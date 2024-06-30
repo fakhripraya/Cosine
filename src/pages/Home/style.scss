@@ -1,0 +1,33 @@
+.creative-store {
+  overflow: hidden;
+  height: 100svh !important;
+}
+
+.creative-store-container {
+  min-width: 100vw;
+  height: 100svh;
+  //overflow: hidden;
+}
+
+.creative-store-wrapper {
+  width: calc(100vw - 20px);
+  margin: 0px auto;
+  position: relative;
+  align-items: center;
+  -webkit-box-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.creative-store-flex-container {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  margin-left: 0px;
+  margin-right: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  height: calc(100vh - 24px);
+  background-color: #151515;
+  border-radius: 1em;
+}
