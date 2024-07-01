@@ -9,4 +9,4 @@ export const DISCONNECTED = "DISCONNECTED";
 export const IS_MEMBER_REDIRECTING_MESSAGE =
   "Kamu udah member, langsung masuk aja ...";
 export const PAGE_LOADING_MESSAGE =
-  "Tunggu bentar ya \n Kita lagi siapin tokonya...";
+  "Tunggu bentar ya \n Kita bangunin dulu si Cosine, hahaha...";

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import Avatar from "react-avatar";
 import ShowChats from "./ShowChats";
-import { IChatData } from "../Interfaces/IChatData";
+import { IChatData } from "../../../interfaces/home";
 
 interface ShowChatWrapperProps {
   chat: [string, IChatData];

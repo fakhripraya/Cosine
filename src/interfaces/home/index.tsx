@@ -1,4 +1,4 @@
-import { OneToOneChat } from "../../../config/dexie/dexie";
+import { OneToOneChat } from "../../config/dexie/dexie";
 
 export interface IChatData {
   sender: {

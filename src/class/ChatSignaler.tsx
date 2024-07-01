@@ -1,6 +1,6 @@
 import { Socket } from "socket.io-client";
 import moment from "moment";
-import db from "../../../config/dexie/dexie";
+import db from "../config/dexie/dexie";
 
 // Define types for login, db, and other used variables
 interface UserLogin {

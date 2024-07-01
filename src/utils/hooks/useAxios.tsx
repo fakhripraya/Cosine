@@ -1,25 +1,34 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import axios from "axios";
+import axios, {
+  AxiosResponse,
+  CancelTokenSource,
+  InternalAxiosRequestConfig,
+} from "axios";
 import { createAxios } from "../../config/xhr/axios.tsx";
-import { AXIOS_INITIAL_VALUE } from "../../variables/initial/axios.tsx";
 import { GET } from "../../variables/global";
+import {
+  IRequestConfig,
+  IResponseConfig,
+} from "../../interfaces/axios/index.tsx";
+
+const initial: IResponseConfig = {
+  responseData: undefined,
+  responseStatus: undefined,
+  responseError: false,
+  errorContent:
+    "Something went wrong,\nPlease try again or contact our support.",
+};
 
 // get data without parameter
 // get data without parameter
 export const useAxios = () => {
-  const getData = async (reqConfig: {
-    endpoint: string;
-    headers?: any;
-    url?: string;
-    params?: any;
-  }) => {
+  const getData = async (reqConfig: IRequestConfig) => {
     // creates the cancel token source
     const cancelSource = axios.CancelToken.source();
     // Start timing now
     console.time("Load Time");
     return new Promise((resolve, reject) => {
       // Initial Value
-      const result = { ...AXIOS_INITIAL_VALUE };
+      const result = { ...initial };
       createAxios(reqConfig.endpoint)({
         method: GET,
         headers: reqConfig.headers,
@@ -27,13 +36,13 @@ export const useAxios = () => {
         params: reqConfig.params,
         cancelToken: cancelSource.token,
       })
-        .then((response: any) => {
+        .then((response: AxiosResponse) => {
           result.responseData = response.data;
           result.responseStatus = response.status;
           console.timeEnd("Load Time");
           resolve(result);
         })
-        .catch((error: any) => {
+        .catch((error) => {
           result.responseError = true;
           if (error.response) {
             if (axios.isCancel(error)) {
@@ -50,14 +59,88 @@ export const useAxios = () => {
     });
   };
 
+  const getDataWithOnRequestInterceptors = async (
+    reqConfig: IRequestConfig,
+    callbackInterceptors?: () => Promise<IResponseConfig>
+  ): Promise<IResponseConfig> => {
+    // creates the cancel token source
+    const cancelSource: CancelTokenSource =
+      axios.CancelToken.source();
+    // Start timing now
+    console.time("Load Time");
+
+    return new Promise<IResponseConfig>(
+      (resolve, reject) => {
+        // Initial Value
+        const result: IResponseConfig = {
+          ...initial,
+        };
+        const axiosInstance = createAxios(
+          reqConfig.endpoint
+        );
+
+        if (callbackInterceptors) {
+          axiosInstance.interceptors.request.use(
+            async (config: InternalAxiosRequestConfig) => {
+              const res = await callbackInterceptors();
+              if (res.responseStatus === 200) return config;
+              else {
+                result.responseError = true;
+                result.errorContent = res.errorContent;
+                result.responseStatus = res.responseStatus;
+                console.timeEnd("Load Time");
+                reject(result);
+                return config;
+              }
+            },
+            (error) => {
+              result.responseError = true;
+              result.errorContent = error.toString();
+              result.responseStatus = 500;
+              console.timeEnd("Load Time");
+              reject(result);
+            }
+          );
+        }
+
+        axiosInstance({
+          method: GET,
+          headers: reqConfig.headers,
+          url: reqConfig.url,
+          params: reqConfig.params,
+          cancelToken: cancelSource.token,
+        })
+          .then((response: AxiosResponse) => {
+            result.responseData = response.data;
+            result.responseStatus = response.status;
+            console.timeEnd("Load Time");
+            resolve(result);
+          })
+          .catch((error) => {
+            result.responseError = true;
+            if (axios.isCancel(error))
+              return cancelSource.cancel();
+            if (error.response) {
+              result.errorContent = error.response.data;
+              result.responseStatus = error.response.status;
+            } else {
+              result.responseStatus = 500;
+            }
+            console.timeEnd("Load Time");
+            reject(result);
+          });
+      }
+    );
+  };
+
   const getAllData = async (
-    reqConfigs: { endpoint: string; config?: any }[]
+    reqConfigs: IRequestConfig[]
   ) => {
     // Start timing now
     console.time("Load Time");
     return new Promise((resolve, reject) => {
       // Initial Value
-      const result = { ...AXIOS_INITIAL_VALUE };
+      const result = { ...initial };
 
       const axiosInstance = axios;
       axiosInstance
@@ -80,6 +163,7 @@ export const useAxios = () => {
 
   return {
     getData,
+    getDataWithOnRequestInterceptors,
     getAllData,
   };
 };
