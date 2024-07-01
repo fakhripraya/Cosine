@@ -1,3 +1,5 @@
+import { URLSearchParams } from "url";
+
 // Whatsapp sender
 export function sendWACS() {
   // Send static Whatsapp messages to Customer Service
@@ -15,3 +17,27 @@ export function smoothScrollTop() {
     behavior: "smooth",
   });
 }
+
+export const delayInMilliSecond = (ms: number) =>
+  new Promise((res) => setTimeout(res, ms));
+
+export const clearAllUrlParameters = () => {
+  const currentUrl = new URL(window.location.href);
+  currentUrl.search = "";
+  window.history.replaceState({}, "", currentUrl.href);
+};
+
+export const getURLParams = (
+  url: URLSearchParams,
+  key: string
+) => url.get(key);
+
+export const setURLParams = (
+  url: URLSearchParams,
+  key: string,
+  val: string
+) => {
+  url.set(key, val);
+  const newUrl = url.toString();
+  window.history.pushState({}, "", newUrl);
+};

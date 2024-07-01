@@ -5,13 +5,14 @@ import {
 } from "axios";
 
 export interface IRequestConfig {
-  endpoint: string;
+  endpoint?: string;
   headers?: AxiosRequestHeaders;
   url?: string;
   params?: AxiosRequestConfig["params"];
+  data?: AxiosRequestConfig["data"];
 }
 
-export interface IResponseConfig {
+export interface IResponseObject {
   responseData?: any;
   responseStatus?: number;
   responseError: boolean;

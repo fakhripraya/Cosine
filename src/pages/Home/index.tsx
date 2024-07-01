@@ -1,16 +1,28 @@
-import { useRef, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import "./style.scss";
+import { useEffect, useRef, useState } from "react";
 import ErrorHandling from "../ErrorHandling/index";
 import Button from "../../components/Button";
-import { useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import PageLoading from "../PageLoading";
 import { PAGE_LOADING_MESSAGE } from "../../variables/constants/home";
 import { USER_NOT_FOUND } from "../../variables/errorMessages/home";
 import TextInput from "../../components/TextInput";
 import ShowChatWrappers from "./modular/ShowChatWrappers";
 import { useAxios } from "../../utils/hooks/useAxios";
-import "./style.scss";
-import axios from "axios";
 import { IChatData } from "../../interfaces/home";
+import { cookies } from "../../config/cookie";
+import { trackPromise } from "react-promise-tracker";
+import { OLYMPUS_SERVICE } from "../../config/environment";
+import { URL_POST_GOOGLE_CALLBACK } from "../../config/xhr/routes/credentials";
+import { CLIENT_USER_INFO } from "../../variables/global";
+import {
+  clearAllUrlParameters,
+  setURLParams,
+} from "../../utils/functions/global";
 
 export default function Home() {
   // REFS //
@@ -18,22 +30,21 @@ export default function Home() {
   const chatBodyContainerRef = useRef<HTMLDivElement>(null);
 
   // HOOKS //
+  const navigate = useNavigate();
   const axiosService = useAxios();
   const [searchParams] = useSearchParams();
 
   // STATES //
-  const [userId] = useState<string | null>(
-    searchParams.get("user-id")
+  const [userId, setUserId] = useState<string | null>(
+    searchParams.get("userId")
   );
-  const [rendered, setRendered] = useState<boolean>(true);
-  const [chatPagination, setChatPagination] =
-    useState<number>(0);
-  const [chats, setChats] = useState<
-    Record<string, IChatData>
-  >({});
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [rendered, setRendered] = useState<boolean>(false);
+  const [chats] = useState<Record<string, IChatData>>({});
 
   // VARIABLES //
+  const urlParams = new URLSearchParams(
+    window.location.search
+  );
   const pageLoadingClassName = rendered
     ? "hidden no-height"
     : "visible";
@@ -43,98 +54,65 @@ export default function Home() {
 
   // FUNCTIONS //
   async function handleInitialize() {
-    let result;
+    const searchParamScopes = searchParams.get("scope");
+    if (searchParamScopes?.includes("googleapis"))
+      await handleGoogleAuthListener();
 
-    try {
-      // check if the user has logged in
-      // if user does logged in, check whether they're a member of the store or not
-      // if they're not a member, redirect them to the consent screen
-      if (IS_OTP_VERIFIED(login)) {
-        const check =
-          await axios.getDataWithOnRequestInterceptors(
-            {
-              endpoint: process.env.REACT_APP_ZEUS_SERVICE,
-              url: `${URL_POST_GET_USER_STORE_MEMBERSHIPS(
-                login?.user?.userId
-              )}?storeId=${storeId}`,
-            },
-            async () => {
-              const result = await checkAuthAndRefresh(
-                zeusService,
-                cookies
-              );
-
-              return result;
-            }
-          );
-
-        // redirect if true
-        if (check.responseData.length === 0)
-          return navigate(
-            `/creative-store/consent-screen?id=${storeId}`
-          );
-        else handleGetUserRoles();
-      }
-
-      result = await zeusService.getData({
-        endpoint: process.env.REACT_APP_ZEUS_SERVICE,
-        url: `${URL_GET_STORE_INFO}?storeId=${storeId}`,
-      });
-    } catch (error) {
-      if (error.responseStatus === 404) {
-        chatSocket.disconnect();
-        webRTCSocket.disconnect();
-        return setStoreId(null);
-      } else handleModalError(error);
-    }
-
-    // if we got the value and its not and error, map it
-    const initialMappedChannels =
-      result.responseData.MasterStoreChannels.sort(
-        (a, b) => a.channelsOrder - b.channelsOrder
-      ).reduce((acc, value) => {
-        return {
-          ...acc,
-          ...value.channelsJSON,
-        };
-      }, {});
-
-    // set the store info
-    // render all the left panel datas
-    // and set the initial joined chat room
-    // also handle the purchase orders render here
-    setStoreInfo(result.responseData);
-    handlePurchaseOrdersRender(CREATIVE_STORE_DUMMY_PO);
-    handleInitialChannelsRender(initialMappedChannels);
-    const joinedChatRoom = handleInitialJoinChatRoom(
-      initialMappedChannels
-    );
-
-    if (result.responseStatus === 200) {
-      try {
-        const chats =
-          await chatSignaler.getChatFromDatabase(
-            joinedChatRoom
-          );
-        // render currently joined chat room body
-        // and set render to true so the page can exit the loading screen
-        handleChatsRender(chats);
-        setRendered(true);
-      } catch (e) {
-        console.error(e.stack || e);
-      }
-    }
+    setRendered(true);
   }
 
   const handleOnSendMessage = () => {};
 
+  async function handleGoogleAuthListener() {
+    const queryString = window.location.search;
+    let loggedUser: any | undefined = undefined;
+    trackPromise(
+      axiosService
+        .postData({
+          endpoint: OLYMPUS_SERVICE,
+          url: `${URL_POST_GOOGLE_CALLBACK}/${queryString}`,
+        })
+        .then((result) => {
+          cookies.set(
+            CLIENT_USER_INFO,
+            result.responseData
+          );
+
+          loggedUser = result.responseData.user;
+          setUserId(loggedUser.userId);
+        })
+        .catch((error) => console.log(error))
+        .finally(() => {
+          clearAllUrlParameters();
+          setURLParams(
+            urlParams,
+            "userId",
+            loggedUser.userId
+          );
+        })
+    );
+  }
+
+  useEffect(() => {
+    handleInitialize();
+  }, []);
+
   // Placeholder message while redirecting to home page
-  if (!userId) {
+  if (!rendered) {
+    return (
+      <PageLoading
+        className={pageLoadingClassName}
+        loadingMessage={PAGE_LOADING_MESSAGE}
+      />
+    );
+  }
+
+  if (!userId && rendered) {
     return (
       <ErrorHandling errorMessage={USER_NOT_FOUND}>
         <Button
           className="margin-top-12-18 "
-          onClick={() => (window.location.href = "/")}>
+          onClick={() => navigate("/login")}>
           Login
         </Button>
       </ErrorHandling>
@@ -143,10 +121,6 @@ export default function Home() {
 
   return (
     <div className="creative-store">
-      <PageLoading
-        className={pageLoadingClassName}
-        loadingMessage={PAGE_LOADING_MESSAGE}
-      />
       <div className={parentContainerClassName}>
         <div className="creative-store-wrapper">
           <div className="creative-store-flex-container">

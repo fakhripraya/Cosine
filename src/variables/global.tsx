@@ -18,24 +18,6 @@ export const UPLOADED_STORE_PROFILE_PICTURE =
 export const ADMIN_FEE = 1500;
 export const GENERAL_MULTIUPLOAD_LABEL =
   "Geser file dan masukkan file ke box ini atau klik untuk pilih file";
-export const GENERAL_MULTIUPLOAD_SUBLABEL = (extensions) =>
-  `Mohon hanya upload extension ${extensions} saja`;
-
-// GLOBAL VALIDATION
-export const IS_INPUT_OTP_ELIGIBLE = (userInfo) => {
-  return userInfo?.credentialToken && userInfo?.sid;
-};
-
-export const IS_OTP_VERIFIED = (login) => {
-  return login?.user?.OTPVerified;
-};
-
-export const IS_NOT_AUTHENTICATE = (result) => {
-  return (
-    result.responseStatus === 401 ||
-    result.responseStatus === 403
-  );
-};
 
 // ARRAY
 export const IMAGE_MIME_TYPE = [
@@ -107,85 +89,6 @@ export const DELETE = "DELETE";
 export const X_SID = "x-sid";
 export const AUTHORIZATION = "authorization";
 export const CONTENT_TYPE = "Content-Type";
-
-// SIGNALER SERVICE ROUTE
-export const URL_ROOM_CHECK = "/v1/room/check";
-export const URL_ROOM_CREATE = "/v1/room/create";
-
-// OLYMPUS SERVICE ROUTE
-export const URL_GET_GOOGLE_URL = `/v1/auth/google/url`;
-export const URL_POST_REGISTER = `/v1/auth/signup`;
-export const URL_POST_LOGIN = `/v1/auth/login`;
-export const URL_POST_FORGOT_PW = `/v1/auth/pw/forgot`;
-export const URL_POST_GOOGLE_CALLBACK = `/v1/auth/google/callback`;
-export const URL_POST_NEW_PW = `/v1/auth/pw/new`;
-export const URL_POST_LOGOUT = `/v1/auth/logout`;
-export const URL_POST_OTP = `/v1/auth/verify/otp`;
-export const URL_CHECK_AUTH_AND_REFRESH_TOKEN = `/v1/auth/token`;
-
-// ZEUS SERVICE ROUTE
-export const URL_DELETE_STORE_PRODUCT = `/v1/store/product/delete`;
-export const URL_PATCH_STORE_PRODUCT = `/v1/store/product/update`;
-export const URL_POST_ADD_STORE_PRODUCT_CATALOGUE = (
-  storeId
-) => `/v1/store/product/add?storeId=${storeId}`;
-export const URL_POST_ADD_USER_STORE = (userId) =>
-  `/v1/user/${userId}/stores/add`;
-export const URL_POST_GET_USER_BUY_ADDRESSES = (userId) =>
-  `/v1/user/${userId}/saved-address`;
-export const URL_GET_USER_STORE_ROLES = (userId) =>
-  `/v1/user/${userId}/roles`;
-export const URL_GET_STORE_ROLES = (storeId) =>
-  `/v1/store/${storeId}/roles`;
-export const URL_GET_DASHBOARD_STORES = (userId) =>
-  `/v1/user/${userId}/stores`;
-export const URL_GET_PRODUCT_DETAILS = (productId) =>
-  `/v1/store/catalogues/product-details${
-    productId ? `?productId=${productId}` : ""
-  }`;
-export const URL_GET_CATALOGUE_DATA = ({
-  storeId,
-  isWithProducts,
-  isProductOnly,
-  offset,
-  limit,
-  itemPage,
-  itemPerPage,
-}) =>
-  `/v1/store/catalogues${
-    storeId ? `?storeId=${storeId}` : ""
-  }${
-    isWithProducts
-      ? `&isWithProducts=${isWithProducts}`
-      : ""
-  }${
-    isProductOnly ? `&isProductOnly=${isProductOnly}` : ""
-  }${offset ? `&offset=${offset}` : ""}${
-    limit ? `&limit=${limit}` : ""
-  }${itemPage ? `&itemPage=${itemPage}` : ""}${
-    itemPerPage ? `&itemPerPage=${itemPerPage}` : ""
-  }`;
-
-export const URL_GET_STORE_INFO = `/v1/stores`;
-
-export const URL_POST_GET_USER_STORE_MEMBERSHIPS = (
-  userId
-) => `/v1/user/${userId}/store-memberships`;
-
-export const URL_POST_CREATE_STORE_ROLE = (storeId) =>
-  `//v1/store/${storeId}/roles/create`;
-
-export const URL_POST_USER_ASSIGN_ROLE = (userId) =>
-  `//v1/user/${userId}/roles/create`;
-
-export const URL_GET_PRODUCT_LIST = `/v1/products`;
-export const URL_GET_CATEGORIES = `/v1/category`;
-export const URL_GET_COURIERS = `/v1/couriers`;
-export const URL_GET_UOM = `/v1/uom`;
-
-// CHRONOS SERVICE ROUTE
-export const URL_GET_FILE = `/v1/file`;
-export const URL_GET_FILES = `/v1/files`;
 
 // USER RDP ROLE
 export const HOST = "HOST";
