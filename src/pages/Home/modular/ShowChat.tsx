@@ -1,18 +1,24 @@
 import React, { useMemo } from "react";
+import { OneToOneChat } from "../../../interfaces/home";
 
 interface ShowChatProps {
-  value: [string, { chatContent: string }];
+  content: OneToOneChat;
+  uniqueKey: string;
 }
 
-const ShowChat: React.FC<ShowChatProps> = ({ value }) => {
-  const chatContent = useMemo(
-    () => value[1].chatContent,
-    [value]
+const ShowChat: React.FC<ShowChatProps> = ({
+  content,
+  uniqueKey,
+}) =>
+  useMemo(
+    () => (
+      <p
+        key={`${uniqueKey}-chat`}
+        style={{ whiteSpace: "pre-line" }}>
+        {content.chatContent}
+      </p>
+    ),
+    [content.chatContent, uniqueKey]
   );
-
-  return (
-    <p style={{ whiteSpace: "pre-line" }}>{chatContent}</p>
-  );
-};
 
 export default ShowChat;

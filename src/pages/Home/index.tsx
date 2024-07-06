@@ -10,7 +10,10 @@ import { USER_NOT_FOUND } from "../../variables/errorMessages/home";
 import TextInput from "../../components/TextInput";
 import ShowChatWrappers from "./modular/ShowChatWrappers";
 import { useAxios } from "../../utils/hooks/useAxios";
-import { IChatData } from "../../interfaces/home";
+import {
+  IChatData,
+  OneToOneChat,
+} from "../../interfaces/home";
 import { cookies } from "../../config/cookie";
 import {
   HERMES_SERVICE,
@@ -23,7 +26,7 @@ import {
   removeTrailingNewlines,
 } from "../../utils/functions/global";
 import { URL_POST_COSINE_MESSAGING } from "../../config/xhr/routes/home";
-import db, { OneToOneChat } from "../../config/dexie/dexie";
+import db from "../../config/dexie/dexie";
 import moment from "moment";
 import { IUserData } from "../../interfaces/credential";
 import { v4 as uuidv4 } from "uuid";
@@ -87,20 +90,20 @@ export default function Home() {
         };
         chatInputRef.current!.value = "";
 
+        const chatData: IChatData = {
+          sender: {
+            id: userMessage.id,
+            fullName: userMessage.senderFullName,
+            profilePictureURI:
+              userMessage.senderProfilePictureUri,
+          },
+          content: userMessage,
+          building_contents: "",
+        };
+
         setChats((record) => {
           let temp: Record<string, IChatData> = {
             ...record,
-          };
-
-          const chatData = {
-            sender: {
-              id: userMessage.id,
-              fullName: userMessage.senderFullName,
-              profilePictureURI:
-                userMessage.senderProfilePictureUri,
-            },
-            contents: [userMessage],
-            image_contents: "",
           };
 
           temp = {
@@ -111,7 +114,7 @@ export default function Home() {
           return temp;
         });
 
-        handleOnMessageSaving(userMessage, timeNow);
+        handleOnMessageSaving(chatData, timeNow);
       }
     } catch (err) {
       console.error(err);
@@ -119,14 +122,14 @@ export default function Home() {
   };
 
   const handleOnMessageSaving = async (
-    userMessage: OneToOneChat,
+    userChatData: IChatData,
     timeNow: string
   ) => {
     const response = await axiosService.postData({
       endpoint: HERMES_SERVICE,
       url: `${URL_POST_COSINE_MESSAGING}`,
       data: {
-        content: userMessage.chatContent,
+        content: userChatData.content.chatContent,
       },
     });
 
@@ -141,19 +144,24 @@ export default function Home() {
       createdAt: timeNow,
     };
 
+    const isHasContent =
+      response.responseData?.output_content.length > 0;
+    const chatData: IChatData = {
+      sender: {
+        id: aiMessage.id,
+        fullName: aiMessage.senderFullName,
+        profilePictureURI:
+          aiMessage.senderProfilePictureUri,
+      },
+      content: aiMessage,
+      building_contents:
+        isHasContent &&
+        response.responseData?.output_content,
+    };
+
     setChats((record) => {
       let temp: Record<string, IChatData> = {
         ...record,
-      };
-      const chatData = {
-        sender: {
-          id: aiMessage.id,
-          fullName: aiMessage.senderFullName,
-          profilePictureURI:
-            aiMessage.senderProfilePictureUri,
-        },
-        contents: [aiMessage],
-        image_contents: "",
       };
 
       temp = {
@@ -164,16 +172,9 @@ export default function Home() {
       return temp;
     });
 
-    await db.transaction(
-      "rw",
-      db.one_to_one_chat,
-      async () => {
-        await db.one_to_one_chat.bulkAdd([
-          userMessage,
-          aiMessage,
-        ]);
-      }
-    );
+    await db.transaction("rw", db.chat_data, async () => {
+      await db.chat_data.bulkAdd([userChatData, chatData]);
+    });
 
     setLoading(false);
   };

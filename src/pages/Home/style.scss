@@ -149,6 +149,7 @@
 
 .creative-store-chattext-username {
   margin: 0px !important;
+  margin-bottom: 4px !important;
 }
 
 .creative-store-chattext-avatar {
@@ -165,5 +166,9 @@
 .creative-store-chattext-container {
   display: flex;
   flex-direction: row;
-  flex-direction: column;
+}
+
+.creative-store-chat-cards-container {
+  display: flex;
+  flex-direction: row;
 }

@@ -1,11 +1,18 @@
-import { OneToOneChat } from "../../config/dexie/dexie";
-
 export interface IChatData {
   sender: {
     id: string;
     fullName: string;
     profilePictureURI?: string;
   };
-  contents: OneToOneChat[];
-  image_contents: string | undefined;
+  content: OneToOneChat;
+  building_contents: string | undefined | null;
+}
+
+export interface OneToOneChat {
+  id: string;
+  chatContent: string;
+  senderId: string;
+  senderFullName: string;
+  senderProfilePictureUri?: string;
+  createdAt: string;
 }
