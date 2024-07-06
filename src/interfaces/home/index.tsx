@@ -5,7 +5,7 @@ export interface IChatData {
     profilePictureURI?: string;
   };
   content: OneToOneChat;
-  building_contents: string | undefined | null;
+  building_contents?: string;
 }
 
 export interface OneToOneChat {

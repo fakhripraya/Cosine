@@ -98,7 +98,6 @@ export default function Home() {
               userMessage.senderProfilePictureUri,
           },
           content: userMessage,
-          building_contents: "",
         };
 
         setChats((record) => {
@@ -144,8 +143,10 @@ export default function Home() {
       createdAt: timeNow,
     };
 
-    const isHasContent =
-      response.responseData?.output_content.length > 0;
+    const parsedContent = JSON.parse(
+      response.responseData?.output_content
+    );
+    const isHasContent = parsedContent.length > 0;
     const chatData: IChatData = {
       sender: {
         id: aiMessage.id,
@@ -154,9 +155,7 @@ export default function Home() {
           aiMessage.senderProfilePictureUri,
       },
       content: aiMessage,
-      building_contents:
-        isHasContent &&
-        response.responseData?.output_content,
+      building_contents: isHasContent && parsedContent,
     };
 
     setChats((record) => {
@@ -172,8 +171,8 @@ export default function Home() {
       return temp;
     });
 
-    await db.transaction("rw", db.chat_data, async () => {
-      await db.chat_data.bulkAdd([userChatData, chatData]);
+    await db.transaction("rw", db.chat_data, () => {
+      db.chat_data.bulkAdd([userChatData, chatData]);
     });
 
     setLoading(false);
