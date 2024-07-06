@@ -3,10 +3,7 @@ import "./style.scss";
 import { useEffect, useRef, useState } from "react";
 import ErrorHandling from "../ErrorHandling/index";
 import Button from "../../components/Button";
-import {
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
 import { PAGE_LOADING_MESSAGE } from "../../variables/constants/home";
 import { USER_NOT_FOUND } from "../../variables/errorMessages/home";
@@ -15,14 +12,21 @@ import ShowChatWrappers from "./modular/ShowChatWrappers";
 import { useAxios } from "../../utils/hooks/useAxios";
 import { IChatData } from "../../interfaces/home";
 import { cookies } from "../../config/cookie";
-import { trackPromise } from "react-promise-tracker";
-import { OLYMPUS_SERVICE } from "../../config/environment";
+import {
+  HERMES_SERVICE,
+  OLYMPUS_SERVICE,
+} from "../../config/environment";
 import { URL_POST_GOOGLE_CALLBACK } from "../../config/xhr/routes/credentials";
 import { CLIENT_USER_INFO } from "../../variables/global";
 import {
   clearAllUrlParameters,
-  setURLParams,
+  removeTrailingNewlines,
 } from "../../utils/functions/global";
+import { URL_POST_COSINE_MESSAGING } from "../../config/xhr/routes/home";
+import db, { OneToOneChat } from "../../config/dexie/dexie";
+import moment from "moment";
+import { IUserData } from "../../interfaces/credential";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
   // REFS //
@@ -32,19 +36,16 @@ export default function Home() {
   // HOOKS //
   const navigate = useNavigate();
   const axiosService = useAxios();
-  const [searchParams] = useSearchParams();
 
   // STATES //
-  const [userId, setUserId] = useState<string | null>(
-    searchParams.get("userId")
-  );
+  const [user, setUser] = useState<IUserData | null>(null);
   const [rendered, setRendered] = useState<boolean>(false);
-  const [chats] = useState<Record<string, IChatData>>({});
+  const [loading, setLoading] = useState<boolean>(false);
+  const [chats, setChats] = useState<
+    Record<string, IChatData>
+  >({});
 
   // VARIABLES //
-  const urlParams = new URLSearchParams(
-    window.location.search
-  );
   const pageLoadingClassName = rendered
     ? "hidden no-height"
     : "visible";
@@ -53,45 +54,149 @@ export default function Home() {
     : "hidden no-height";
 
   // FUNCTIONS //
-  async function handleInitialize() {
-    const searchParamScopes = searchParams.get("scope");
+  const handleInitialize = async () => {
+    const clientUserInfo = cookies.get(CLIENT_USER_INFO);
+    if (clientUserInfo?.user) {
+      setUser(clientUserInfo.user);
+      return setRendered(true);
+    }
+
+    const searchParamScopes = window.location.search;
     if (searchParamScopes?.includes("googleapis"))
-      await handleGoogleAuthListener();
+      await handleGoogleAuthListener(searchParamScopes);
 
     setRendered(true);
-  }
+  };
 
-  const handleOnSendMessage = () => {};
+  const handleOnSendMessage = async () => {
+    try {
+      if (loading) return window.alert("sabar lg loading");
+      if (!user) return;
+      if (chatInputRef.current?.value !== "") {
+        setLoading(true);
+        const timeNow = moment(new Date())
+          .format("dddd, MMMM Do YYYY, h:mm:ss a")
+          .toString();
+        const userMessage: OneToOneChat = {
+          id: uuidv4(),
+          chatContent: chatInputRef.current!.value,
+          senderId: user.userId,
+          senderFullName: user.fullName,
+          senderProfilePictureUri: "",
+          createdAt: timeNow,
+        };
+        chatInputRef.current!.value = "";
 
-  async function handleGoogleAuthListener() {
-    const queryString = window.location.search;
-    let loggedUser: any | undefined = undefined;
-    trackPromise(
-      axiosService
-        .postData({
-          endpoint: OLYMPUS_SERVICE,
-          url: `${URL_POST_GOOGLE_CALLBACK}/${queryString}`,
-        })
-        .then((result) => {
-          cookies.set(
-            CLIENT_USER_INFO,
-            result.responseData
-          );
+        setChats((record) => {
+          let temp: Record<string, IChatData> = {
+            ...record,
+          };
 
-          loggedUser = result.responseData.user;
-          setUserId(loggedUser.userId);
-        })
-        .catch((error) => console.log(error))
-        .finally(() => {
-          clearAllUrlParameters();
-          setURLParams(
-            urlParams,
-            "userId",
-            loggedUser.userId
-          );
-        })
+          const chatData = {
+            sender: {
+              id: userMessage.id,
+              fullName: userMessage.senderFullName,
+              profilePictureURI:
+                userMessage.senderProfilePictureUri,
+            },
+            contents: [userMessage],
+            image_contents: "",
+          };
+
+          temp = {
+            ...temp,
+            [uuidv4()]: chatData,
+          };
+
+          return temp;
+        });
+
+        handleOnMessageSaving(userMessage, timeNow);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleOnMessageSaving = async (
+    userMessage: OneToOneChat,
+    timeNow: string
+  ) => {
+    const response = await axiosService.postData({
+      endpoint: HERMES_SERVICE,
+      url: `${URL_POST_COSINE_MESSAGING}`,
+      data: {
+        content: userMessage.chatContent,
+      },
+    });
+
+    const aiMessage: OneToOneChat = {
+      id: uuidv4(),
+      chatContent: removeTrailingNewlines(
+        response.responseData?.output
+      ),
+      senderId: "Cosine",
+      senderFullName: "Cosine",
+      senderProfilePictureUri: "",
+      createdAt: timeNow,
+    };
+
+    setChats((record) => {
+      let temp: Record<string, IChatData> = {
+        ...record,
+      };
+      const chatData = {
+        sender: {
+          id: aiMessage.id,
+          fullName: aiMessage.senderFullName,
+          profilePictureURI:
+            aiMessage.senderProfilePictureUri,
+        },
+        contents: [aiMessage],
+        image_contents: "",
+      };
+
+      temp = {
+        ...temp,
+        [uuidv4()]: chatData,
+      };
+
+      return temp;
+    });
+
+    await db.transaction(
+      "rw",
+      db.one_to_one_chat,
+      async () => {
+        await db.one_to_one_chat.bulkAdd([
+          userMessage,
+          aiMessage,
+        ]);
+      }
     );
-  }
+
+    setLoading(false);
+  };
+
+  const handleGoogleAuthListener = async (
+    queryString: string
+  ) => {
+    await axiosService
+      .postData({
+        endpoint: OLYMPUS_SERVICE,
+        url: `${URL_POST_GOOGLE_CALLBACK}/${queryString}`,
+      })
+      .then((result) => {
+        let loggedUser: any | undefined = undefined;
+        cookies.set(CLIENT_USER_INFO, result.responseData);
+        loggedUser = result.responseData.user;
+        setUser(loggedUser);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        clearAllUrlParameters();
+      });
+  };
 
   useEffect(() => {
     handleInitialize();
@@ -107,7 +212,7 @@ export default function Home() {
     );
   }
 
-  if (!userId && rendered) {
+  if (rendered && !user) {
     return (
       <ErrorHandling errorMessage={USER_NOT_FOUND}>
         <Button
@@ -147,7 +252,7 @@ export default function Home() {
                   className="creative-store-chat-textinput light-color darker-bg-color"
                 />
                 <Button onClick={handleOnSendMessage}>
-                  Send
+                  {loading ? "Loading..." : "Send"}
                 </Button>
               </div>
             </div>

@@ -1,7 +1,7 @@
 export interface IUserData {
-  id: string;
+  userId: string;
   username: string;
-  fullname: string;
+  fullName: string;
   phoneNumber: string | undefined;
   email: string;
   isOTPVerfied: boolean;

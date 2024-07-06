@@ -1,17 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import Dexie, { Table } from "dexie";
-
-const CHAT_DB: string =
-  process.env.REACT_APP_CHAT_DB ?? "DB";
+import { CHAT_DB } from "../environment";
 
 interface OneToOneChat {
-  id?: number;
-  channelId: string;
-  roomId: string;
+  id: string;
   chatContent: string;
-  imageURI?: string;
-  isChat: boolean;
-  isImage: boolean;
   senderId: string;
   senderFullName: string;
   senderProfilePictureUri?: string;

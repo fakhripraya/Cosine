@@ -41,3 +41,8 @@ export const setURLParams = (
   const newUrl = url.toString();
   window.history.pushState({}, "", newUrl);
 };
+
+export const removeTrailingNewlines = (str: string) => {
+  if (!str) return "";
+  return str.replace(/\n+$/, "");
+};
