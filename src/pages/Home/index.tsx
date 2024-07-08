@@ -30,6 +30,10 @@ import db from "../../config/dexie/dexie";
 import moment from "moment";
 import { IUserData } from "../../interfaces/credential";
 import { v4 as uuidv4 } from "uuid";
+import {
+  AI_ID,
+  AI_NAME,
+} from "../../variables/constants/ai";
 
 export default function Home() {
   // REFS //
@@ -117,6 +121,7 @@ export default function Home() {
       }
     } catch (err) {
       console.error(err);
+      setLoading(false);
     }
   };
 
@@ -137,8 +142,8 @@ export default function Home() {
       chatContent: removeTrailingNewlines(
         response.responseData?.output
       ),
-      senderId: "Cosine",
-      senderFullName: "Cosine",
+      senderId: AI_ID,
+      senderFullName: AI_NAME,
       senderProfilePictureUri: "",
       createdAt: timeNow,
     };
@@ -202,6 +207,14 @@ export default function Home() {
     handleInitialize();
   }, []);
 
+  useEffect(() => {
+    // Scroll to the bottom of the chat body container
+    if (chatBodyContainerRef.current) {
+      chatBodyContainerRef.current.scrollTop =
+        chatBodyContainerRef.current.scrollHeight;
+    }
+  }, [chats]);
+
   // Placeholder message while redirecting to home page
   if (!rendered) {
     return (
@@ -232,7 +245,7 @@ export default function Home() {
             <div className="creative-store-body-container">
               <div className="creative-store-body-header-container">
                 <div className="creative-store-body-header-left">
-                  <h4>Cosine AI</h4>
+                  <h4>{AI_NAME}</h4>
                 </div>
               </div>
               <div
