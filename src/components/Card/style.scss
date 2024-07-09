@@ -11,8 +11,8 @@
   padding: 12px !important;
   margin: auto 0px;
   margin-right: 12px !important;
-  background-color: #1c1d1d;
-  cursor: inherit;
+  background-color: #151515;
+  cursor: pointer;
   transition: all 0.3s ease-in-out;
 
   @media screen and (max-width: 768px) {
@@ -30,7 +30,7 @@
 }
 
 .card-img {
-  background-color: #151515;
+  background-color: #1c1d1d;
   display: flex;
   margin: auto;
   border-radius: 12px;

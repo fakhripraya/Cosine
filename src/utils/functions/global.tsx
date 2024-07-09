@@ -46,3 +46,59 @@ export const removeTrailingNewlines = (str: string) => {
   if (!str) return "";
   return str.replace(/\n+$/, "");
 };
+
+export const removeLeadingZeros = (str: string) => {
+  // Use regular expression to remove leading zeros
+  return str.replace(/^0+/, "");
+};
+
+export const formattedNumber = (number: number) => {
+  if (isNaN(number)) number = 0;
+  return new Intl.NumberFormat().format(number);
+};
+
+export const unformattedNumber = (
+  formattedString: string
+) => {
+  // Remove any non-numeric characters and parse the string to a number
+  const unformattedString = formattedString.replace(
+    /[^\d.-]/g,
+    ""
+  );
+  return parseFloat(unformattedString);
+};
+
+export const acceptNumericOnly = (input: string) => {
+  // Remove any non-numeric characters
+  input = input.replace(/[^0-9]/g, "");
+  return input;
+};
+
+export const formatDateID = (date: string) => {
+  const inputDate = new Date(date);
+
+  // Indonesian days of the week
+  const indonesianDaysOfWeek = [
+    "Minggu",
+    "Senin",
+    "Selasa",
+    "Rabu",
+    "Kamis",
+    "Jumat",
+    "Sabtu",
+  ];
+
+  const dayName =
+    indonesianDaysOfWeek[inputDate.getUTCDay()];
+  const day = inputDate.getUTCDate();
+  const month = inputDate.getUTCMonth() + 1;
+  const year = inputDate.getUTCFullYear();
+
+  const formattedDate = `${dayName}, ${day
+    .toString()
+    .padStart(2, "0")}-${month
+    .toString()
+    .padStart(2, "0")}-${year}`;
+
+  return formattedDate;
+};

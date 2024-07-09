@@ -1,3 +1,5 @@
+import { BuildingDetails } from "../building";
+
 export interface IChatData {
   sender: {
     id: string;
@@ -5,7 +7,7 @@ export interface IChatData {
     profilePictureURI?: string;
   };
   content: OneToOneChat;
-  building_contents?: string;
+  building_contents?: BuildingDetails[];
 }
 
 export interface OneToOneChat {

@@ -34,6 +34,7 @@ import {
   AI_ID,
   AI_NAME,
 } from "../../variables/constants/ai";
+import { BuildingDetails } from "../../interfaces/building";
 
 export default function Home() {
   // REFS //
@@ -148,10 +149,14 @@ export default function Home() {
       createdAt: timeNow,
     };
 
-    const parsedContent = JSON.parse(
+    const parsedContent: BuildingDetails[] = JSON.parse(
       response.responseData?.output_content
     );
     const isHasContent = parsedContent.length > 0;
+    const building_contents = isHasContent
+      ? parsedContent
+      : undefined;
+
     const chatData: IChatData = {
       sender: {
         id: aiMessage.id,
@@ -160,8 +165,10 @@ export default function Home() {
           aiMessage.senderProfilePictureUri,
       },
       content: aiMessage,
-      building_contents: isHasContent && parsedContent,
+      building_contents: building_contents,
     };
+
+    console.log(chatData);
 
     setChats((record) => {
       let temp: Record<string, IChatData> = {
@@ -186,21 +193,20 @@ export default function Home() {
   const handleGoogleAuthListener = async (
     queryString: string
   ) => {
-    await axiosService
-      .postData({
+    try {
+      const result = await axiosService.postData({
         endpoint: OLYMPUS_SERVICE,
         url: `${URL_POST_GOOGLE_CALLBACK}/${queryString}`,
-      })
-      .then((result) => {
-        let loggedUser: any | undefined = undefined;
-        cookies.set(CLIENT_USER_INFO, result.responseData);
-        loggedUser = result.responseData.user;
-        setUser(loggedUser);
-      })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        clearAllUrlParameters();
       });
+
+      let loggedUser: any | undefined = undefined;
+      cookies.set(CLIENT_USER_INFO, result.responseData);
+      loggedUser = result.responseData.user;
+      setUser(loggedUser);
+      clearAllUrlParameters();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
