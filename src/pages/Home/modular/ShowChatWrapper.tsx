@@ -15,8 +15,8 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
   useMemo(
     () => (
       <Fragment>
-        <div className="creative-store-chattext-container">
-          <div className="creative-store-chattext-avatar">
+        <div className="home-page-chattext-container">
+          <div className="home-page-chattext-avatar">
             <Avatar
               style={{ cursor: "pointer" }}
               round={true}
@@ -26,9 +26,9 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
               name={chat[1].sender.fullName}
             />
           </div>
-          <div className="creative-store-chattext-wrapper">
+          <div className="home-page-chattext-wrapper">
             <div>
-              <h4 className="creative-store-chattext-username">
+              <h4 className="home-page-chattext-username">
                 {chat[1].sender.fullName}
               </h4>
               {chat[1].content.createdAt}
@@ -38,7 +38,7 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
               uniqueKey={chat[0]}
             />
             {chat[1].building_contents && (
-              <div className="creative-store-chat-cards-container">
+              <div className="home-page-chat-cards-container">
                 <ShowGrabableStoreCardCarousel
                   uniqueKey={chat[0]}
                   values={chat[1].building_contents}

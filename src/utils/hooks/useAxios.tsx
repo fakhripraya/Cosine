@@ -18,8 +18,6 @@ const initial: IResponseObject = {
     "Something went wrong,\nPlease try again or contact our support.",
 };
 
-// get data without parameter
-// get data without parameter
 export const useAxios = () => {
   const getData = async (reqConfig: IRequestConfig) => {
     // creates the cancel token source

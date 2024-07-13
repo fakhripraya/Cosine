@@ -58,7 +58,7 @@ export default function Home() {
     ? "hidden no-height"
     : "visible";
   const parentContainerClassName = rendered
-    ? "visible creative-store-container"
+    ? "visible home-page-container"
     : "hidden no-height";
 
   // FUNCTIONS //
@@ -246,29 +246,29 @@ export default function Home() {
   return (
     <div className="creative-store">
       <div className={parentContainerClassName}>
-        <div className="creative-store-wrapper">
-          <div className="creative-store-flex-container">
-            <div className="creative-store-body-container">
-              <div className="creative-store-body-header-container">
-                <div className="creative-store-body-header-left">
+        <div className="home-page-wrapper">
+          <div className="home-page-flex-container">
+            <div className="home-page-body-container">
+              <div className="home-page-body-header-container">
+                <div className="home-page-body-header-left">
                   <h4>{AI_NAME}</h4>
                 </div>
               </div>
               <div
                 ref={chatBodyContainerRef}
-                className="creative-store-mainbody-container creative-store-chatbody-container dark-bg-color">
-                <div className="creative-store-mainbody-wrapper">
+                className="home-page-mainbody-container home-page-chatbody-container dark-bg-color">
+                <div className="home-page-mainbody-wrapper">
                   <ShowChatWrappers
                     uniqueKey={"chats"}
                     chats={chats}
                   />
                 </div>
               </div>
-              <div className="creative-store-chat-container dark-bg-color">
+              <div className="home-page-chat-container dark-bg-color">
                 <TextInput
                   onEnter={handleOnSendMessage}
                   ref={chatInputRef}
-                  className="creative-store-chat-textinput light-color darker-bg-color"
+                  className="home-page-chat-textinput light-color darker-bg-color"
                 />
                 <Button onClick={handleOnSendMessage}>
                   {loading ? "Loading..." : "Send"}

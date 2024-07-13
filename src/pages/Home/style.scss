@@ -3,13 +3,13 @@
   height: 100svh !important;
 }
 
-.creative-store-container {
+.home-page-container {
   min-width: 100vw;
   height: 100svh;
   //overflow: hidden;
 }
 
-.creative-store-wrapper {
+.home-page-wrapper {
   width: calc(100vw - 24px);
   margin: 0px auto;
   position: relative;
@@ -24,7 +24,7 @@
   }
 }
 
-.creative-store-flex-container {
+.home-page-flex-container {
   margin-top: 12px;
   margin-bottom: 12px;
   display: flex;
@@ -37,7 +37,7 @@
   border-radius: 1em;
 }
 
-.creative-store-body-header-container {
+.home-page-body-header-container {
   display: flex;
   flex-direction: row;
   border-radius: 1em;
@@ -51,7 +51,7 @@
   box-sizing: border-box;
 }
 
-.creative-store-body-header-left {
+.home-page-body-header-left {
   display: flex;
   flex-direction: row;
   justify-self: flex-start;
@@ -59,7 +59,7 @@
   color: #fff;
 }
 
-.creative-store-body-container {
+.home-page-body-container {
   position: relative;
   box-sizing: border-box;
   width: stretch;
@@ -75,7 +75,7 @@
   }
 }
 
-.creative-store-mainbody-container {
+.home-page-mainbody-container {
   display: flex;
   flex-direction: column;
   margin-top: 12px;
@@ -89,22 +89,22 @@
   border-top-right-radius: 1em;
 }
 
-.creative-store-chatbody-container {
+.home-page-chatbody-container {
   padding-bottom: 0px !important;
 }
 
-.creative-store-chatbody-container:hover {
+.home-page-chatbody-container:hover {
   overflow-y: scroll;
 }
 
-.creative-store-mainbody-wrapper {
+.home-page-mainbody-wrapper {
   height: fit-content;
   display: flex;
   flex-direction: column;
   margin-top: auto;
 }
 
-.creative-store-chat-container {
+.home-page-chat-container {
   padding: 12px;
   padding-top: 0px !important;
   height: fit-content;
@@ -117,7 +117,7 @@
   border-bottom-right-radius: 1em;
 }
 
-.creative-store-chat-leftside-textinput-button {
+.home-page-chat-leftside-textinput-button {
   cursor: pointer;
   height: 30px !important;
   width: 30px !important;
@@ -133,42 +133,42 @@
   margin-right: 6px;
 }
 
-.creative-store-chat-leftside-textinput-button-emoji {
+.home-page-chat-leftside-textinput-button-emoji {
   background-image: url("../../assets/svg/face-smile-solid.svg");
 }
 
-.creative-store-chat-leftside-textinput-button-gif {
+.home-page-chat-leftside-textinput-button-gif {
   background-image: url("../../assets/svg/gif-icon.svg");
 }
 
-.creative-store-chat-textinput {
+.home-page-chat-textinput {
   color: #151515;
   margin-right: 6px;
   text-indent: 12px;
 }
 
-.creative-store-chattext-username {
+.home-page-chattext-username {
   margin: 0px !important;
   margin-bottom: 4px !important;
 }
 
-.creative-store-chattext-avatar {
+.home-page-chattext-avatar {
   justify-self: center;
   align-self: flex-start;
   padding-right: 8px;
 }
 
-.creative-store-chattext-wrapper {
+.home-page-chattext-wrapper {
   padding: 1em;
   padding-top: 12.5px !important;
 }
 
-.creative-store-chattext-container {
+.home-page-chattext-container {
   display: flex;
   flex-direction: row;
 }
 
-.creative-store-chat-cards-container {
+.home-page-chat-cards-container {
   display: flex;
   flex-direction: row;
 }
