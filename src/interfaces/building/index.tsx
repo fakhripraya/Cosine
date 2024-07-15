@@ -8,5 +8,5 @@ export interface BuildingDetails {
   owner_whatsapp: string;
   owner_phone_number: string;
   owner_email: string;
-  image_url: string[];
+  image_url: string;
 }

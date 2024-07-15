@@ -97,7 +97,7 @@ export default function Home() {
 
         const chatData: IChatData = {
           sender: {
-            id: userMessage.id,
+            id: userMessage.senderId,
             fullName: userMessage.senderFullName,
             profilePictureURI:
               userMessage.senderProfilePictureUri,
@@ -134,6 +134,7 @@ export default function Home() {
       endpoint: HERMES_SERVICE,
       url: `${URL_POST_COSINE_MESSAGING}`,
       data: {
+        sessionId: userChatData.sender.id,
         content: userChatData.content.chatContent,
       },
     });
