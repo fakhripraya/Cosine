@@ -38,12 +38,10 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
               uniqueKey={chat[0]}
             />
             {chat[1].building_contents && (
-              <div className="home-page-chat-cards-container">
-                <ShowGrabableStoreCardCarousel
-                  uniqueKey={chat[0]}
-                  values={chat[1].building_contents}
-                />
-              </div>
+              <ShowGrabableStoreCardCarousel
+                uniqueKey={chat[0]}
+                values={chat[1].building_contents}
+              />
             )}
           </div>
         </div>

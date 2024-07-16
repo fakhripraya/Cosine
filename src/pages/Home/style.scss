@@ -91,6 +91,10 @@
 
 .home-page-chatbody-container {
   padding-bottom: 0px !important;
+
+  @media screen and (max-width: 769px) {
+    overflow-y: scroll;
+  }
 }
 
 .home-page-chatbody-container:hover {
@@ -161,6 +165,7 @@
 .home-page-chattext-wrapper {
   padding: 1em;
   padding-top: 12.5px !important;
+  overflow-x: hidden;
 }
 
 .home-page-chattext-container {
@@ -168,8 +173,14 @@
   flex-direction: row;
 }
 
-.home-page-chat-cards-container {
+.home-page-carousel-wrapper {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  overflow-x: scroll;
+  align-items: center;
+  -webkit-box-align: center;
+  justify-content: flex-start;
+  cursor: grab;
+  padding: 12px 0px;
+  padding-bottom: 0px !important;
 }

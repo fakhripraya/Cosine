@@ -7,7 +7,7 @@ import "./style.scss";
 interface TextAreaProps {
   placeholder?: string;
   readOnly?: boolean;
-  value: string;
+  value: string | undefined;
   style?: CSSProperties;
   onChange?: ChangeEventHandler<HTMLTextAreaElement>;
   maxLength?: number;

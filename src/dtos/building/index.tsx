@@ -1,4 +1,4 @@
-export interface BuildingDetails {
+export interface BuildingDetailsDTO {
   id: string;
   building_title?: string;
   building_address: string;
@@ -8,5 +8,5 @@ export interface BuildingDetails {
   owner_whatsapp: string;
   owner_phone_number: string;
   owner_email: string;
-  image_url: string[];
+  image_url: string;
 }

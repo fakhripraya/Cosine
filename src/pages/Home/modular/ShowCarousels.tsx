@@ -1,32 +1,50 @@
-import React, { Fragment } from "react";
+import React, { useRef } from "react";
 import Card from "../../../components/Card";
 import { BuildingDetails } from "../../../interfaces/building";
-import { formattedNumber } from "../../../utils/functions/global";
+import {
+  formattedNumber,
+  scrollCarousel,
+} from "../../../utils/functions/global";
+import {
+  NavigateFunction,
+  useNavigate,
+} from "react-router-dom";
 
 interface ShowGrabableStoreCardCarouselProps {
   uniqueKey: string;
   values: BuildingDetails[];
 }
 
+const navigateToDetails = (
+  navigate: NavigateFunction,
+  args: BuildingDetails
+) => {
+  navigate("/detail", {
+    state: args,
+  });
+};
+
 export const ShowGrabableStoreCardCarousel: React.FC<
   ShowGrabableStoreCardCarouselProps
-> = (props) => (
-  <Fragment>
-    {props.values?.map((obj, index) => {
-      obj.image_url = obj.image_url.replace(/'/g, '"');
-      const actualImages: string[] = JSON.parse(
-        obj.image_url
-      );
-      return (
+> = (props) => {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  return (
+    <div
+      onMouseDown={(event) =>
+        scrollCarousel(event, carouselRef.current)
+      }
+      className="home-page-carousel-wrapper"
+      ref={carouselRef}>
+      {props.values?.map((obj, index) => (
         <Card
-          onClick={() => {
-            console.log(actualImages);
-          }}
+          onClick={() => navigateToDetails(navigate, obj)}
           key={`carousel-card-${props.uniqueKey}-${index}-id${obj.id}`}>
           <img
             className="card-img"
-            src={actualImages[0]}
-            alt={actualImages[0]}
+            src={obj.image_url[0]}
+            alt={obj.image_url[0]}
           />
           <div className="breakline" />
           <div className="breakline" />
@@ -46,7 +64,7 @@ export const ShowGrabableStoreCardCarousel: React.FC<
           </p>
           <button>see more</button>
         </Card>
-      );
-    })}
-  </Fragment>
-);
+      ))}
+    </div>
+  );
+};

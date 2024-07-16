@@ -35,6 +35,7 @@ import {
   AI_NAME,
 } from "../../variables/constants/ai";
 import { BuildingDetails } from "../../interfaces/building";
+import { BuildingDetailsDTO } from "../../dtos/building";
 
 export default function Home() {
   // REFS //
@@ -150,13 +151,23 @@ export default function Home() {
       createdAt: timeNow,
     };
 
-    const parsedContent: BuildingDetails[] = JSON.parse(
+    const parsedContent: BuildingDetailsDTO[] = JSON.parse(
       response.responseData?.output_content
     );
-    const isHasContent = parsedContent.length > 0;
-    const building_contents = isHasContent
-      ? parsedContent
-      : undefined;
+
+    const building_contents = parsedContent?.map(
+      (obj): BuildingDetails => {
+        obj.image_url = obj.image_url.replace(/'/g, '"');
+        const actualImages: string[] = JSON.parse(
+          obj.image_url
+        );
+
+        return {
+          ...obj,
+          image_url: actualImages,
+        };
+      }
+    );
 
     const chatData: IChatData = {
       sender: {

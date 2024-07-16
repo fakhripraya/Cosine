@@ -10,6 +10,46 @@ export function sendWACS() {
   );
 }
 
+let pos = { left: 0, x: 0, y: 0 };
+export function scrollCarousel(
+  e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ele: HTMLDivElement | null
+): void {
+  if (!ele) return;
+
+  pos = {
+    left: ele.scrollLeft,
+    x: e.clientX,
+    y: e.clientY,
+  };
+
+  function mouseMoveHandler(e: MouseEvent) {
+    if (!ele) return;
+    const dx = e.clientX - pos.x;
+
+    ele.scrollLeft = pos.left - dx;
+  }
+
+  function mouseUpHandler() {
+    if (!ele) return;
+    window.removeEventListener(
+      "mousemove",
+      mouseMoveHandler
+    );
+    window.removeEventListener("mouseup", mouseUpHandler);
+
+    ele.style.cursor = "grab";
+    ele.style.removeProperty("user-select");
+  }
+
+  // Change the cursor and prevent user from selecting the text
+  ele.style.cursor = "grabbing";
+  ele.style.userSelect = "none";
+
+  window.addEventListener("mousemove", mouseMoveHandler);
+  window.addEventListener("mouseup", mouseUpHandler);
+}
+
 export function smoothScrollTop() {
   window.scrollTo({
     top: 0,
