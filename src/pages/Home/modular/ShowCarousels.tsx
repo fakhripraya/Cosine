@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Card from "../../../components/Card";
 import { BuildingDetails } from "../../../interfaces/building";
 import {
-  formattedNumber,
+  formattedCurrencyIDR,
   scrollCarousel,
 } from "../../../utils/functions/global";
 import {
@@ -51,18 +51,14 @@ export const ShowGrabableStoreCardCarousel: React.FC<
           <h3 className="light-color">
             {obj?.building_title}
           </h3>
-          <p className="margin-bottom-0 light-color">
-            {formattedNumber(
+          <p className="margin-bottom-0 main-color">
+            {formattedCurrencyIDR(
               parseFloat(obj?.housing_price)
             )}
           </p>
           <p className="light-color">
             {obj?.building_address}
           </p>
-          <p className="light-color">
-            {obj?.building_description}
-          </p>
-          <button>see more</button>
         </Card>
       ))}
     </div>

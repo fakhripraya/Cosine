@@ -97,6 +97,13 @@ export const formattedNumber = (number: number) => {
   return new Intl.NumberFormat().format(number);
 };
 
+export const formattedCurrencyIDR = (number: number) => {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(number);
+};
+
 export const unformattedNumber = (
   formattedString: string
 ) => {

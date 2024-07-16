@@ -282,9 +282,17 @@ export default function Home() {
                   ref={chatInputRef}
                   className="home-page-chat-textinput light-color darker-bg-color"
                 />
-                <Button onClick={handleOnSendMessage}>
-                  {loading ? "Loading..." : "Send"}
-                </Button>
+                {loading ? (
+                  <Button
+                    className="red-bg-color"
+                    onClick={() => {}}>
+                    Cancel
+                  </Button>
+                ) : (
+                  <Button onClick={handleOnSendMessage}>
+                    Send
+                  </Button>
+                )}
               </div>
             </div>
           </div>
