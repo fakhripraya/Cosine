@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Share+Tech&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lato&family=Montserrat&family=Open+Sans&family=PT+Sans&family=Roboto+Condensed&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 /* Fonts */
 * {
@@ -148,10 +149,16 @@ body h6 {
 .hidden {
   visibility: hidden;
   opacity: 0 !important;
+  padding: 0px !important;
+  margin: 0px !important;
 }
 
 .no-height {
   height: 0px !important;
+}
+
+.no-width {
+  width: 0px !important;
 }
 
 .break-word {
@@ -428,6 +435,11 @@ body h6 {
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
+
+  @media screen and (max-width: 420px) {
+    width: 0px;
+    height: 0px;
+  }
 }
 
 /* Track */

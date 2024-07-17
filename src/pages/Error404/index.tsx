@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import "./style.scss";
 
-export default function Error404() {
+const Error404: React.FC = () => {
   const navigate = useNavigate();
+
   return (
     <div className="error404-container">
       <div className="error404-wrapper">
@@ -22,12 +23,13 @@ export default function Error404() {
             </span>
           </label>
           <div className="breakline" />
-          <Button
-            onClick={() => (window.location.href = "/")}>
+          <Button onClick={() => navigate("/")}>
             Balik ke home
           </Button>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Error404;

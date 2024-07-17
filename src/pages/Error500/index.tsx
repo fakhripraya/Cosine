@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import "./style.scss";
 
-export default function Error500() {
+const Error500: React.FC = () => {
   const navigate = useNavigate();
+
   return (
     <div className="error500-container">
       <div className="error500-wrapper">
@@ -32,4 +33,6 @@ export default function Error500() {
       </div>
     </div>
   );
-}
+};
+
+export default Error500;

@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./style.scss";
-import { useEffect } from "react";
 import { smoothScrollTop } from "../../utils/functions/global";
 
-export default function TermsAndConditions() {
+const PrivacyPolicy: React.FC = () => {
   // INITIAL RENDER
   useEffect(() => {
     // scroll to top on entering
     smoothScrollTop();
   }, []);
+
   return (
     <div className="privacy-policy-container">
       <div className="privacy-policy-wrapper">
@@ -138,24 +138,9 @@ export default function TermsAndConditions() {
           quasi repellat odio autem unde distinctio illo
           ipsa cupiditate aliquam sunt?
         </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur,
-          adipisicing elit. Ea sint praesentium fugiat
-          aperiam ipsa, facere cumque ducimus autem error
-          incidunt nesciunt, quaerat ex dicta?
-          Necessitatibus officia praesentium non ullam
-          rerum. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. At laudantium expedita sunt
-          similique quae reiciendis, unde ratione
-          reprehenderit nobis molestias doloribus excepturi
-          omnis aspernatur ipsa ipsam vero sint, quis a.
-          Lorem, ipsum dolor sit amet consectetur
-          adipisicing elit. Odit natus ad, deleniti
-          assumenda eveniet alias amet ea quibusdam rerum
-          quasi repellat odio autem unde distinctio illo
-          ipsa cupiditate aliquam sunt?
-        </p>
       </div>
     </div>
   );
-}
+};
+
+export default PrivacyPolicy;

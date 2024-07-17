@@ -1,5 +1,7 @@
 import axios from "axios";
 
+export const abortController = new AbortController();
+
 export const createAxios = (
   baseUrl: string | undefined
 ) => {

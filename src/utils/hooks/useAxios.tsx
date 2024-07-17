@@ -1,6 +1,5 @@
 import axios, {
   AxiosResponse,
-  CancelTokenSource,
   InternalAxiosRequestConfig,
 } from "axios";
 import { createAxios } from "../../config/xhr/axios.tsx";
@@ -19,10 +18,15 @@ const initial: IResponseObject = {
 };
 
 export const useAxios = () => {
+  const setAxiosTimeout = (controller: AbortController) => {
+    const timeout = setTimeout(
+      () => controller.abort(),
+      30000
+    );
+    return timeout;
+  };
+
   const getData = async (reqConfig: IRequestConfig) => {
-    // creates the cancel token source
-    const cancelSource = axios.CancelToken.source();
-    // Start timing now
     console.time("Load Time");
     return new Promise<IResponseObject>(
       (resolve, reject) => {
@@ -33,7 +37,7 @@ export const useAxios = () => {
           headers: reqConfig.headers,
           url: reqConfig.url,
           params: reqConfig.params,
-          cancelToken: cancelSource.token,
+          signal: reqConfig.controller.signal,
         })
           .then((response: AxiosResponse) => {
             result.responseData = response.data;
@@ -44,14 +48,10 @@ export const useAxios = () => {
           .catch((error) => {
             result.responseError = true;
             if (error.response) {
-              if (axios.isCancel(error)) {
-                return cancelSource.cancel();
-              }
               result.errorContent = error.response.data;
               result.responseStatus = error.response.status;
-            } else {
-              result.responseStatus = 500;
-            }
+            } else result.responseStatus = 500;
+
             console.timeEnd("Load Time");
             reject(result);
           });
@@ -63,10 +63,6 @@ export const useAxios = () => {
     reqConfig: IRequestConfig,
     callbackInterceptors?: () => Promise<IResponseObject>
   ): Promise<IResponseObject> => {
-    // creates the cancel token source
-    const cancelSource: CancelTokenSource =
-      axios.CancelToken.source();
-    // Start timing now
     console.time("Load Time");
 
     return new Promise<IResponseObject>(
@@ -108,7 +104,7 @@ export const useAxios = () => {
           headers: reqConfig.headers,
           url: reqConfig.url,
           params: reqConfig.params,
-          cancelToken: cancelSource.token,
+          signal: reqConfig.controller.signal,
         })
           .then((response: AxiosResponse) => {
             result.responseData = response.data;
@@ -118,14 +114,11 @@ export const useAxios = () => {
           })
           .catch((error) => {
             result.responseError = true;
-            if (axios.isCancel(error))
-              return cancelSource.cancel();
             if (error.response) {
               result.errorContent = error.response.data;
               result.responseStatus = error.response.status;
-            } else {
-              result.responseStatus = 500;
-            }
+            } else result.responseStatus = 500;
+
             console.timeEnd("Load Time");
             reject(result);
           });
@@ -164,10 +157,6 @@ export const useAxios = () => {
   const postData = async (
     reqConfig: IRequestConfig
   ): Promise<IResponseObject> => {
-    // creates the cancel token source
-    const cancelSource: CancelTokenSource =
-      axios.CancelToken.source();
-    // Start timing now
     console.time("Load Time");
 
     return new Promise<IResponseObject>(
@@ -178,7 +167,7 @@ export const useAxios = () => {
           headers: reqConfig.headers,
           url: reqConfig.url,
           data: reqConfig.data,
-          cancelToken: cancelSource.token,
+          signal: reqConfig.controller.signal,
         })
           .then((response: AxiosResponse) => {
             result.responseData = response.data;
@@ -188,14 +177,11 @@ export const useAxios = () => {
           })
           .catch((error) => {
             result.responseError = true;
-            if (axios.isCancel(error)) {
-              cancelSource.cancel();
-            } else if (error.response) {
+            if (error.response) {
               result.errorContent = error.response.data;
               result.responseStatus = error.response.status;
-            } else {
-              result.responseStatus = 500;
-            }
+            } else result.responseStatus = 500;
+
             console.timeEnd("Load Time");
             reject(result);
           });
@@ -204,6 +190,7 @@ export const useAxios = () => {
   };
 
   return {
+    setAxiosTimeout,
     getData,
     getDataWithOnRequestInterceptors,
     getAllData,

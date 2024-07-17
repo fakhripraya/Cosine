@@ -1,6 +1,7 @@
 import { BuildingDetails } from "../building";
 
 export interface IChatData {
+  id: string;
   sender: {
     id: string;
     fullName: string;
@@ -8,6 +9,7 @@ export interface IChatData {
   };
   content: OneToOneChat;
   building_contents?: BuildingDetails[];
+  timestamp: string;
 }
 
 export interface OneToOneChat {

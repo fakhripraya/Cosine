@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { OLYMPUS_SERVICE } from "../../config/environment";
 import { delayInMilliSecond } from "../../utils/functions/global";
 import { IResponseObject } from "../../interfaces/axios";
+import { abortController } from "../../config/xhr/axios";
 
 const initial = {
   username: "",
@@ -40,12 +41,16 @@ export default function Login() {
   }
 
   function handleLoginRequest(callback: () => void) {
+    const axiosTimeout =
+      axiosService.setAxiosTimeout(abortController);
+
     trackPromise(
       axiosService
         .postData({
           endpoint: OLYMPUS_SERVICE,
           url: URL_POST_LOGIN,
           data: postLoginData,
+          controller: abortController,
         })
         .then((result) => {
           cookies.set(
@@ -57,15 +62,20 @@ export default function Login() {
         .catch((error) => {
           console.log(error);
         })
+        .finally(() => clearTimeout(axiosTimeout))
     );
   }
 
   function handlePostGoogleAuth() {
+    const axiosTimeout =
+      axiosService.setAxiosTimeout(abortController);
+
     trackPromise(
       axiosService
         .getData({
           endpoint: OLYMPUS_SERVICE,
           url: URL_GET_GOOGLE_URL,
+          controller: abortController,
         })
         .then(async (result: IResponseObject) => {
           window.location.replace(result.responseData);
@@ -74,6 +84,7 @@ export default function Login() {
         .catch((error) => {
           console.log(error);
         })
+        .finally(() => clearTimeout(axiosTimeout))
     );
   }
 
@@ -81,12 +92,11 @@ export default function Login() {
     <div className="login-container">
       <div className="login-wrapper">
         <h3 className="margin-bottom-12-18">
-          <span className="main-color">Login</span> Untuk
-          Mengakses
+          <span className="main-color">Login</span> untuk
+          mengakses
         </h3>
         <label className="margin-top-0 margin-bottom-12-18">
-          Mulai bisnis dan komunitasmu sekarang, tunggu apa
-          lagi?
+          Login dulu yuk biar bisa nyari kos bareng Cosine
         </label>
         <div className="login-textinput-box">
           <label className="login-input-title">ID</label>

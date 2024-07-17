@@ -39,12 +39,10 @@ const TextInput = React.forwardRef<
       if (
         (e.key === "Enter" || e.keyCode === 13) &&
         typeof props.onEnter !== "undefined"
-      ) {
+      )
         props.onEnter();
-      }
-      if (typeof props.onKeyUp !== "undefined") {
+      if (typeof props.onKeyUp !== "undefined")
         props.onKeyUp(e);
-      }
     }}
     onInput={props.onInput}
     onFocus={props.onFocus}

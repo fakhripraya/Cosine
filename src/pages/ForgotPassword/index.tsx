@@ -1,10 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, {
+  Fragment,
+  useState,
+  ChangeEvent,
+} from "react";
 import "./style.scss";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
-import OverridingContainer from "../../components/OverridingContainer";
-import { ShowNavbar } from "../../components/Global";
-import Footer from "../../components/Footer";
 import XMark from "../../assets/svg/xmark-solid.svg";
 import {
   NO_STRING,
@@ -22,31 +23,50 @@ import {
   handleOpenModal,
 } from "../../utils/functions/global";
 import { cookies } from "../../config/cookie";
+import { abortController } from "../../config/xhr/axios";
 
-export default function ForgotPassword(props) {
+interface ForgotPasswordProps {
+  handleOpen: (view: string) => void;
+  toggle: string;
+}
+
+interface PostForgotPWData {
+  email: string;
+}
+
+export default function ForgotPassword(
+  props: ForgotPasswordProps
+) {
   // HOOKS //
   const loginService = useAxios();
   const [modalToggle, setModalToggle] = useState(false);
-  const [postForgotPWData, setPostForgotPWData] = useState(
-    FORGOT_PASSWORD_INITIAL_VALUE
-  );
+  const [postForgotPWData, setPostForgotPWData] =
+    useState<PostForgotPWData>(
+      FORGOT_PASSWORD_INITIAL_VALUE
+    );
   const [success, setSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<
+    string | null
+  >(null);
 
   // FUNCTIONS SPECIFIC //
-  function handleTextChange(field, event) {
+  function handleTextChange(
+    field: keyof PostForgotPWData,
+    event: ChangeEvent<HTMLInputElement>
+  ) {
     const temp = { ...postForgotPWData };
     temp[field] = event.target.value;
     setPostForgotPWData(temp);
   }
 
-  function handleForgotPWRequest(callback) {
+  function handleForgotPWRequest(callback: () => void) {
     trackPromise(
       loginService
         .postData({
           endpoint: process.env.REACT_APP_OLYMPUS_SERVICE,
           url: URL_POST_FORGOT_PW,
           data: postForgotPWData,
+          controller: abortController,
         })
         .then((result) => {
           cookies.set(
@@ -58,7 +78,7 @@ export default function ForgotPassword(props) {
         })
         .catch((error) => {
           setSuccess(false);
-          return handleErrorMessage(
+          handleErrorMessage(
             error,
             setErrorMessage,
             setModalToggle,
@@ -79,28 +99,23 @@ export default function ForgotPassword(props) {
 
   // COMPONENTS SPECIFIC //
 
-  const ShowErrorTitle = () => {
-    return (
-      <h3 className="margin-top-0 margin-bottom-12-18">
-        There is an <span className="red-color">ERROR</span>
-      </h3>
-    );
-  };
+  const ShowErrorTitle: React.FC = () => (
+    <h3 className="margin-top-0 margin-bottom-12-18">
+      There is an <span className="red-color">ERROR</span>
+    </h3>
+  );
 
-  const ShowSuccessTitle = () => {
-    return (
-      <h3 className="margin-top-0 margin-bottom-12-18">
-        <span className="main-color">Berhasil</span>
-        &nbsp;mengirim recovery email
-      </h3>
-    );
-  };
+  const ShowSuccessTitle: React.FC = () => (
+    <h3 className="margin-top-0 margin-bottom-12-18">
+      <span className="main-color">Berhasil</span>
+      &nbsp;mengirim recovery email
+    </h3>
+  );
 
-  const ShowModal = () => {
-    const ShowTitle = () => {
-      if (success) return <ShowSuccessTitle />;
-      else return <ShowErrorTitle />;
-    };
+  const ShowModal: React.FC = () => {
+    const ShowTitle: React.FC = success
+      ? ShowSuccessTitle
+      : ShowErrorTitle;
 
     return (
       <div className="forgot-password-modal-container dark-bg-color">
@@ -175,14 +190,14 @@ export default function ForgotPassword(props) {
               </div>
               <div className="breakline" />
               <label
-                onClick={() => handleOpenLogin()}
+                onClick={handleOpenLogin}
                 className="forgot-password-forgot-pass main-color cursor-pointer">
                 Gak jadi deh, aku ingat kata sandiku
               </label>
               <Button
                 onClick={() =>
-                  handleForgotPWRequest(() =>
-                    handleAfterSubmitEmail()
+                  handleForgotPWRequest(
+                    handleAfterSubmitEmail
                   )
                 }
                 className="forgot-password-button">

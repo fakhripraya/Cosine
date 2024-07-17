@@ -6,7 +6,7 @@ import { IChatData } from "../../../interfaces/home";
 import { ShowGrabableStoreCardCarousel } from "./ShowCarousels";
 
 interface ShowChatWrapperProps {
-  chat: [string, IChatData];
+  chat: IChatData;
 }
 
 const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
@@ -21,26 +21,26 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
               style={{ cursor: "pointer" }}
               round={true}
               size={"50"}
-              src={chat[1].sender.profilePictureURI}
-              title={chat[1].sender.fullName}
-              name={chat[1].sender.fullName}
+              src={chat.sender.profilePictureURI}
+              title={chat.sender.fullName}
+              name={chat.sender.fullName}
             />
           </div>
           <div className="home-page-chattext-wrapper">
             <div>
               <h4 className="home-page-chattext-username">
-                {chat[1].sender.fullName}
+                {chat.sender.fullName}
               </h4>
-              {chat[1].content.createdAt}
+              {chat.content.createdAt}
             </div>
             <ShowChat
-              content={chat[1].content}
-              uniqueKey={chat[0]}
+              content={chat.content}
+              uniqueKey={chat.id}
             />
-            {chat[1].building_contents && (
+            {chat.building_contents && (
               <ShowGrabableStoreCardCarousel
-                uniqueKey={chat[0]}
-                values={chat[1].building_contents}
+                uniqueKey={chat.id}
+                values={chat.building_contents}
               />
             )}
           </div>

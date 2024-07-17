@@ -3,9 +3,7 @@ import ShowChatWrapper from "./ShowChatWrapper";
 import { IChatData } from "../../../interfaces/home";
 
 interface ShowChatWrappersProps {
-  chats: {
-    [key: string]: IChatData;
-  };
+  chats: IChatData[];
   uniqueKey: string;
 }
 
@@ -15,7 +13,7 @@ const ShowChatWrappers: React.FC<ShowChatWrappersProps> = ({
 }) => {
   const render = useCallback(
     () =>
-      Object.entries(chats).map((obj, index) => (
+      chats.map((obj, index) => (
         <ShowChatWrapper
           key={`${uniqueKey}-chat-wrapper-${index}`}
           chat={obj}

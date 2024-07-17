@@ -32,14 +32,15 @@
 
 // MAIN STYLES //
 .login-container {
-  min-height: 100vmin;
+  min-height: 100vh;
   min-width: 100%;
   display: flex;
 }
 
 .login-wrapper {
-  width: 40vw;
-  margin: 0px auto;
+  max-width: 768px;
+  width: calc(100% - 24px);
+  margin: auto;
   position: relative;
   align-self: center;
   align-items: flex-start;
@@ -47,13 +48,6 @@
   -webkit-box-align: center;
   display: flex;
   flex-direction: column;
-
-  @media screen and (max-width: 1280px) {
-    width: 60vw;
-  }
-  @media screen and (max-width: 768px) {
-    width: 80vw;
-  }
 }
 
 .login-input-title {

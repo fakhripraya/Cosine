@@ -36,6 +36,8 @@ import {
 } from "../../variables/constants/ai";
 import { BuildingDetails } from "../../interfaces/building";
 import { BuildingDetailsDTO } from "../../dtos/building";
+import { abortController } from "../../config/xhr/axios";
+import { isIResponseObject } from "../../interfaces/axios";
 
 export default function Home() {
   // REFS //
@@ -50,9 +52,7 @@ export default function Home() {
   const [user, setUser] = useState<IUserData | null>(null);
   const [rendered, setRendered] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [chats, setChats] = useState<
-    Record<string, IChatData>
-  >({});
+  const [chats, setChats] = useState<IChatData[]>([]);
 
   // VARIABLES //
   const pageLoadingClassName = rendered
@@ -64,22 +64,37 @@ export default function Home() {
 
   // FUNCTIONS //
   const handleInitialize = async () => {
-    const clientUserInfo = cookies.get(CLIENT_USER_INFO);
-    if (clientUserInfo?.user) {
-      setUser(clientUserInfo.user);
-      return setRendered(true);
+    try {
+      const clientUserInfo = cookies.get(CLIENT_USER_INFO);
+      const searchParamScopes = window.location.search;
+
+      if (clientUserInfo?.user)
+        setUser(clientUserInfo.user);
+      else if (searchParamScopes?.includes("googleapis"))
+        await handleGoogleAuthListener(searchParamScopes);
+
+      const allChatData = await db.transaction(
+        "rw",
+        db.chat_data,
+        async () => {
+          return await db.chat_data
+            .orderBy("timestamp")
+            .toArray();
+        }
+      );
+
+      setChats(allChatData);
+    } catch (error) {
+      console.error("Failed to initialize:", error);
+    } finally {
+      setRendered(true);
     }
-
-    const searchParamScopes = window.location.search;
-    if (searchParamScopes?.includes("googleapis"))
-      await handleGoogleAuthListener(searchParamScopes);
-
-    setRendered(true);
   };
 
   const handleOnSendMessage = async () => {
     try {
-      if (loading) return window.alert("sabar lg loading");
+      if (loading)
+        return window.alert("Sabar lagi loading nih !");
       if (!user) return;
       if (chatInputRef.current?.value !== "") {
         setLoading(true);
@@ -97,6 +112,7 @@ export default function Home() {
         chatInputRef.current!.value = "";
 
         const chatData: IChatData = {
+          id: uuidv4(),
           sender: {
             id: userMessage.senderId,
             fullName: userMessage.senderFullName,
@@ -104,18 +120,12 @@ export default function Home() {
               userMessage.senderProfilePictureUri,
           },
           content: userMessage,
+          timestamp: new Date().toISOString(),
         };
 
         setChats((record) => {
-          let temp: Record<string, IChatData> = {
-            ...record,
-          };
-
-          temp = {
-            ...temp,
-            [uuidv4()]: chatData,
-          };
-
+          const temp: IChatData[] = [...record];
+          temp.push(chatData);
           return temp;
         });
 
@@ -131,85 +141,96 @@ export default function Home() {
     userChatData: IChatData,
     timeNow: string
   ) => {
-    const response = await axiosService.postData({
-      endpoint: HERMES_SERVICE,
-      url: `${URL_POST_COSINE_MESSAGING}`,
-      data: {
-        sessionId: userChatData.sender.id,
-        content: userChatData.content.chatContent,
-      },
-    });
+    const axiosTimeout =
+      axiosService.setAxiosTimeout(abortController);
 
-    const aiMessage: OneToOneChat = {
-      id: uuidv4(),
-      chatContent: removeTrailingNewlines(
-        response.responseData?.output
-      ),
-      senderId: AI_ID,
-      senderFullName: AI_NAME,
-      senderProfilePictureUri: "",
-      createdAt: timeNow,
-    };
+    try {
+      const response = await axiosService.postData({
+        endpoint: HERMES_SERVICE,
+        url: `${URL_POST_COSINE_MESSAGING}`,
+        data: {
+          sessionId: userChatData.sender.id,
+          content: userChatData.content.chatContent,
+        },
+        controller: abortController,
+      });
 
-    const parsedContent: BuildingDetailsDTO[] = JSON.parse(
-      response.responseData?.output_content
-    );
+      clearTimeout(axiosTimeout);
 
-    const building_contents = parsedContent?.map(
-      (obj): BuildingDetails => {
-        obj.image_url = obj.image_url.replace(/'/g, '"');
-        const actualImages: string[] = JSON.parse(
-          obj.image_url
-        );
-
-        return {
-          ...obj,
-          image_url: actualImages,
-        };
-      }
-    );
-
-    const chatData: IChatData = {
-      sender: {
-        id: aiMessage.id,
-        fullName: aiMessage.senderFullName,
-        profilePictureURI:
-          aiMessage.senderProfilePictureUri,
-      },
-      content: aiMessage,
-      building_contents: building_contents,
-    };
-
-    console.log(chatData);
-
-    setChats((record) => {
-      let temp: Record<string, IChatData> = {
-        ...record,
+      const aiMessage: OneToOneChat = {
+        id: uuidv4(),
+        chatContent: removeTrailingNewlines(
+          response.responseData?.output
+        ),
+        senderId: AI_ID,
+        senderFullName: AI_NAME,
+        senderProfilePictureUri: "",
+        createdAt: timeNow,
       };
 
-      temp = {
-        ...temp,
-        [uuidv4()]: chatData,
+      const parsedContent: BuildingDetailsDTO[] =
+        JSON.parse(response.responseData?.output_content);
+
+      const building_contents = parsedContent?.map(
+        (obj): BuildingDetails => {
+          obj.image_url = obj.image_url.replace(/'/g, '"');
+          const actualImages: string[] = JSON.parse(
+            obj.image_url
+          );
+
+          return {
+            ...obj,
+            image_url: actualImages,
+          };
+        }
+      );
+
+      const chatData: IChatData = {
+        id: uuidv4(),
+        sender: {
+          id: aiMessage.id,
+          fullName: aiMessage.senderFullName,
+          profilePictureURI:
+            aiMessage.senderProfilePictureUri,
+        },
+        content: aiMessage,
+        building_contents: building_contents,
+        timestamp: new Date().toISOString(),
       };
 
-      return temp;
-    });
+      setChats((record) => {
+        const temp: IChatData[] = [...record];
+        temp.push(chatData);
+        return temp;
+      });
 
-    await db.transaction("rw", db.chat_data, () => {
-      db.chat_data.bulkAdd([userChatData, chatData]);
-    });
-
-    setLoading(false);
+      await db.transaction("rw", db.chat_data, () => {
+        db.chat_data.bulkAdd([userChatData, chatData]);
+      });
+    } catch (error) {
+      console.log(error);
+      if (isIResponseObject(error))
+        return alert(error.errorContent);
+      alert(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleAuthListener = async (
     queryString: string
   ) => {
     try {
+      const axiosTimeout =
+        axiosService.setAxiosTimeout(abortController);
+
       const result = await axiosService.postData({
         endpoint: OLYMPUS_SERVICE,
         url: `${URL_POST_GOOGLE_CALLBACK}/${queryString}`,
+        controller: abortController,
       });
+
+      clearTimeout(axiosTimeout);
 
       let loggedUser: any | undefined = undefined;
       cookies.set(CLIENT_USER_INFO, result.responseData);
@@ -218,6 +239,8 @@ export default function Home() {
       clearAllUrlParameters();
     } catch (error) {
       console.log(error);
+      alert(error);
+      navigate("/login");
     }
   };
 
@@ -280,19 +303,19 @@ export default function Home() {
                 <TextInput
                   onEnter={handleOnSendMessage}
                   ref={chatInputRef}
-                  className="home-page-chat-textinput light-color darker-bg-color"
+                  className="home-page-chat-textinput light-color darker-bg-color max-width"
+                  placeholder={loading ? "Loading..." : ""}
+                  readOnly={loading}
                 />
-                {loading ? (
-                  <Button
-                    className="red-bg-color"
-                    onClick={() => {}}>
-                    Cancel
-                  </Button>
-                ) : (
-                  <Button onClick={handleOnSendMessage}>
+                <Button
+                  className={
+                    loading ? "hidden no-width" : "visible"
+                  }
+                  onClick={handleOnSendMessage}>
+                  <label className="text-ellipsis">
                     Send
-                  </Button>
-                )}
+                  </label>
+                </Button>
               </div>
             </div>
           </div>

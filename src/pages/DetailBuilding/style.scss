@@ -1,19 +1,26 @@
-.home-page {
+.detail-building {
   overflow: hidden;
   height: 100svh !important;
+
+  @media screen and (max-width: 1280px) {
+    height: auto;
+    overflow-y: scroll;
+  }
 }
 
 .detail-building-container {
-  width: auto;
   height: 100svh;
+  width: 100vw;
   display: flex;
   flex-direction: row;
-  //overflow: hidden;
+
+  @media screen and (max-width: 1280px) {
+    height: auto;
+  }
 }
 
 .detail-building-wrapper {
   display: flex;
-  width: calc(100vw - 24px);
   align-items: center;
   -webkit-box-align: center;
   flex-direction: column;
@@ -35,6 +42,13 @@
   height: calc(100vh - 24px);
   background-color: #151515;
   border-radius: 1em;
+
+  @media screen and (max-width: 1280px) {
+    margin-left: 12px;
+    margin-right: 12px;
+    width: auto;
+    height: auto;
+  }
 }
 
 .detail-building-body-container {
@@ -47,8 +61,13 @@
     "mainPic mainPic listPic detail detail"
     "mainPic mainPic listPic detail detail";
   grid-template-rows: 60px 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr 300px 1fr;
+  grid-template-columns: 20% 30% min-content auto 30%;
   gap: 12px;
+
+  @media screen and (max-width: 1280px) {
+    display: flex;
+    flex-direction: column;
+  }
 
   @media screen and (max-width: 769px) {
     padding-left: 0px;
@@ -65,6 +84,10 @@
   justify-content: space-between;
   padding: 12px;
   box-sizing: border-box;
+
+  @media screen and (max-width: 1280px) {
+    max-height: 60px;
+  }
 }
 
 .detail-building-body-header-left {
@@ -77,19 +100,25 @@
 
 .detail-building-body-mainpic-container {
   grid-area: mainPic;
+  border-radius: 1em;
 }
 
 .detail-building-body-mainpic {
   height: 100%;
   width: 100%;
+  border-radius: 1em;
 }
 
 .detail-building-body-listpic-container {
   grid-area: listPic;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  max-width: 300px;
+  border-radius: 1em;
+  justify-content: flex-start;
+
+  @media screen and (max-width: 1280px) {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
 }
 
 .detail-building-body-listpic-item {
@@ -100,16 +129,17 @@
 
 .detail-building-mainbody-container {
   grid-area: detail;
-  display: flex;
-  flex-direction: column;
   padding: 12px;
   overflow: hidden;
   border-radius: 1em;
   overflow-y: scroll;
+
+  @media screen and (max-width: 1280px) {
+    overflow-y: hidden;
+  }
 }
 
 .detail-building-mainbody-wrapper {
-  height: fit-content;
   display: flex;
   flex-direction: column;
 }
@@ -179,8 +209,6 @@
   color: #fff;
 }
 
-.detail-building-chat-cards-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+.detail-building-card {
+  margin: 0px !important;
 }

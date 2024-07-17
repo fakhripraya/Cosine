@@ -10,6 +10,7 @@ export interface IRequestConfig {
   url?: string;
   params?: AxiosRequestConfig["params"];
   data?: AxiosRequestConfig["data"];
+  controller: AbortController;
 }
 
 export interface IResponseObject {
@@ -17,4 +18,21 @@ export interface IResponseObject {
   responseStatus?: number;
   responseError: boolean;
   errorContent: string;
+}
+
+export function isIResponseObject(
+  obj: any
+): obj is IResponseObject {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "responseError" in obj &&
+    typeof obj.responseError === "boolean" &&
+    "errorContent" in obj &&
+    typeof obj.errorContent === "string" &&
+    ("responseData" in obj ||
+      "responseData" in obj === undefined) &&
+    ("responseStatus" in obj ||
+      "responseStatus" in obj === undefined)
+  );
 }
