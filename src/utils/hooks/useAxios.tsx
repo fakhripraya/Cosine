@@ -14,7 +14,7 @@ const initial: IResponseObject = {
   responseStatus: undefined,
   responseError: false,
   errorContent:
-    "Something went wrong,\nPlease try again or contact our support.",
+    "Ada yang salah nih, coba lagi nanti atau contact support kita yah.",
 };
 
 export const useAxios = () => {

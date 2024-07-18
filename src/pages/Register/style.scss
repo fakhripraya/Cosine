@@ -1,5 +1,5 @@
 // MODAL STYLES //
-.new-password-modal-container {
+.register-modal-container {
   z-index: 1001;
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
   }
 }
 
-.new-password-modal-wrapper {
+.register-modal-wrapper {
   max-height: 100svh;
   margin: auto 0px;
   padding: 1.25em;
@@ -31,13 +31,13 @@
 }
 
 // MAIN STYLES //
-.new-password-container {
+.register-container {
   min-height: 100vh;
   min-width: 100%;
   display: flex;
 }
 
-.new-password-wrapper {
+.register-wrapper {
   max-width: 768px;
   width: calc(100% - 24px);
   margin: auto;
@@ -50,12 +50,12 @@
   flex-direction: column;
 }
 
-.new-password-input-title {
+.register-input-title {
   width: 100px;
   margin: 10px 10px 0px 0px !important;
 }
 
-.new-password-textinput-box {
+.register-textinput-box {
   margin-top: 12px;
   width: 100%;
   list-style: none;
@@ -63,7 +63,7 @@
   flex-direction: row;
 }
 
-.new-password-textinput {
+.register-textinput {
   padding: 6px 0px;
   border-radius: 8px;
   text-decoration: none;
@@ -72,32 +72,32 @@
   background-color: #fff;
 }
 
-.new-password-button {
+.register-button {
   margin-top: 12px;
   text-align: center;
   justify-self: center;
   align-self: center;
 }
 
-.new-password-button-text {
+.register-button-text {
   margin: 6px !important;
 }
 
-.new-password-forgot-pass {
+.register-forgot-pass {
   align-self: flex-start;
 }
 
-.new-password-middle-text {
+.register-middle-text {
   align-self: center;
 }
 
-.new-password-open-auths {
+.register-open-auths {
   align-self: center;
   display: flex;
   flex-direction: row;
 }
 
-.new-password-open-auths-button {
+.register-open-auths-button {
   margin-top: 12px;
   text-align: center;
   justify-self: center;
@@ -105,11 +105,11 @@
   margin-right: 6px;
 }
 
-.new-password-open-auths-button img {
+.register-open-auths-button img {
   height: 40px;
   width: 40px;
 }
 
-.new-password-open-auths-button:last-child {
+.register-open-auths-button:last-child {
   margin-right: 0px !important;
 }

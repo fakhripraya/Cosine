@@ -4,9 +4,14 @@ import {
   AxiosRequestHeaders,
 } from "axios";
 
+export interface AdvanceAxiosRequestHeaders
+  extends AxiosRequestHeaders {
+  [key: string]: any;
+}
+
 export interface IRequestConfig {
   endpoint?: string;
-  headers?: AxiosRequestHeaders;
+  headers?: AdvanceAxiosRequestHeaders;
   url?: string;
   params?: AxiosRequestConfig["params"];
   data?: AxiosRequestConfig["data"];

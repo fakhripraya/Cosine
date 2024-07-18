@@ -1,49 +1,31 @@
-import React, {
-  Fragment,
-  useState,
-  ChangeEvent,
-} from "react";
+import { Fragment, useState, ChangeEvent } from "react";
 import "./style.scss";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
-import XMark from "../../assets/svg/xmark-solid.svg";
-import {
-  NO_STRING,
-  FORGOT_PASSWORD,
-  LOGIN,
-  URL_POST_FORGOT_PW,
-  CLIENT_USER_INFO,
-} from "../../variables/global";
+import { CLIENT_USER_INFO } from "../../variables/global";
 import { trackPromise } from "react-promise-tracker";
 import { useAxios } from "../../utils/hooks/useAxios";
-import { FORGOT_PASSWORD_INITIAL_VALUE } from "../../variables/initial/forgotpassword";
 import Modal from "../../components/Modal";
-import {
-  handleErrorMessage,
-  handleOpenModal,
-} from "../../utils/functions/global";
 import { cookies } from "../../config/cookie";
 import { abortController } from "../../config/xhr/axios";
+import { URL_POST_FORGOT_PW } from "../../config/xhr/routes/credentials";
+import { IForgotPWData } from "../../interfaces/credential";
+import { ShowResponseModal } from "./modular/ShowModal";
+import { useNavigate } from "react-router-dom";
+import { OLYMPUS_SERVICE } from "../../config/environment";
+import { IResponseObject } from "../../interfaces/axios";
 
-interface ForgotPasswordProps {
-  handleOpen: (view: string) => void;
-  toggle: string;
-}
+const initial: IForgotPWData = {
+  email: "",
+};
 
-interface PostForgotPWData {
-  email: string;
-}
-
-export default function ForgotPassword(
-  props: ForgotPasswordProps
-) {
+export default function ForgotPassword() {
   // HOOKS //
-  const loginService = useAxios();
+  const navigate = useNavigate();
+  const axiosService = useAxios();
   const [modalToggle, setModalToggle] = useState(false);
   const [postForgotPWData, setPostForgotPWData] =
-    useState<PostForgotPWData>(
-      FORGOT_PASSWORD_INITIAL_VALUE
-    );
+    useState<IForgotPWData>(initial);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<
     string | null
@@ -51,7 +33,7 @@ export default function ForgotPassword(
 
   // FUNCTIONS SPECIFIC //
   function handleTextChange(
-    field: keyof PostForgotPWData,
+    field: keyof IForgotPWData,
     event: ChangeEvent<HTMLInputElement>
   ) {
     const temp = { ...postForgotPWData };
@@ -60,10 +42,12 @@ export default function ForgotPassword(
   }
 
   function handleForgotPWRequest(callback: () => void) {
+    const axiosTimeout =
+      axiosService.setAxiosTimeout(abortController);
     trackPromise(
-      loginService
+      axiosService
         .postData({
-          endpoint: process.env.REACT_APP_OLYMPUS_SERVICE,
+          endpoint: OLYMPUS_SERVICE,
           url: URL_POST_FORGOT_PW,
           data: postForgotPWData,
           controller: abortController,
@@ -71,145 +55,79 @@ export default function ForgotPassword(
         .then((result) => {
           cookies.set(
             CLIENT_USER_INFO,
-            result.responseData,
-            { path: "/" }
+            result.responseData
           );
           callback();
         })
-        .catch((error) => {
+        .catch((error: IResponseObject) => {
           setSuccess(false);
-          handleErrorMessage(
-            error,
-            setErrorMessage,
-            setModalToggle,
-            modalToggle
-          );
+          setErrorMessage(error.errorContent);
+          setModalToggle(error.responseError);
         })
+        .finally(() => clearTimeout(axiosTimeout))
     );
   }
 
   function handleOpenLogin() {
-    props.handleOpen(LOGIN);
+    navigate("/login");
   }
-
-  function handleAfterSubmitEmail() {
-    setSuccess(true);
-    handleOpenModal(setModalToggle, modalToggle);
-  }
-
-  // COMPONENTS SPECIFIC //
-
-  const ShowErrorTitle: React.FC = () => (
-    <h3 className="margin-top-0 margin-bottom-12-18">
-      There is an <span className="red-color">ERROR</span>
-    </h3>
-  );
-
-  const ShowSuccessTitle: React.FC = () => (
-    <h3 className="margin-top-0 margin-bottom-12-18">
-      <span className="main-color">Berhasil</span>
-      &nbsp;mengirim recovery email
-    </h3>
-  );
-
-  const ShowModal: React.FC = () => {
-    const ShowTitle: React.FC = success
-      ? ShowSuccessTitle
-      : ShowErrorTitle;
-
-    return (
-      <div className="forgot-password-modal-container dark-bg-color">
-        <div className="forgot-password-modal-wrapper">
-          <Button
-            onClick={() =>
-              handleOpenModal(setModalToggle, modalToggle)
-            }
-            className="align-self-end forgot-password-button red-bg-color">
-            <h4 className="forgot-password-button-text">
-              X
-            </h4>
-          </Button>
-          <div className="breakline" />
-          <ShowTitle />
-          <div className="breakline" />
-          <label className="margin-top-0 margin-bottom-12-18 white-space-pre-line">
-            {success
-              ? "Kami sudah berhasil kirimin kamu recovery email ke kamu, tolong dicek ya"
-              : errorMessage}
-          </label>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <Fragment>
       <Modal
         className="dark-bg-color"
-        clicked={() =>
-          handleOpenModal(setModalToggle, modalToggle)
-        }
+        clicked={() => setModalToggle(false)}
         toggle={modalToggle}>
-        <ShowModal />
+        <ShowResponseModal
+          closeModal={() => setModalToggle(false)}
+          success={success}
+          errorMessage={errorMessage}
+        />
       </Modal>
-      <OverridingContainer
-        toggle={props.toggle === FORGOT_PASSWORD}>
-        <div className="sticky-top">
-          <ShowNavbar>
-            <img
-              onClick={() => {
-                props.handleOpen(NO_STRING);
-              }}
-              className="navbar-mobile-hamburger-image navbar-mobile-hamburger-image-xmark"
-              src={XMark}
-              alt="ic_hamburger"
-            />
-          </ShowNavbar>
-          <div className="forgot-password-container">
-            <div className="forgot-password-wrapper">
-              <h3 className="margin-bottom-12-18">
-                <span className="main-color">Lupa</span>{" "}
-                Kata Sandi Kamu ?
-              </h3>
-              <label className="margin-top-0 margin-bottom-12-18">
-                Jangan khawatir, kita bakal kirimin kamu
-                email recovery
+      <div className="sticky-top">
+        <div className="forgot-password-container">
+          <div className="forgot-password-wrapper">
+            <h3 className="margin-bottom-12-18">
+              <span className="main-color">Lupa</span> kata
+              sandi kamu ?
+            </h3>
+            <label className="margin-top-0 margin-bottom-12-18">
+              Jangan khawatir, kita bakal kirimin kamu email
+              recovery
+            </label>
+            <div className="forgot-password-textinput-box">
+              <label className="forgot-password-input-title">
+                Email
               </label>
-              <div className="forgot-password-textinput-box">
-                <label className="forgot-password-input-title">
-                  Email
-                </label>
-                <TextInput
-                  value={postForgotPWData.email}
-                  onChange={(e) =>
-                    handleTextChange("email", e)
-                  }
-                  type="text"
-                  className="forgot-password-textinput text-align-center"
-                />
-              </div>
-              <div className="breakline" />
-              <label
-                onClick={handleOpenLogin}
-                className="forgot-password-forgot-pass main-color cursor-pointer">
-                Gak jadi deh, aku ingat kata sandiku
-              </label>
-              <Button
-                onClick={() =>
-                  handleForgotPWRequest(
-                    handleAfterSubmitEmail
-                  )
+              <TextInput
+                value={postForgotPWData.email}
+                onChange={(e) =>
+                  handleTextChange("email", e)
                 }
-                className="forgot-password-button">
-                <p className="forgot-password-button-text">
-                  Kirim Email
-                </p>
-              </Button>
+                type="text"
+                className="forgot-password-textinput text-align-center"
+              />
             </div>
+            <div className="breakline" />
+            <label
+              onClick={handleOpenLogin}
+              className="forgot-password-forgot-pass main-color cursor-pointer">
+              Gak jadi deh, aku ingat kata sandiku
+            </label>
+            <Button
+              onClick={() =>
+                handleForgotPWRequest(() =>
+                  setSuccess(true)
+                )
+              }
+              className="forgot-password-button">
+              <p className="forgot-password-button-text">
+                Kirim Email
+              </p>
+            </Button>
           </div>
-          <Footer isOverriding={true} />
         </div>
-      </OverridingContainer>
+      </div>
     </Fragment>
   );
 }
