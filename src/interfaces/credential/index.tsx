@@ -18,6 +18,11 @@ export interface IUserData {
   isOTPVerfied: boolean;
 }
 
+export interface ICheckAuthResult {
+  message: string;
+  responseStatus: number | undefined;
+}
+
 export interface ILoginData {
   [key: string]: string;
 }

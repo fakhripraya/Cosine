@@ -1,8 +1,4 @@
-import React, {
-  Fragment,
-  useState,
-  ChangeEvent,
-} from "react";
+import { Fragment, useState, ChangeEvent } from "react";
 import "./style.scss";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";

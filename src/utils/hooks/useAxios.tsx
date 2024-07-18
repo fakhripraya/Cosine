@@ -5,7 +5,9 @@ import axios, {
 import { createAxios } from "../../config/xhr/axios.tsx";
 import { GET, POST } from "../../variables/global";
 import {
+  IAxiosService,
   IRequestConfig,
+  IResponseAllObject,
   IResponseObject,
 } from "../../interfaces/axios/index.tsx";
 
@@ -17,7 +19,7 @@ const initial: IResponseObject = {
     "Ada yang salah nih, coba lagi nanti atau contact support kita yah.",
 };
 
-export const useAxios = () => {
+export const useAxios = (): IAxiosService => {
   const setAxiosTimeout = (controller: AbortController) => {
     const timeout = setTimeout(
       () => controller.abort(),
@@ -131,27 +133,35 @@ export const useAxios = () => {
   ) => {
     // Start timing now
     console.time("Load Time");
-    return new Promise<IResponseObject>((_, reject) => {
-      // Initial Value
-      const result = { ...initial };
+    return new Promise<IResponseAllObject>(
+      (resolve, reject) => {
+        // Initial Value
+        const result = { ...initial };
 
-      const axiosInstance = axios;
-      axiosInstance
-        .all(
-          reqConfigs.map((reqConfig) => getData(reqConfig))
-        )
-        .then(
-          axiosInstance.spread((...datas) => ({
-            ...result,
-            responseStatus: 200,
-            responseData: datas,
-          }))
-        )
-        .catch((error) => reject(error))
-        .finally(() => {
-          console.timeEnd("Load Time");
-        });
-    });
+        const axiosInstance = axios;
+        axiosInstance
+          .all(
+            reqConfigs.map((reqConfig) =>
+              getData(reqConfig)
+            )
+          )
+          .then(
+            axiosInstance.spread((...datas) =>
+              resolve({
+                ...result,
+                responseStatus: 200,
+                responseData: datas,
+              })
+            )
+          )
+          .catch((error: IResponseAllObject) =>
+            reject(error)
+          )
+          .finally(() => {
+            console.timeEnd("Load Time");
+          });
+      }
+    );
   };
 
   const postData = async (

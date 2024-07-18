@@ -1,4 +1,5 @@
 import DetailBuilding from "../../pages/DetailBuilding/index.tsx";
+import Error404 from "../../pages/Error404/index.tsx";
 import ForgotPassword from "../../pages/ForgotPassword/index.tsx";
 import Home from "../../pages/Home/index.tsx";
 import Login from "../../pages/Login/index.tsx";
@@ -34,5 +35,9 @@ export const routes = [
   {
     path: "/otp",
     component: <OTP />,
+  },
+  {
+    path: "*",
+    component: <Error404 />,
   },
 ];

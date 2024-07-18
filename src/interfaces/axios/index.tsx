@@ -4,6 +4,25 @@ import {
   AxiosRequestHeaders,
 } from "axios";
 
+export interface IAxiosService {
+  setAxiosTimeout: (
+    controller: AbortController
+  ) => NodeJS.Timeout;
+  getData: (
+    reqConfig: IRequestConfig
+  ) => Promise<IResponseObject>;
+  getDataWithOnRequestInterceptors: (
+    reqConfig: IRequestConfig,
+    callbackInterceptors?: () => Promise<IResponseObject>
+  ) => Promise<IResponseObject>;
+  getAllData: (
+    reqConfigs: IRequestConfig[]
+  ) => Promise<IResponseAllObject>;
+  postData: (
+    reqConfig: IRequestConfig
+  ) => Promise<IResponseObject>;
+}
+
 export interface AdvanceAxiosRequestHeaders
   extends AxiosRequestHeaders {
   [key: string]: any;
@@ -16,6 +35,13 @@ export interface IRequestConfig {
   params?: AxiosRequestConfig["params"];
   data?: AxiosRequestConfig["data"];
   controller: AbortController;
+}
+
+export interface IResponseAllObject {
+  responseData?: IResponseObject[];
+  responseStatus?: number;
+  responseError: boolean;
+  errorContent: string;
 }
 
 export interface IResponseObject {
