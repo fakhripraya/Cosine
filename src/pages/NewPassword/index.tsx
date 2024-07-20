@@ -27,7 +27,6 @@ import {
   AdvanceAxiosRequestHeaders,
   IResponseObject,
 } from "../../interfaces/axios";
-import { abortController } from "../../config/xhr/axios";
 import { OLYMPUS_SERVICE } from "../../config/environment";
 import { INewPasswordData } from "../../interfaces/credential";
 
@@ -65,6 +64,7 @@ export default function NewPassword() {
 
   function handleNewPWRequest(callback: () => void) {
     if (recoveryToken) {
+      const abortController = new AbortController();
       const axiosTimeout =
         axiosService.setAxiosTimeout(abortController);
       trackPromise(

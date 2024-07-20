@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "./style.scss";
 import { useEffect, useRef, useState } from "react";
@@ -36,7 +37,6 @@ import {
 } from "../../variables/constants/ai";
 import { BuildingDetails } from "../../interfaces/building";
 import { BuildingDetailsDTO } from "../../dtos/building";
-import { abortController } from "../../config/xhr/axios";
 import { isIResponseObject } from "../../interfaces/axios";
 
 export default function Home() {
@@ -68,10 +68,16 @@ export default function Home() {
       const clientUserInfo = cookies.get(CLIENT_USER_INFO);
       const searchParamScopes = window.location.search;
 
-      if (clientUserInfo?.user)
+      if (clientUserInfo?.user) {
         setUser(clientUserInfo.user);
-      else if (searchParamScopes?.includes("googleapis"))
-        await handleGoogleAuthListener(searchParamScopes);
+        clearAllUrlParameters();
+      } else if (
+        searchParamScopes?.includes("googleapis")
+      ) {
+        const scopes = searchParamScopes;
+        clearAllUrlParameters();
+        await handleGoogleAuthListener(scopes);
+      }
 
       const allChatData = await db.transaction(
         "rw",
@@ -141,6 +147,7 @@ export default function Home() {
     userChatData: IChatData,
     timeNow: string
   ) => {
+    const abortController = new AbortController();
     const axiosTimeout =
       axiosService.setAxiosTimeout(abortController);
 
@@ -210,8 +217,8 @@ export default function Home() {
     } catch (error) {
       console.log(error);
       if (isIResponseObject(error))
-        return alert(error.errorContent);
-      alert(error);
+        return alert(JSON.stringify(error.errorContent));
+      alert(JSON.stringify(error));
     } finally {
       setLoading(false);
     }
@@ -221,6 +228,7 @@ export default function Home() {
     queryString: string
   ) => {
     try {
+      const abortController = new AbortController();
       const axiosTimeout =
         axiosService.setAxiosTimeout(abortController);
 
@@ -233,13 +241,14 @@ export default function Home() {
       clearTimeout(axiosTimeout);
 
       let loggedUser: any | undefined = undefined;
-      cookies.set(CLIENT_USER_INFO, result.responseData);
       loggedUser = result.responseData.user;
       setUser(loggedUser);
-      clearAllUrlParameters();
+      cookies.set(CLIENT_USER_INFO, result.responseData);
     } catch (error) {
       console.log(error);
-      alert(error);
+      if (isIResponseObject(error))
+        return alert(JSON.stringify(error.errorContent));
+      alert(JSON.stringify(error));
       navigate("/login");
     }
   };

@@ -8,7 +8,6 @@ import { useAxios } from "../../utils/hooks/useAxios";
 import { trackPromise } from "react-promise-tracker";
 import Modal from "../../components/Modal";
 import { cookies } from "../../config/cookie";
-import { abortController } from "../../config/xhr/axios";
 import { useNavigate } from "react-router-dom";
 import {
   URL_GET_GOOGLE_URL,
@@ -61,6 +60,7 @@ export default function Register() {
     data: AxiosRequestConfig["data"],
     callback: () => void
   ) {
+    const abortController = new AbortController();
     const axiosTimeout =
       axiosService.setAxiosTimeout(abortController);
     trackPromise(
@@ -92,6 +92,7 @@ export default function Register() {
       setModalToggle(true);
     }
 
+    const abortController = new AbortController();
     const axiosTimeout =
       axiosService.setAxiosTimeout(abortController);
     trackPromise(
@@ -120,6 +121,7 @@ export default function Register() {
   }
 
   function handlePostGoogleAuth() {
+    const abortController = new AbortController();
     const axiosTimeout =
       axiosService.setAxiosTimeout(abortController);
 

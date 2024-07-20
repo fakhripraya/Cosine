@@ -19,12 +19,12 @@ import { trackPromise } from "react-promise-tracker";
 import { acceptNumericOnly } from "../../utils/functions/global";
 import { cookies } from "../../config/cookie";
 import { ShowResponseModal } from "./modular/ShowModal";
-import { abortController } from "../../config/xhr/axios";
 import { URL_POST_OTP } from "../../config/xhr/routes/credentials";
 import { useNavigate } from "react-router-dom";
 import { IS_INPUT_OTP_ELIGIBLE } from "../../utils/validations/credential";
 import { IOTPData } from "../../interfaces/credential";
 import { AdvanceAxiosRequestHeaders } from "../../interfaces/axios";
+import { OLYMPUS_SERVICE } from "../../config/environment";
 
 const initial: IOTPData = {
   OTPInput: "",
@@ -64,12 +64,13 @@ export default function OTP() {
 
   function handleSubmitOTP() {
     if (!IS_INPUT_OTP_ELIGIBLE(userInfo)) return;
+    const abortController = new AbortController();
     const axiosTimeout =
       axiosService.setAxiosTimeout(abortController);
     trackPromise(
       axiosService
         .postData({
-          endpoint: process.env.REACT_APP_OLYMPUS_SERVICE,
+          endpoint: OLYMPUS_SERVICE,
           headers: {
             [X_SID]:
               cookies.get(CLIENT_USER_INFO)?.sid || "",

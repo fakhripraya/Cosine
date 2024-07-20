@@ -7,7 +7,6 @@ import { trackPromise } from "react-promise-tracker";
 import { useAxios } from "../../utils/hooks/useAxios";
 import Modal from "../../components/Modal";
 import { cookies } from "../../config/cookie";
-import { abortController } from "../../config/xhr/axios";
 import { URL_POST_FORGOT_PW } from "../../config/xhr/routes/credentials";
 import { IForgotPWData } from "../../interfaces/credential";
 import { ShowResponseModal } from "./modular/ShowModal";
@@ -42,6 +41,7 @@ export default function ForgotPassword() {
   }
 
   function handleForgotPWRequest(callback: () => void) {
+    const abortController = new AbortController();
     const axiosTimeout =
       axiosService.setAxiosTimeout(abortController);
     trackPromise(

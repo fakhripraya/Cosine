@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import { OLYMPUS_SERVICE } from "../../config/environment";
 import { delayInMilliSecond } from "../../utils/functions/global";
 import { IResponseObject } from "../../interfaces/axios";
-import { abortController } from "../../config/xhr/axios";
 import Modal from "../../components/Modal";
 import { ShowResponseModal } from "./modular/ShowModal";
 
@@ -47,6 +46,7 @@ export default function Login() {
   }
 
   function handleLoginRequest(callback: () => void) {
+    const abortController = new AbortController();
     const axiosTimeout =
       axiosService.setAxiosTimeout(abortController);
 
@@ -74,6 +74,7 @@ export default function Login() {
   }
 
   function handlePostGoogleAuth() {
+    const abortController = new AbortController();
     const axiosTimeout =
       axiosService.setAxiosTimeout(abortController);
 
@@ -89,6 +90,7 @@ export default function Login() {
           await delayInMilliSecond(10000);
         })
         .catch((error: IResponseObject) => {
+          alert(JSON.stringify(error));
           setErrorMessage(error.errorContent);
           setModalToggle(error.responseError);
         })
@@ -108,7 +110,7 @@ export default function Login() {
     <Fragment>
       <Modal
         className="dark-bg-color"
-        clicked={() => {}}
+        clicked={() => setModalToggle(false)}
         toggle={modalToggle}>
         <ShowResponseModal
           closeModal={() => setModalToggle(false)}
@@ -156,7 +158,7 @@ export default function Login() {
           </label>
           <Button
             onClick={() =>
-              handleLoginRequest(() => navigate("/"))
+              handleLoginRequest(() => navigate("/otp"))
             }
             className="login-button">
             <p className="login-button-text">Login</p>
