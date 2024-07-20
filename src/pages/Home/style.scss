@@ -1,4 +1,4 @@
-.creative-store {
+.home-page {
   overflow: hidden;
   height: 100svh !important;
 }
@@ -6,11 +6,11 @@
 .home-page-container {
   min-width: 100vw;
   height: 100svh;
-  //overflow: hidden;
 }
 
 .home-page-wrapper {
   width: calc(100vw - 24px);
+  height: 100svh;
   margin: 0px auto;
   position: relative;
   align-items: center;
@@ -32,7 +32,7 @@
   margin-right: 0px;
   width: 100%;
   box-sizing: border-box;
-  height: calc(100vh - 24px);
+  height: calc(100svh - 24px);
   background-color: #151515;
   border-radius: 1em;
 }

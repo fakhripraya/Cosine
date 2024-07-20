@@ -1,4 +1,10 @@
-import { Fragment, useState, ChangeEvent } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
+  Fragment,
+  useState,
+  ChangeEvent,
+  useEffect,
+} from "react";
 import "./style.scss";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
@@ -10,7 +16,10 @@ import { cookies } from "../../config/cookie";
 import { URL_POST_FORGOT_PW } from "../../config/xhr/routes/credentials";
 import { IForgotPWData } from "../../interfaces/credential";
 import { ShowResponseModal } from "./modular/ShowModal";
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { OLYMPUS_SERVICE } from "../../config/environment";
 import { IResponseObject } from "../../interfaces/axios";
 
@@ -22,6 +31,8 @@ export default function ForgotPassword() {
   // HOOKS //
   const navigate = useNavigate();
   const axiosService = useAxios();
+
+  const [searchParams] = useSearchParams();
   const [modalToggle, setModalToggle] = useState(false);
   const [postForgotPWData, setPostForgotPWData] =
     useState<IForgotPWData>(initial);
@@ -72,6 +83,14 @@ export default function ForgotPassword() {
     navigate("/login");
   }
 
+  useEffect(() => {
+    const recoveryToken = searchParams.get("recoveryToken");
+    if (recoveryToken)
+      navigate(
+        `/new-password?recoveryToken=${recoveryToken}`
+      );
+  }, []);
+
   return (
     <Fragment>
       <Modal
@@ -116,9 +135,10 @@ export default function ForgotPassword() {
             </label>
             <Button
               onClick={() =>
-                handleForgotPWRequest(() =>
-                  setSuccess(true)
-                )
+                handleForgotPWRequest(() => {
+                  setSuccess(true);
+                  setModalToggle(true);
+                })
               }
               className="forgot-password-button">
               <p className="forgot-password-button-text">

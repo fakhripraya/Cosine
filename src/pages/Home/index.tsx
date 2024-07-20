@@ -288,7 +288,7 @@ export default function Home() {
   }
 
   return (
-    <div className="creative-store">
+    <div className="home-page">
       <div className={parentContainerClassName}>
         <div className="home-page-wrapper">
           <div className="home-page-flex-container">
