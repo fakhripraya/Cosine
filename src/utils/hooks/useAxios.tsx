@@ -20,10 +20,14 @@ const initial: IResponseObject = {
 };
 
 export const useAxios = (): IAxiosService => {
-  const setAxiosTimeout = (controller: AbortController) => {
+  const setAxiosTimeout = (
+    controller: AbortController,
+    milisecond: number = 30000
+  ) => {
+    console.log(milisecond);
     const timeout = setTimeout(
       () => controller.abort(),
-      30000
+      milisecond
     );
     return timeout;
   };

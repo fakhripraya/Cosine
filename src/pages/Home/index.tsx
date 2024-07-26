@@ -148,8 +148,10 @@ export default function Home() {
     timeNow: string
   ) => {
     const abortController = new AbortController();
-    const axiosTimeout =
-      axiosService.setAxiosTimeout(abortController);
+    const axiosTimeout = axiosService.setAxiosTimeout(
+      abortController,
+      120000
+    );
 
     try {
       const response = await axiosService.postData({

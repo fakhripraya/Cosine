@@ -6,7 +6,8 @@ import {
 
 export interface IAxiosService {
   setAxiosTimeout: (
-    controller: AbortController
+    controller: AbortController,
+    milisecond?: number
   ) => NodeJS.Timeout;
   getData: (
     reqConfig: IRequestConfig
