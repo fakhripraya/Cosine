@@ -48,9 +48,9 @@ export const ShowGrabableStoreCardCarousel: React.FC<
           />
           <div className="breakline" />
           <div className="breakline" />
-          <h3 className="light-color">
+          <p className="light-color font-bold">
             {obj?.building_title}
-          </h3>
+          </p>
           <p className="margin-bottom-0 main-color">
             {formattedCurrencyIDR(
               parseFloat(obj?.housing_price)

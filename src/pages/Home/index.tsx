@@ -20,8 +20,14 @@ import {
   HERMES_SERVICE,
   OLYMPUS_SERVICE,
 } from "../../config/environment";
-import { URL_POST_GOOGLE_CALLBACK } from "../../config/xhr/routes/credentials";
-import { CLIENT_USER_INFO } from "../../variables/global";
+import {
+  URL_POST_GOOGLE_CALLBACK,
+  URL_POST_LOGOUT,
+} from "../../config/xhr/routes/credentials";
+import {
+  CLIENT_USER_INFO,
+  X_SID,
+} from "../../variables/global";
 import {
   clearAllUrlParameters,
   removeTrailingNewlines,
@@ -29,7 +35,10 @@ import {
 import { URL_POST_COSINE_MESSAGING } from "../../config/xhr/routes/home";
 import db from "../../config/dexie/dexie";
 import moment from "moment";
-import { IUserData } from "../../interfaces/credential";
+import {
+  ICookieInfo,
+  IUserData,
+} from "../../interfaces/credential";
 import { v4 as uuidv4 } from "uuid";
 import {
   AI_ID,
@@ -37,7 +46,11 @@ import {
 } from "../../variables/constants/ai";
 import { BuildingDetails } from "../../interfaces/building";
 import { BuildingDetailsDTO } from "../../dtos/building";
-import { isIResponseObject } from "../../interfaces/axios";
+import {
+  AdvanceAxiosRequestHeaders,
+  isIResponseObject,
+} from "../../interfaces/axios";
+import { trackPromise } from "react-promise-tracker";
 
 export default function Home() {
   // REFS //
@@ -255,6 +268,33 @@ export default function Home() {
     }
   };
 
+  const handleLogout = () => {
+    const abortController = new AbortController();
+    const axiosTimeout =
+      axiosService.setAxiosTimeout(abortController);
+    const clientUserInfo: ICookieInfo = cookies.get(
+      CLIENT_USER_INFO
+    );
+    if (!clientUserInfo?.user) return;
+    trackPromise(
+      axiosService
+        .postData({
+          headers: {
+            [X_SID]: clientUserInfo?.sid || "",
+          } as unknown as AdvanceAxiosRequestHeaders,
+          endpoint: OLYMPUS_SERVICE,
+          url: URL_POST_LOGOUT,
+          controller: abortController,
+        })
+        .then(() => {})
+        .catch(() => {})
+        .finally(() => {
+          cookies.remove(CLIENT_USER_INFO, { path: "/" });
+          clearTimeout(axiosTimeout);
+        })
+    );
+  };
+
   useEffect(() => {
     handleInitialize();
   }, []);
@@ -296,8 +336,15 @@ export default function Home() {
           <div className="home-page-flex-container">
             <div className="home-page-body-container">
               <div className="home-page-body-header-container">
-                <div className="home-page-body-header-left">
+                <div className="home-page-body-header">
                   <h4>{AI_NAME}</h4>
+                </div>
+                <div className="home-page-body-header">
+                  <p
+                    onClick={handleLogout}
+                    className="red-color cursor-pointer">
+                    Log out
+                  </p>
                 </div>
               </div>
               <div

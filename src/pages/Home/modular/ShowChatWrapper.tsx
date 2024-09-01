@@ -28,9 +28,9 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
           </div>
           <div className="home-page-chattext-wrapper">
             <div>
-              <h4 className="home-page-chattext-username">
+              <p className="home-page-chattext-username font-bold">
                 {chat.sender.fullName}
-              </h4>
+              </p>
               {chat.content.createdAt}
             </div>
             <ShowChat
