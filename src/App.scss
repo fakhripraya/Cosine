@@ -8,14 +8,13 @@
   //font-family: 'Lato', sans-serif;
   //font-family: 'Montserrat', sans-serif;
   //font-family: 'Open Sans', sans-serif;
-  font-family: "PT Sans", sans-serif;
-  //font-family: "Roboto Condensed", sans-serif;
+  //font-family: "PT Sans", sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 /* For WebKit browsers like Chrome and Safari */
 body {
   -webkit-font-smoothing: antialiased; /* Use antialiased for smoother text */
-  -webkit-text-size-adjust: 100%; /* Adjust text size for better rendering */
 }
 
 /* For Mozilla Firefox on macOS */
@@ -26,10 +25,6 @@ body {
 /* For Microsoft Edge and Internet Explorer */
 body {
   text-rendering: optimizeLegibility; /* Optimize legibility */
-}
-
-body {
-  -webkit-text-size-adjust: 100%; /* Prevents automatic resizing */
 }
 
 body,

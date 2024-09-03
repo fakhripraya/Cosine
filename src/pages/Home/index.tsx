@@ -230,10 +230,7 @@ export default function Home() {
         db.chat_data.bulkAdd([userChatData, chatData]);
       });
     } catch (error) {
-      console.log(error);
-      if (isIResponseObject(error))
-        return alert(JSON.stringify(error.errorContent));
-      alert(JSON.stringify(error));
+      handleError(error);
     } finally {
       setLoading(false);
     }
@@ -260,10 +257,7 @@ export default function Home() {
       setUser(loggedUser);
       cookies.set(CLIENT_USER_INFO, result.responseData);
     } catch (error) {
-      console.log(error);
-      if (isIResponseObject(error))
-        return alert(JSON.stringify(error.errorContent));
-      alert(JSON.stringify(error));
+      handleError(error);
       navigate("/login");
     }
   };
@@ -286,13 +280,20 @@ export default function Home() {
           url: URL_POST_LOGOUT,
           controller: abortController,
         })
-        .then(() => {})
-        .catch(() => {})
+        .then(() => navigate("/login"))
+        .catch((error) => handleError(error))
         .finally(() => {
           cookies.remove(CLIENT_USER_INFO, { path: "/" });
           clearTimeout(axiosTimeout);
         })
     );
+  };
+
+  const handleError = (error: any) => {
+    console.log(error);
+    if (isIResponseObject(error))
+      return alert(JSON.stringify(error.errorContent));
+    alert(JSON.stringify(error));
   };
 
   useEffect(() => {

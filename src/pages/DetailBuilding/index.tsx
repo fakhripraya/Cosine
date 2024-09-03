@@ -111,7 +111,7 @@ export default function DetailBuilding() {
                     </div>
                     <div className="detail-building-textinput-box">
                       <label className="detail-building-input-title">
-                        Whatsapp Pemilik
+                        Whatsapp
                       </label>
                       <TextInput
                         value={data?.owner_whatsapp}
@@ -122,7 +122,7 @@ export default function DetailBuilding() {
                     </div>
                     <div className="detail-building-textinput-box">
                       <label className="detail-building-input-title">
-                        Nomor Telepon Pemilik
+                        Nomor Telepon
                       </label>
                       <TextInput
                         value={data?.owner_phone_number}
