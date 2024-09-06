@@ -3,12 +3,14 @@
 import "./style.scss";
 import { Fragment, useState } from "react";
 import { BuildingDetails } from "../../interfaces/building";
-import TextArea from "../../components/TextArea";
+// import TextArea from "../../components/TextArea";
 import TextInput from "../../components/TextInput";
 import Modal from "../../components/Modal";
 import { formattedNumber } from "../../utils/functions/global";
 import { useLocation } from "react-router-dom";
 import Card from "../../components/Card";
+import TextArea from "../../components/TextArea";
+import Button from "../../components/Button";
 
 export default function DetailBuilding() {
   const location = useLocation();
@@ -39,6 +41,9 @@ export default function DetailBuilding() {
                 <div className="detail-building-body-header-container">
                   <div className="detail-building-body-header-left">
                     <h4>{data?.building_title}</h4>
+                  </div>
+                  <div className="detail-building-body-header-right">
+                    <Button>Detail</Button>
                   </div>
                 </div>
                 <div className="detail-building-body-mainpic-container dark-bg-color">
@@ -73,6 +78,9 @@ export default function DetailBuilding() {
                 </div>
                 <div className="detail-building-mainbody-container dark-bg-color">
                   <div className="detail-building-mainbody-wrapper">
+                    <div className="detail-building-textinput-box">
+                      <p className="font-bold">Infomasi</p>
+                    </div>
                     <div className="detail-building-textinput-box">
                       <label className="detail-building-input-title">
                         Alamat
@@ -109,7 +117,7 @@ export default function DetailBuilding() {
                         className="detail-building-textinput darker-bg-color"
                       />
                     </div>
-                    <div className="detail-building-textinput-box">
+                    {/* <div className="detail-building-textinput-box">
                       <label className="detail-building-input-title">
                         Whatsapp
                       </label>
@@ -130,7 +138,7 @@ export default function DetailBuilding() {
                         readOnly={true}
                         className="detail-building-textinput darker-bg-color"
                       />
-                    </div>
+                    </div> */}
                     <div className="detail-building-textinput-box">
                       <label className="detail-building-input-title">
                         Email Pemilik
@@ -144,7 +152,7 @@ export default function DetailBuilding() {
                     </div>
                     <div className="detail-building-textinput-box">
                       <label className="detail-building-input-title">
-                        Deskripsi
+                        Keterangan
                       </label>
                       <TextArea
                         readOnly={true}
@@ -152,6 +160,18 @@ export default function DetailBuilding() {
                         value={data?.building_description}
                       />
                     </div>
+                    <hr className="max-width standard-line" />
+                    <label className="margin-top-bottom-16">
+                      Untuk detail lebih lanjut kami akan
+                      menghubungkan anda dengan pemilik via
+                      whatsapp untuk mengonfirmasi
+                      ketersediaan kamar, silahkan klik
+                      tombol{" "}
+                      <span className="font-bold main-color">
+                        detail
+                      </span>{" "}
+                      diatas
+                    </label>
                   </div>
                 </div>
               </div>
