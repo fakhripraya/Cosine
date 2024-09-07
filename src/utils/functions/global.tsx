@@ -1,11 +1,12 @@
 import { URLSearchParams } from "url";
+import { CUSTOMER_SERVICE } from "../../config/environment";
 
 // Whatsapp sender
 export function sendWACS() {
   // Send static Whatsapp messages to Customer Service
   // TODO: Insert the Whatsapp number to ENV
   return window.open(
-    `https://wa.me/${6281280111698}?text=Hi%20kak%20mau%20nanya%20dong%20!%20!%20!`,
+    `https://wa.me/${CUSTOMER_SERVICE}?text=Hi%20kak%20mau%20nanya%20dong%20!%20!%20!`,
     "_blank"
   );
 }

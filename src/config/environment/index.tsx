@@ -5,3 +5,6 @@ export const HERMES_SERVICE = import.meta.env
 
 export const CHAT_DB = import.meta.env
   .VITE_CHAT_DB as string;
+
+export const CUSTOMER_SERVICE = import.meta.env
+  .VITE_CUSTOMER_SERVICE as string;

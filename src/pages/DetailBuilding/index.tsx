@@ -6,7 +6,10 @@ import { BuildingDetails } from "../../interfaces/building";
 // import TextArea from "../../components/TextArea";
 import TextInput from "../../components/TextInput";
 import Modal from "../../components/Modal";
-import { formattedNumber } from "../../utils/functions/global";
+import {
+  formattedNumber,
+  sendWACS,
+} from "../../utils/functions/global";
 import { useLocation } from "react-router-dom";
 import Card from "../../components/Card";
 import TextArea from "../../components/TextArea";
@@ -43,7 +46,9 @@ export default function DetailBuilding() {
                     <h4>{data?.building_title}</h4>
                   </div>
                   <div className="detail-building-body-header-right">
-                    <Button>Detail</Button>
+                    <Button onClick={() => sendWACS()}>
+                      Detail
+                    </Button>
                   </div>
                 </div>
                 <div className="detail-building-body-mainpic-container dark-bg-color">
