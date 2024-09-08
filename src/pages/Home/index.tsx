@@ -25,6 +25,7 @@ import {
   URL_POST_LOGOUT,
 } from "../../config/xhr/routes/credentials";
 import {
+  AUTHORIZATION,
   CLIENT_USER_INFO,
   X_SID,
 } from "../../variables/global";
@@ -51,6 +52,7 @@ import {
   isIResponseObject,
 } from "../../interfaces/axios";
 import { trackPromise } from "react-promise-tracker";
+import { IS_NOT_AUTHENTICATE } from "../../utils/validations/credential";
 
 export default function Home() {
   // REFS //
@@ -167,12 +169,23 @@ export default function Home() {
     );
 
     try {
+      const clientUserInfo: ICookieInfo = cookies.get(
+        CLIENT_USER_INFO
+      );
       const response = await axiosService.postData({
         endpoint: HERMES_SERVICE,
         url: `${URL_POST_COSINE_MESSAGING}`,
+        headers: {
+          [AUTHORIZATION]:
+            `Bearer ${clientUserInfo?.credentialToken.accessToken}` ||
+            "",
+          [X_SID]: clientUserInfo?.sid || "",
+        } as unknown as AdvanceAxiosRequestHeaders,
         data: {
           sessionId: userChatData.sender.id,
           content: userChatData.content.chatContent,
+          refreshToken:
+            clientUserInfo.credentialToken.refreshToken,
         },
         controller: abortController,
       });
@@ -230,6 +243,11 @@ export default function Home() {
         db.chat_data.bulkAdd([userChatData, chatData]);
       });
     } catch (error) {
+      if (
+        isIResponseObject(error) &&
+        IS_NOT_AUTHENTICATE(error)
+      )
+        return setUser(null);
       handleError(error);
     } finally {
       setLoading(false);

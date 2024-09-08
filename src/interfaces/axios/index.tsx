@@ -61,10 +61,6 @@ export function isIResponseObject(
     "responseError" in obj &&
     typeof obj.responseError === "boolean" &&
     "errorContent" in obj &&
-    typeof obj.errorContent === "string" &&
-    ("responseData" in obj ||
-      "responseData" in obj === undefined) &&
-    ("responseStatus" in obj ||
-      "responseStatus" in obj === undefined)
+    typeof obj.errorContent === "string"
   );
 }

@@ -23,7 +23,10 @@ import { URL_POST_OTP } from "../../config/xhr/routes/credentials";
 import { useNavigate } from "react-router-dom";
 import { IS_INPUT_OTP_ELIGIBLE } from "../../utils/validations/credential";
 import { IOTPData } from "../../interfaces/credential";
-import { AdvanceAxiosRequestHeaders } from "../../interfaces/axios";
+import {
+  AdvanceAxiosRequestHeaders,
+  isIResponseObject,
+} from "../../interfaces/axios";
 import { OLYMPUS_SERVICE } from "../../config/environment";
 
 const initial: IOTPData = {
@@ -91,7 +94,9 @@ export default function OTP() {
           navigate("/");
         })
         .catch((error) => {
-          setErrorMessage(error.message);
+          if (isIResponseObject(error))
+            setErrorMessage(error.errorContent);
+          else setErrorMessage(error.toString());
           setModalToggle(true);
         })
         .finally(() => clearTimeout(axiosTimeout))
