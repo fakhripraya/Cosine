@@ -1,33 +1,14 @@
-# Use the official Node.js image with a specific version
-FROM node:20.17.0-alpine
+FROM node:20.17.0-alpine as build
 
-# Set the working directory
 WORKDIR /app
+COPY . /app
 
-# Copy package.json and package-lock.json (if applicable)
-COPY package*.json ./
-
-# Install npm dependencies
-RUN npm install --verbose
-
-# Copy the rest of the application files
-COPY . .
-
-# Build the Vite project
+RUN npm install
 RUN npm run build
 
-# Install a web server to serve the build files
-RUN npm install -g serve
-
-# Set environment variables from .env
-ENV VITE_STATE="PROD" \
-    VITE_CUSTOMER_SERVICE="08123456789" \
-    VITE_CHAT_DB="COSINE-DEXIE" \
-    VITE_OLYMPUS_SERVICE="http://localhost:8001" \
-    VITE_HERMES_SERVICE="http://localhost:7001" 
-
-# Expose the port your app will run on
-EXPOSE 5000
-
-# Command to run the static file server
-CMD ["serve", "-s", "dist"]
+# FROM ubuntu
+# RUN apt-get update
+# RUN apt-get install nginx -y
+# COPY --from=build /app/dist /var/www/html/
+# EXPOSE 443
+# CMD ["nginx","-g","daemon off;"]

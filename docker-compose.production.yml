@@ -1,6 +1,19 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  reverse-proxy:
+    image: traefik:v3.1
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+    ports:
+      # The HTTP Port
+      - "80:80"
+      # The Traefik Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So Traefik can listen to Docker Events
+      - /var/run/docker.sock:/var/run/docker.sock
   app:
     build:
       context: .
@@ -14,7 +27,4 @@ services:
     restart: always
     volumes:
       - .:/app
-      - ./logs:/app/logs
-    # Optionally, you can add volume mounts for logs or configuration
-    # volumes:
-    #   - ./logs:/app/logs
+      - /app/node_modules
