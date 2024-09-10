@@ -20,7 +20,11 @@ RUN npm run build
 RUN npm install -g serve
 
 # Set environment variables from .env
-ENV $(cat .env.production | xargs)
+ENV VITE_STATE="PROD" \
+    VITE_CUSTOMER_SERVICE="08123456789" \
+    VITE_CHAT_DB="COSINE-DEXIE" \
+    VITE_OLYMPUS_SERVICE="http://localhost:8001" \
+    VITE_HERMES_SERVICE="http://localhost:7001" 
 
 # Expose the port your app will run on
 EXPOSE 5000
