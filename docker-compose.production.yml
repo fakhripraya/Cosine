@@ -6,6 +6,7 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker"
+      - "--entrypoints.web.address=:80"
     ports:
       # The HTTP Port
       - "80:80"
@@ -13,18 +14,27 @@ services:
       - "8080:8080"
     volumes:
       # So Traefik can listen to Docker Events
-      - /var/run/docker.sock:/var/run/docker.sock
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - web
   app:
     build:
       context: .
       dockerfile: Dockerfile.production
     ports:
-      - "5000:5000"
+      - "80:3000"
     environment:
       - NODE_ENV=production
     env_file:
       - .env.production
     restart: always
-    volumes:
-      - .:/app
-      - /app/node_modules
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`yourdomain.com`)" # Replace with your domain or IP
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.services.app.loadbalancer.server.port=3000" # Vite app port inside the container
+    networks:
+      - web
+networks:
+  web:
+    driver: bridge
