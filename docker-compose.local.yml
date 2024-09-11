@@ -1,7 +1,5 @@
-version: "3.8"
-
 services:
-  web:
+  app:
     build:
       context: .
       dockerfile: Dockerfile.local
@@ -12,3 +10,8 @@ services:
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
+    networks:
+      - web
+networks:
+  web:
+    driver: bridge
