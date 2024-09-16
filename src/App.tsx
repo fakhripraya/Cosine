@@ -5,13 +5,23 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
 } from "react-router-dom";
 import Spinner from "./components/Spinner/index.tsx";
 
 function App() {
   return (
-    <Router basename="/">
+    <Router basename="/cl">
       <Routes>
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to="/cl"
+              replace
+            />
+          }
+        />
         {routes.map((item, index) => (
           <Route
             key={`route-${index}`}
