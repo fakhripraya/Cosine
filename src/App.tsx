@@ -10,14 +10,15 @@ import {
 import Spinner from "./components/Spinner/index.tsx";
 
 function App() {
+  const prefix = "/cl";
   return (
-    <Router basename="/cl">
+    <Router basename="/">
       <Routes>
         <Route
           path="/"
           element={
             <Navigate
-              to="/cl"
+              to={prefix}
               replace
             />
           }
@@ -25,7 +26,7 @@ function App() {
         {routes.map((item, index) => (
           <Route
             key={`route-${index}`}
-            path={item.path}
+            path={`${prefix}/${item.path}`}
             element={
               <Suspense fallback={<p>Loading...</p>}>
                 {item.component}

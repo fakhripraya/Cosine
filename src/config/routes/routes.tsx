@@ -9,7 +9,7 @@ import Register from "../../pages/Register/index.tsx";
 
 export const routes = [
   {
-    path: "/cl",
+    path: "/",
     component: <Home />,
   },
   {
