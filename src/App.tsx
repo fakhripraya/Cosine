@@ -15,7 +15,7 @@ function App() {
         {routes.map((item, index) => (
           <Route
             key={`route-${index}`}
-            path={`${item.path}`}
+            path={item.path}
             element={
               <Suspense fallback={<p>Loading...</p>}>
                 {item.component}
