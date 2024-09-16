@@ -90,6 +90,7 @@ export default function Register() {
     if (handleLocalFilter()) {
       setErrorMessage(ERROR_CONFIRM_PASSWORD.errorContent);
       setModalToggle(true);
+      return;
     }
 
     const abortController = new AbortController();
