@@ -10,7 +10,7 @@ import Spinner from "./components/Spinner/index.tsx";
 
 function App() {
   return (
-    <Router basename="/cl">
+    <Router basename="/">
       <Routes>
         {routes.map((item, index) => (
           <Route
