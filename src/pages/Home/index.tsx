@@ -332,6 +332,7 @@ export default function Home() {
       <PageLoading
         className={pageLoadingClassName}
         loadingMessage={PAGE_LOADING_MESSAGE}
+        noLogo={true}
       />
     );
   }
