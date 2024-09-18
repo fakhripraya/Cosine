@@ -172,7 +172,7 @@ export default function Register() {
               sama kita !
             </h3>
             <label className="margin-top-0 margin-bottom-12-18">
-              Tunggu apa lagi ayo gabung sama kita, Cosine
+              Tunggu apa lagi ayo gabung sama kita, Pintrail
               pengen banget ngobrol dan nyariin kamu kosan
               nih !
             </label>

@@ -124,7 +124,8 @@ export default function Login() {
             mengakses
           </h3>
           <label className="margin-top-0 margin-bottom-12-18">
-            Login dulu yuk biar bisa nyari kos bareng Cosine
+            Login dulu yuk biar bisa nyari kos bareng
+            Pintrail
           </label>
           <div className="login-textinput-box">
             <label className="login-input-title">ID</label>

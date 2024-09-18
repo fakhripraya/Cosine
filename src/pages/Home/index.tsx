@@ -33,7 +33,7 @@ import {
   clearAllUrlParameters,
   removeTrailingNewlines,
 } from "../../utils/functions/global";
-import { URL_POST_COSINE_MESSAGING } from "../../config/xhr/routes/home";
+import { URL_POST_AGENT_MESSAGING } from "../../config/xhr/routes/home";
 import db from "../../config/dexie/dexie";
 import moment from "moment";
 import {
@@ -174,7 +174,7 @@ export default function Home() {
       );
       const response = await axiosService.postData({
         endpoint: HERMES_SERVICE,
-        url: `${URL_POST_COSINE_MESSAGING}`,
+        url: `${URL_POST_AGENT_MESSAGING}`,
         headers: {
           [AUTHORIZATION]:
             `Bearer ${clientUserInfo?.credentialToken.accessToken}` ||

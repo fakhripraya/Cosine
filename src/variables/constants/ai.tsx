@@ -1,2 +1,2 @@
-export const AI_NAME = "Cosine";
-export const AI_ID = "Cosine";
+export const AI_NAME = "Pintrail";
+export const AI_ID = "Pintrail";
