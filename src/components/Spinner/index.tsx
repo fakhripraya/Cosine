@@ -12,13 +12,7 @@ export default function Spinner() {
         bgClassName="dark-bg-color"
         className="spinner-container"
         toggle={true}>
-        <div className="spinner-wrapper">
-          <img
-            className="spinner-logo-img"
-            src={WGLogo}
-            alt="WG_LOGO"
-          />
-        </div>
+        <p>Loading...</p>
       </Modal>
     )
   );
