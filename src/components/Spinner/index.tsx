@@ -1,6 +1,5 @@
 import Modal from "../Modal";
 import { usePromiseTracker } from "react-promise-tracker";
-import WGLogo from "../../assets/svg/LIVEJB_V1_LOGO.svg";
 import "./style.scss";
 
 export default function Spinner() {
