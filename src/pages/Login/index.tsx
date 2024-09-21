@@ -120,11 +120,10 @@ export default function Login() {
       <div className="login-container">
         <div className="login-wrapper">
           <h3 className="margin-bottom-12-18">
-            <span className="main-color">Login</span> untuk
-            mengakses
+            <span className="main-color">Login</span>
           </h3>
           <label className="margin-top-0 margin-bottom-12-18">
-            Login dulu yuk biar bisa nyari kos bareng
+            Yuk lah nyari lokasi yang kamu mau bareng
             Pintrail
           </label>
           <div className="login-textinput-box">

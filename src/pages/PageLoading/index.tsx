@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
 import "./style.scss";
-import WGLogo from "../../assets/svg/LIVEJB_V1_LOGO.svg";
+import MainLogo from "../../assets/svg/pintrail.svg";
 
 interface PageLoadingProps {
   containerStyle?: CSSProperties;
@@ -18,16 +18,22 @@ const PageLoading: React.FC<PageLoadingProps> = ({
   noLogo = false,
 }: PageLoadingProps) => {
   return (
-    <div style={containerStyle} className={`page-loading-container ${className}`}>
-      <div style={wrapperStyle} className="page-loading-wrapper">
+    <div
+      style={containerStyle}
+      className={`page-loading-container ${className}`}>
+      <div
+        style={wrapperStyle}
+        className="page-loading-wrapper">
         {!noLogo && (
           <img
             className="spinner-logo-img page-loading-logo-img"
-            src={WGLogo}
-            alt="WG_LOGO_SPINNER_PAGE_LOADING"
+            src={MainLogo}
+            alt="main_logo"
           />
         )}
-        <label className="page-loading-text">{loadingMessage}</label>
+        <label className="page-loading-text">
+          {loadingMessage}
+        </label>
       </div>
     </div>
   );

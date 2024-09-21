@@ -167,9 +167,7 @@ export default function Register() {
         <div className="register-container">
           <div className="register-wrapper">
             <h3 className="margin-bottom-12-18">
-              Sini{" "}
-              <span className="main-color">Gabung</span>{" "}
-              sama kita !
+              <span className="main-color">Register</span>
             </h3>
             <label className="margin-top-0 margin-bottom-12-18">
               Tunggu apa lagi ayo gabung sama kita, Pintrail

@@ -107,8 +107,9 @@ export default function ForgotPassword() {
         <div className="forgot-password-container">
           <div className="forgot-password-wrapper">
             <h3 className="margin-bottom-12-18">
-              <span className="main-color">Lupa</span> kata
-              sandi kamu ?
+              <span className="main-color">
+                Forgot Password
+              </span>
             </h3>
             <label className="margin-top-0 margin-bottom-12-18">
               Jangan khawatir, kita bakal kirimin kamu email

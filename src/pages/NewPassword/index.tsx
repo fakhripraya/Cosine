@@ -116,11 +116,9 @@ export default function NewPassword() {
         <div className="new-password-container">
           <div className="new-password-wrapper">
             <h3 className="margin-bottom-12-18">
-              Ternyata&nbsp;
               <span className="main-color">
-                Beneran Kamu !
+                Set New Password
               </span>
-              &nbsp;Nice !!
             </h3>
             <label className="margin-top-0 margin-bottom-12-18">
               Nicely done bro, sekarang tinggal input kata

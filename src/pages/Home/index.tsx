@@ -53,6 +53,7 @@ import {
 } from "../../interfaces/axios";
 import { trackPromise } from "react-promise-tracker";
 import { IS_NOT_AUTHENTICATE } from "../../utils/validations/credential";
+import MainLogo from "../../assets/svg/pintrail.svg";
 
 export default function Home() {
   // REFS //
@@ -332,7 +333,7 @@ export default function Home() {
       <PageLoading
         className={pageLoadingClassName}
         loadingMessage={PAGE_LOADING_MESSAGE}
-        noLogo={true}
+        noLogo={false}
       />
     );
   }
@@ -357,6 +358,13 @@ export default function Home() {
             <div className="home-page-body-container">
               <div className="home-page-body-header-container">
                 <div className="home-page-body-header">
+                  <p className="home-page-body-header-icon-container">
+                    <img
+                      className="home-page-body-header-icon"
+                      src={MainLogo}
+                      alt="main_logo"
+                    />
+                  </p>
                   <h4>{AI_NAME}</h4>
                 </div>
                 <div className="home-page-body-header">

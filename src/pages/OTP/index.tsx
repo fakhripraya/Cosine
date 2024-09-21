@@ -122,7 +122,6 @@ export default function OTP() {
         <div className="otp-container">
           <div className="otp-wrapper">
             <h3 className="margin-bottom-12-18">
-              Input kode&nbsp;
               <span className="main-color">OTP</span>
             </h3>
             <label className="margin-top-0 margin-bottom-12-18">
