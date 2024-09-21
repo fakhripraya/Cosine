@@ -44,6 +44,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   AI_ID,
   AI_NAME,
+  AI_PROFILE_PIC_URL,
 } from "../../variables/constants/ai";
 import { BuildingDetails } from "../../interfaces/building";
 import { BuildingDetailsDTO } from "../../dtos/building";
@@ -200,7 +201,7 @@ export default function Home() {
         ),
         senderId: AI_ID,
         senderFullName: AI_NAME,
-        senderProfilePictureUri: "",
+        senderProfilePictureUri: AI_PROFILE_PIC_URL,
         createdAt: timeNow,
       };
 

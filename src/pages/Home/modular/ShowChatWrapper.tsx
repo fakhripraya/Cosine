@@ -19,7 +19,7 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
           <div className="home-page-chattext-avatar">
             <Avatar
               style={{ cursor: "pointer" }}
-              round={true}
+              round={false}
               size={"50"}
               src={chat.sender.profilePictureURI}
               title={chat.sender.fullName}
