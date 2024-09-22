@@ -1,17 +1,23 @@
 services:
   app:
+    container_name: pintrail-app
     build:
       context: .
       dockerfile: Dockerfile.local
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
+      args:
+        progress: plain
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=development
+    env_file:
+      - .env.local
+    restart: on-failure:0
     networks:
       - web
+    ports:
+      - 3000:3000
+    depends_on:
+      - forefront-olympus
+      - forefront-hermes
 networks:
   web:
     driver: bridge

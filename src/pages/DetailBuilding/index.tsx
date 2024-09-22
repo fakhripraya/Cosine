@@ -13,7 +13,7 @@ import {
 import { useLocation } from "react-router-dom";
 import Card from "../../components/Card";
 import TextArea from "../../components/TextArea";
-import Button from "../../components/Button";
+import WhatsappIcon from "../../assets/svg/whatsapp_icon.svg";
 
 export default function DetailBuilding() {
   const location = useLocation();
@@ -46,9 +46,12 @@ export default function DetailBuilding() {
                     <h4>{data?.building_title}</h4>
                   </div>
                   <div className="detail-building-body-header-right">
-                    <Button onClick={() => sendWACS()}>
-                      Detail
-                    </Button>
+                    <img
+                      onClick={() => sendWACS()}
+                      className="detail-building-body-icon"
+                      src={WhatsappIcon}
+                      alt="whatsapp-icon"
+                    />
                   </div>
                 </div>
                 <div className="detail-building-body-mainpic-container dark-bg-color">
@@ -172,8 +175,10 @@ export default function DetailBuilding() {
                       whatsapp untuk mengonfirmasi
                       ketersediaan kamar, silahkan klik
                       tombol{" "}
-                      <span className="font-bold main-color">
-                        detail
+                      <span
+                        onClick={() => sendWACS()}
+                        className="font-bold main-color cursor-pointer">
+                        Whatsapp
                       </span>{" "}
                       diatas
                     </label>

@@ -98,6 +98,19 @@
   color: #fff;
 }
 
+.detail-building-body-header-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+}
+
+.detail-building-body-icon {
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+
 .detail-building-body-mainpic-container {
   grid-area: mainPic;
   border-radius: 1em;
