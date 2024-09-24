@@ -37,10 +37,10 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
               content={chat.content}
               uniqueKey={chat.id}
             />
-            {chat.building_contents && (
+            {chat.buildingContents && (
               <ShowGrabableStoreCardCarousel
                 uniqueKey={chat.id}
-                values={chat.building_contents}
+                values={chat.buildingContents}
               />
             )}
           </div>
