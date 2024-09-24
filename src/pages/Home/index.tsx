@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "./style.scss";
 import { useEffect, useRef, useState } from "react";
-import ErrorHandling from "../ErrorHandling/index";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
-import { PAGE_LOADING_MESSAGE } from "../../variables/constants/home";
-import { USER_NOT_FOUND } from "../../variables/errorMessages/home";
+import {
+  LOGIN_UNAUTHORIZED_REDIRECTING_MESSAGE,
+  PAGE_LOADING_MESSAGE,
+} from "../../variables/constants/home";
 import TextInput from "../../components/TextInput";
 import ShowChatWrappers from "./modular/ShowChatWrappers";
 import { useAxios } from "../../utils/hooks/useAxios";
@@ -340,14 +341,15 @@ export default function Home() {
   }
 
   if (rendered && !user) {
+    navigate("/login");
     return (
-      <ErrorHandling errorMessage={USER_NOT_FOUND}>
-        <Button
-          className="margin-top-12-18 "
-          onClick={() => navigate("/login")}>
-          Login
-        </Button>
-      </ErrorHandling>
+      <PageLoading
+        className={pageLoadingClassName}
+        loadingMessage={
+          LOGIN_UNAUTHORIZED_REDIRECTING_MESSAGE
+        }
+        noLogo={false}
+      />
     );
   }
 

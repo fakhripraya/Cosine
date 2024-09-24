@@ -10,3 +10,5 @@ export const IS_MEMBER_REDIRECTING_MESSAGE =
   "Kamu udah member, langsung masuk aja ...";
 export const PAGE_LOADING_MESSAGE =
   "Tunggu bentar ya \n Kita bangunin dulu si Pintrail, hahaha...";
+export const LOGIN_UNAUTHORIZED_REDIRECTING_MESSAGE =
+  "Belom login nih bro, login dulu ya...";
