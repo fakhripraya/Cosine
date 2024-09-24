@@ -262,7 +262,7 @@ export default function Home() {
     const chatData: IChatData = {
       id: uuidv4(),
       sender: {
-        id: message.id,
+        id: message.senderId,
         fullName: message.senderFullName,
         profilePictureURI: message.senderProfilePictureUri,
       },
