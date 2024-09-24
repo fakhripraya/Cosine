@@ -8,7 +8,7 @@ export interface IChatData {
     profilePictureURI?: string;
   };
   content: OneToOneChat;
-  building_contents?: BuildingDetails[];
+  buildingContents?: BuildingDetails[];
   timestamp: string;
 }
 

@@ -6,6 +6,7 @@ import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
 import {
+  INITIAL_PINTRAIL_MESSAGE,
   LOGIN_UNAUTHORIZED_REDIRECTING_MESSAGE,
   PAGE_LOADING_MESSAGE,
 } from "../../variables/constants/home";
@@ -107,6 +108,20 @@ export default function Home() {
         }
       );
 
+      const timeNow = moment(new Date())
+        .format("dddd, MMMM Do YYYY, h:mm:ss a")
+        .toString();
+      const initMessage: OneToOneChat = {
+        id: uuidv4(),
+        chatContent: INITIAL_PINTRAIL_MESSAGE,
+        senderId: AI_ID,
+        senderFullName: AI_NAME,
+        senderProfilePictureUri: AI_PROFILE_PIC_URL,
+        createdAt: timeNow,
+      };
+
+      const initData = handleCreateMessage(initMessage);
+      allChatData.push(initData);
       setChats(allChatData);
     } catch (error) {
       console.error("Failed to initialize:", error);
@@ -135,17 +150,8 @@ export default function Home() {
         };
         chatInputRef.current!.value = "";
 
-        const chatData: IChatData = {
-          id: uuidv4(),
-          sender: {
-            id: userMessage.senderId,
-            fullName: userMessage.senderFullName,
-            profilePictureURI:
-              userMessage.senderProfilePictureUri,
-          },
-          content: userMessage,
-          timestamp: new Date().toISOString(),
-        };
+        const chatData: IChatData =
+          handleCreateMessage(userMessage);
 
         setChats((record) => {
           const temp: IChatData[] = [...record];
@@ -209,7 +215,7 @@ export default function Home() {
       const parsedContent: BuildingDetailsDTO[] =
         JSON.parse(response.responseData?.output_content);
 
-      const building_contents = parsedContent?.map(
+      const buildingContents = parsedContent?.map(
         (obj): BuildingDetails => {
           obj.image_url = obj.image_url.replace(/'/g, '"');
           const actualImages: string[] = JSON.parse(
@@ -223,18 +229,10 @@ export default function Home() {
         }
       );
 
-      const chatData: IChatData = {
-        id: uuidv4(),
-        sender: {
-          id: aiMessage.id,
-          fullName: aiMessage.senderFullName,
-          profilePictureURI:
-            aiMessage.senderProfilePictureUri,
-        },
-        content: aiMessage,
-        building_contents: building_contents,
-        timestamp: new Date().toISOString(),
-      };
+      const chatData: IChatData = handleCreateMessage(
+        aiMessage,
+        buildingContents
+      );
 
       setChats((record) => {
         const temp: IChatData[] = [...record];
@@ -255,6 +253,24 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCreateMessage = (
+    message: OneToOneChat,
+    buildingContents?: BuildingDetails[]
+  ) => {
+    const chatData: IChatData = {
+      id: uuidv4(),
+      sender: {
+        id: message.id,
+        fullName: message.senderFullName,
+        profilePictureURI: message.senderProfilePictureUri,
+      },
+      content: message,
+      buildingContents: buildingContents,
+      timestamp: new Date().toISOString(),
+    };
+    return chatData;
   };
 
   const handleGoogleAuthListener = async (
