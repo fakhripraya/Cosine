@@ -417,9 +417,9 @@ export default function Home() {
                     loading ? "hidden no-width" : "visible"
                   }
                   onClick={handleOnSendMessage}>
-                  <label className="text-ellipsis">
+                  <span className="text-ellipsis">
                     Send
-                  </label>
+                  </span>
                 </Button>
               </div>
             </div>
