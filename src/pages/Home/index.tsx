@@ -247,8 +247,10 @@ export default function Home() {
       if (
         isIResponseObject(error) &&
         IS_NOT_AUTHENTICATE(error)
-      )
+      ) {
+        cookies.remove(CLIENT_USER_INFO, { path: "/" });
         return setUser(null);
+      }
       handleError(error);
     } finally {
       setLoading(false);
@@ -294,6 +296,7 @@ export default function Home() {
       setUser(loggedUser);
       cookies.set(CLIENT_USER_INFO, result.responseData);
     } catch (error) {
+      cookies.remove(CLIENT_USER_INFO, { path: "/" });
       handleError(error);
       navigate("/login");
     }
