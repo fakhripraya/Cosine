@@ -103,8 +103,15 @@ export default function Home() {
         db.chat_data,
         async () => {
           return await db.chat_data
-            .orderBy("timestamp")
-            .toArray();
+            .filter(
+              (chat) =>
+                chat.sender.id ===
+                  clientUserInfo?.user.userId ||
+                (chat.sender.id === AI_ID &&
+                  chat.content.sendSpecificToId ===
+                    clientUserInfo?.user.userId)
+            )
+            .sortBy("timestamp");
         }
       );
 
@@ -116,6 +123,7 @@ export default function Home() {
         chatContent: INITIAL_PINTRAIL_MESSAGE,
         senderId: AI_ID,
         senderFullName: AI_NAME,
+        sendSpecificToId: user?.userId,
         senderProfilePictureUri: AI_PROFILE_PIC_URL,
         createdAt: timeNow,
       };
@@ -145,6 +153,7 @@ export default function Home() {
           chatContent: chatInputRef.current!.value,
           senderId: user.userId,
           senderFullName: user.fullName,
+          sendSpecificToId: AI_ID,
           senderProfilePictureUri: "",
           createdAt: timeNow,
         };
@@ -208,6 +217,7 @@ export default function Home() {
         ),
         senderId: AI_ID,
         senderFullName: AI_NAME,
+        sendSpecificToId: user?.userId,
         senderProfilePictureUri: AI_PROFILE_PIC_URL,
         createdAt: timeNow,
       };

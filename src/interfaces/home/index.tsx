@@ -17,6 +17,7 @@ export interface OneToOneChat {
   chatContent: string;
   senderId: string;
   senderFullName: string;
+  sendSpecificToId?: string;
   senderProfilePictureUri?: string;
   createdAt: string;
 }
