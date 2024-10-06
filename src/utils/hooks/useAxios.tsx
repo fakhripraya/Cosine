@@ -24,7 +24,6 @@ export const useAxios = (): IAxiosService => {
     controller: AbortController,
     milisecond: number = 30000
   ) => {
-    console.log(milisecond);
     const timeout = setTimeout(
       () => controller.abort(),
       milisecond
