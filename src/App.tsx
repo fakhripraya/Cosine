@@ -7,6 +7,7 @@ import {
   Route,
 } from "react-router-dom";
 import Spinner from "./components/Spinner/index.tsx";
+import Footer from "./components/Footer/index.tsx";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           />
         ))}
       </Routes>
+      <Footer />
       <Spinner />
     </Router>
   );
