@@ -123,6 +123,11 @@ const Footer: React.FC<FooterProps> = () => {
                   Pintrail
                 </span>
               </p>
+              <p onClick={() => sendWA()}>
+                <span className="main-color font-bold cursor-pointer">
+                  Daftarin propertimu disini !
+                </span>
+              </p>
             </div>
           </div>
         </div>
