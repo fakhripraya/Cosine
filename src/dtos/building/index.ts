@@ -1,6 +1,6 @@
 export interface BuildingDetailsDTO {
   id: string;
-  building_title?: string;
+  building_title: string;
   building_address: string;
   building_description: string;
   housing_price: string;

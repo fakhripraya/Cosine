@@ -13,11 +13,11 @@ const db = new Dexie(DB_NAME) as Dexie & {
 };
 
 // Schema declaration:
-db.version(1).stores({
+db.version(6).stores({
   chat_data:
     "id, sender, roomId, content, buildingContents, timestamp",
   user_saved_location_data:
-    "id, userId, savedLocation, timestamp",
+    "id, userId, savedLocationId, savedLocation, timestamp",
 });
 
 export type { IChatData };

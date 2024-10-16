@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "./style.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
@@ -37,20 +37,14 @@ import {
 import { URL_POST_AGENT_MESSAGING } from "../../config/xhr/routes/home";
 import db from "../../config/dexie/dexie";
 import moment from "moment";
-import {
-  ICookieInfo,
-  IUserData,
-} from "../../interfaces/credential";
+import { ICookieInfo } from "../../interfaces/credential";
 import { v4 as uuidv4 } from "uuid";
 import {
   AI_ID,
   AI_NAME,
   AI_PROFILE_PIC_URL,
 } from "../../variables/constants/ai";
-import {
-  IBuildingDetails,
-  IUserSavedLocation,
-} from "../../interfaces/building";
+import { IBuildingDetails } from "../../interfaces/building";
 import { BuildingDetailsDTO } from "../../dtos/building";
 import {
   AdvanceAxiosRequestHeaders,
@@ -59,11 +53,24 @@ import {
 import { trackPromise } from "react-promise-tracker";
 import { IS_NOT_AUTHENTICATE } from "../../utils/validations/credential";
 import HamburgerIcon from "../../assets/svg/ic_hamburg_3.svg";
-import ClearIcon from "../../assets/svg/clear-icon-solid.svg";
+import { createChatData } from "../../utils/functions/db";
 import {
-  createChatData,
-  createSavedLocationData,
-} from "../../utils/functions/db";
+  useAppDispatch,
+  useAppSelector,
+} from "../../utils/hooks/useRedux";
+import {
+  setChats,
+  setLoading,
+  setRendered,
+  setSavedLocations,
+  setShowMobileSidebar,
+  setShowSidebar,
+  setUser,
+} from "../../redux/reducers/pages/home";
+import {
+  MobileSidebar,
+  Sidebar,
+} from "./modular/ShowSidebar";
 
 export default function Home() {
   // REFS //
@@ -75,15 +82,15 @@ export default function Home() {
   const axiosService = useAxios();
 
   // STATES //
-  const [user, setUser] = useState<IUserData | null>(null);
-  const [rendered, setRendered] = useState<boolean>(false);
-  const [showSidebar, setShowSidebar] =
-    useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [chats, setChats] = useState<IChatData[]>([]);
-  const [savedLocation, setSavedLocation] = useState<
-    IUserSavedLocation[]
-  >([]);
+  const {
+    user,
+    rendered,
+    showSidebar,
+    showMobileSidebar,
+    isLoading,
+    chats,
+  } = useAppSelector((state) => state.home);
+  const dispatch = useAppDispatch();
 
   // VARIABLES //
   const pageLoadingClassName = rendered
@@ -92,9 +99,6 @@ export default function Home() {
   const parentContainerClassName = rendered
     ? "visible home-page-container"
     : "hidden no-height";
-  const sidebarContainerClassName = showSidebar
-    ? "visible home-page-sidebar-container dark-bg-color"
-    : "hidden no-width";
   const chatContainerClassName = showSidebar
     ? ""
     : "max-width full-width";
@@ -102,18 +106,20 @@ export default function Home() {
   // FUNCTIONS //
   const handleInitialize = async () => {
     try {
+      let loggedUser = null;
       const clientUserInfo = cookies.get(CLIENT_USER_INFO);
       const searchParamScopes = window.location.search;
 
       if (clientUserInfo?.user) {
-        setUser(clientUserInfo.user);
+        dispatch(setUser(clientUserInfo.user));
+        loggedUser = clientUserInfo.user;
         clearAllUrlParameters();
       } else if (
         searchParamScopes?.includes("googleapis")
       ) {
         const scopes = searchParamScopes;
         clearAllUrlParameters();
-        await handleGoogleAuthListener(scopes);
+        loggedUser = await handleGoogleAuthListener(scopes);
       }
 
       const { chatDatas, locationDatas } =
@@ -124,11 +130,10 @@ export default function Home() {
             const chatDatas = await db.chat_data
               .filter(
                 (chat) =>
-                  chat.sender.id ===
-                    clientUserInfo?.user.userId ||
+                  chat.sender.id === loggedUser.userId ||
                   (chat.sender.id === AI_ID &&
                     chat.content.sendSpecificToId ===
-                      clientUserInfo?.user.userId)
+                      loggedUser.userId)
               )
               .sortBy("timestamp");
 
@@ -136,8 +141,7 @@ export default function Home() {
               await db.user_saved_location_data
                 .filter(
                   (location) =>
-                    location.userId ===
-                    clientUserInfo?.user.userId
+                    location.userId === loggedUser.userId
                 )
                 .sortBy("timestamp");
 
@@ -163,22 +167,22 @@ export default function Home() {
 
       const initData = createChatData(initMessage);
       chatDatas.push(initData);
-      setChats(chatDatas);
-      setSavedLocation(locationDatas);
+      dispatch(setChats(chatDatas));
+      dispatch(setSavedLocations(locationDatas));
     } catch (error) {
       console.error("Failed to initialize:", error);
     } finally {
-      setRendered(true);
+      dispatch(setRendered(true));
     }
   };
 
   const handleOnSendMessage = async () => {
     try {
-      if (loading)
+      if (isLoading)
         return window.alert("Sabar lagi loading nih !");
       if (!user) return navigate("/login");
       if (chatInputRef.current?.value !== "") {
-        setLoading(true);
+        dispatch(setLoading(true));
         const timeNow = moment(new Date())
           .format("dddd, MMMM Do YYYY, h:mm:ss a")
           .toString();
@@ -196,17 +200,15 @@ export default function Home() {
         const chatData: IChatData =
           createChatData(userMessage);
 
-        setChats((record) => {
-          const temp: IChatData[] = [...record];
-          temp.push(chatData);
-          return temp;
-        });
+        const temp: IChatData[] = [...chats];
+        temp.push(chatData);
+        dispatch(setChats(temp));
 
         handleOnMessageSaving(chatData, timeNow);
       }
     } catch (err) {
       console.error(err);
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -278,11 +280,9 @@ export default function Home() {
         buildingContents
       );
 
-      setChats((record) => {
-        const temp: IChatData[] = [...record];
-        temp.push(chatData);
-        return temp;
-      });
+      const temp: IChatData[] = [...chats];
+      temp.push(chatData);
+      dispatch(setChats(temp));
 
       await db.transaction("rw", db.chat_data, () => {
         db.chat_data.bulkAdd([userChatData, chatData]);
@@ -293,36 +293,11 @@ export default function Home() {
         IS_NOT_AUTHENTICATE(error)
       ) {
         cookies.remove(CLIENT_USER_INFO, { path: "/" });
-        return setUser(null);
+        return dispatch(setUser(null));
       }
       handleError(error);
     } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleOnSaveLocation = async (
-    location: IBuildingDetails
-  ) => {
-    try {
-      if (loading)
-        return window.alert("Sabar lagi loading nih !");
-      if (!user) return navigate("/login");
-      if (location) {
-        setLoading(true);
-
-        const locationData: IUserSavedLocation =
-          createSavedLocationData(location);
-
-        setSavedLocation((record) => {
-          const temp: IUserSavedLocation[] = [...record];
-          temp.push(locationData);
-          return temp;
-        });
-      }
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -344,8 +319,10 @@ export default function Home() {
 
       let loggedUser: any | undefined = undefined;
       loggedUser = result.responseData.user;
-      setUser(loggedUser);
+      dispatch(setUser(loggedUser));
       cookies.set(CLIENT_USER_INFO, result.responseData);
+
+      return loggedUser;
     } catch (error) {
       cookies.remove(CLIENT_USER_INFO, { path: "/" });
       handleError(error);
@@ -413,55 +390,8 @@ export default function Home() {
       <div className={parentContainerClassName}>
         <div className="home-page-wrapper">
           <div className="home-page-flex-container">
-            <div className={sidebarContainerClassName}>
-              <div className="home-page-sidebar-header ">
-                {showSidebar && (
-                  <img
-                    onClick={() => setShowSidebar(false)}
-                    className="home-page-body-header-icon cursor-pointer"
-                    src={HamburgerIcon}
-                    alt="hamburger-icon-header"
-                  />
-                )}
-                <img
-                  className="home-page-body-clear-icon cursor-pointer"
-                  src={ClearIcon}
-                  alt="clear-icon"
-                />
-              </div>
-              <hr className="max-width standard-line" />
-              <div className="home-page-sidebar-body">
-                {savedLocation.length > 0 ? (
-                  savedLocation.map((location) => (
-                    <div className="home-page-sidebar-body-item">
-                      <label>
-                        {
-                          location.savedLocation
-                            .building_title
-                        }
-                      </label>
-                    </div>
-                  ))
-                ) : (
-                  <label>Belum ada lokasi tersimpan</label>
-                )}
-              </div>
-              <hr className="max-width standard-line" />
-              <div className="home-page-sidebar-footer ">
-                <label>© 2024 All Rights Reserved</label>
-                <div className="home-page-sidebar-footer-info">
-                  <label className="main-color cursor-pointer">
-                    Privacy
-                  </label>
-                  <label className="main-color cursor-pointer">
-                    Terms
-                  </label>
-                  <label className="main-color cursor-pointer">
-                    FAQ
-                  </label>
-                </div>
-              </div>
-            </div>
+            <Sidebar />
+            <MobileSidebar />
             <div
               className={`home-page-body-container ${chatContainerClassName}`}>
               <div className="home-page-body-header-container">
@@ -469,8 +399,22 @@ export default function Home() {
                   <p className="home-page-body-header-icon-container">
                     {!showSidebar && (
                       <img
-                        onClick={() => setShowSidebar(true)}
-                        className="home-page-body-header-icon cursor-pointer"
+                        onClick={() =>
+                          dispatch(setShowSidebar(true))
+                        }
+                        className="home-page-body-header-icon hide-on-mobile-flex wcursor-pointer"
+                        src={HamburgerIcon}
+                        alt="hamburger-icon-header"
+                      />
+                    )}
+                    {!showMobileSidebar && (
+                      <img
+                        onClick={() =>
+                          dispatch(
+                            setShowMobileSidebar(true)
+                          )
+                        }
+                        className="home-page-body-header-icon show-on-mobile-flex cursor-pointer"
                         src={HamburgerIcon}
                         alt="hamburger-icon-header"
                       />
@@ -511,12 +455,16 @@ export default function Home() {
                   onEnter={handleOnSendMessage}
                   ref={chatInputRef}
                   className="home-page-chat-textinput light-color darker-bg-color max-width"
-                  placeholder={loading ? "Loading..." : ""}
-                  readOnly={loading}
+                  placeholder={
+                    isLoading ? "Loading..." : ""
+                  }
+                  readOnly={isLoading}
                 />
                 <Button
                   className={
-                    loading ? "hidden no-width" : "visible"
+                    isLoading
+                      ? "hidden no-width"
+                      : "visible"
                   }
                   onClick={handleOnSendMessage}>
                   <span className="text-ellipsis">

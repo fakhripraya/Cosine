@@ -1,48 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "./reducers/index"; // Replace with your actual reducers
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
-
-const persistConfig = {
-  key: "root", // Storage key
-  version: 1,
-  storage, // Use the storage library
-  blacklist: ["home"],
-  stateReconciler: autoMergeLevel2,
-};
-
-const persistedReducer = persistReducer(
-  persistConfig,
-  rootReducer
-);
+import rootReducer from "./reducers/index";
 
 // Other configuration options can be provided here,
 // Such as middleware, dev tools, etc.
 export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [
-          FLUSH,
-          REHYDRATE,
-          PAUSE,
-          PERSIST,
-          PURGE,
-          REGISTER,
-        ],
-      },
-    }),
+  reducer: rootReducer,
 });
 
-export const persistor = persistStore(store);
+// Get the type of our store variable
+export type AppStore = typeof store;
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<AppStore["getState"]>;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = AppStore["dispatch"];

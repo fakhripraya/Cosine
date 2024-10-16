@@ -32,20 +32,15 @@
 }
 
 .detail-building-flex-container {
-  margin-top: 12px;
-  margin-bottom: 12px;
+  margin: 12px;
   display: flex;
-  margin-left: 0px;
-  margin-right: 0px;
-  width: 100%;
   box-sizing: border-box;
+  width: calc(100% - 24px);
   height: calc(100vh - 24px);
   background-color: #151515;
   border-radius: 1em;
 
   @media screen and (max-width: 1280px) {
-    margin-left: 12px;
-    margin-right: 12px;
     width: auto;
     height: auto;
   }

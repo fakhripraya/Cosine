@@ -19,6 +19,7 @@
     "react-avatar": "^5.0.3",
     "react-dom": "^18.3.1",
     "react-promise-tracker": "^2.1.1",
+    "react-redux": "^9.1.2",
     "redux-persist": "^6.0.0",
     "uuid": "^10.0.0"
   },

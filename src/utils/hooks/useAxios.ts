@@ -2,14 +2,14 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
-import { createAxios } from "../../config/xhr/axios.tsx";
-import { GET, POST } from "../../variables/global";
+import { createAxios } from "../../config/xhr/axios.ts";
+import { GET, POST } from "../../variables/global.ts";
 import {
   IAxiosService,
   IRequestConfig,
   IResponseAllObject,
   IResponseObject,
-} from "../../interfaces/axios/index.tsx";
+} from "../../interfaces/axios/index.ts";
 
 const initial: IResponseObject = {
   responseData: undefined,

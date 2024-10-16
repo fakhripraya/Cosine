@@ -1,6 +1,6 @@
 export interface IBuildingDetails {
   id: string;
-  building_title?: string;
+  building_title: string;
   building_address: string;
   building_description: string;
   housing_price: string;
@@ -14,6 +14,7 @@ export interface IBuildingDetails {
 export interface IUserSavedLocation {
   id: string;
   userId: string;
+  savedLocationId: string;
   savedLocation: IBuildingDetails;
   timestamp: string;
 }

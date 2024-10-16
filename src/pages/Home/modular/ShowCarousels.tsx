@@ -1,35 +1,77 @@
 import React, { useRef } from "react";
 import Card from "../../../components/Card";
-import { IBuildingDetails } from "../../../interfaces/building";
+import {
+  IBuildingDetails,
+  IUserSavedLocation,
+} from "../../../interfaces/building";
 import {
   formattedCurrencyIDR,
   scrollCarousel,
 } from "../../../utils/functions/global";
-import {
-  NavigateFunction,
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import HamburgerIcon from "../../../assets/svg/square-plus-solid.svg";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../utils/hooks/useRedux";
+import { setSavedLocations } from "../../../redux/reducers/pages/home";
+import { createSavedLocationData } from "../../../utils/functions/db";
+import db from "../../../config/dexie/dexie";
+import { navigateToDetails } from "../../../utils/functions/navigation";
 
 interface ShowGrabableStoreCardCarouselProps {
   uniqueKey: string;
   values: IBuildingDetails[];
 }
 
-const navigateToDetails = (
-  navigate: NavigateFunction,
-  args: IBuildingDetails
-) => {
-  navigate("/detail", {
-    state: args,
-  });
-};
-
 export const ShowGrabableStoreCardCarousel: React.FC<
   ShowGrabableStoreCardCarouselProps
 > = (props) => {
   const carouselRef = useRef<HTMLDivElement>(null);
+
   const navigate = useNavigate();
+  const { user, isLoading, savedLocations } =
+    useAppSelector((state) => state.home);
+  const dispatch = useAppDispatch();
+
+  const handleOnSaveLocation = async (
+    location: IBuildingDetails
+  ) => {
+    try {
+      if (isLoading)
+        return window.alert("Sabar lagi loading nih !");
+      if (!user) return navigate("/login");
+      if (location) {
+        const locationData: IUserSavedLocation =
+          createSavedLocationData(location, user);
+
+        const temp: IUserSavedLocation[] = [
+          ...savedLocations,
+        ];
+        temp.push(locationData);
+
+        await db.transaction(
+          "rw",
+          db.user_saved_location_data,
+          async () => {
+            const exist = await db.user_saved_location_data
+              .where("savedLocationId")
+              .equals(locationData.savedLocationId)
+              .first();
+
+            if (!exist) {
+              await db.user_saved_location_data.add(
+                locationData
+              );
+              dispatch(setSavedLocations(temp));
+            }
+          }
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div
@@ -39,11 +81,13 @@ export const ShowGrabableStoreCardCarousel: React.FC<
       className="home-page-carousel-wrapper"
       ref={carouselRef}>
       {props.values?.map((obj, index) => (
-        <div>
+        <div
+          key={`carousel-card-${props.uniqueKey}-${index}-id${obj.id}`}>
           <Card
             className="margin-bottom-0"
-            onClick={() => navigateToDetails(navigate, obj)}
-            key={`carousel-card-${props.uniqueKey}-${index}-id${obj.id}`}>
+            onClick={() =>
+              navigateToDetails(navigate, obj)
+            }>
             <img
               className="card-img"
               src={obj.image_url[0]}
@@ -64,7 +108,7 @@ export const ShowGrabableStoreCardCarousel: React.FC<
             </p>
           </Card>
           <img
-            onClick={() => {}}
+            onClick={() => handleOnSaveLocation(obj)}
             className="home-page-body-header-icon cursor-pointer margin-top-bottom-8"
             src={HamburgerIcon}
             alt="hamburger-icon-header"

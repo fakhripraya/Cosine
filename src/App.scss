@@ -433,6 +433,20 @@ body h6 {
   display: flex !important;
 }
 
+.show-on-mobile-flex {
+  display: flex !important;
+  @media screen and (min-width: 769px) {
+    display: none !important;
+  }
+}
+
+.hide-on-mobile-flex {
+  display: flex !important;
+  @media screen and (max-width: 769px) {
+    display: none !important;
+  }
+}
+
 .breakline {
   margin: 8px 0px 8px 0px;
 }

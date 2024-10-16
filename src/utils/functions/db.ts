@@ -7,6 +7,7 @@ import {
   OneToOneChat,
 } from "../../interfaces/chat";
 import { v4 as uuidv4 } from "uuid";
+import { IUserData } from "../../interfaces/credential";
 
 export const createChatData = (
   message: OneToOneChat,
@@ -27,11 +28,13 @@ export const createChatData = (
 };
 
 export const createSavedLocationData = (
-  savedLocation: IBuildingDetails
+  savedLocation: IBuildingDetails,
+  user: IUserData
 ) => {
   const locationData: IUserSavedLocation = {
     id: uuidv4(),
-    userId: "",
+    userId: user.userId,
+    savedLocationId: savedLocation.building_title,
     savedLocation: savedLocation,
     timestamp: new Date().toISOString(),
   };

@@ -1,8 +1,12 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import homeReducer from "./home/homeReducer";
+import homeSlice, { HomeState } from "./pages/home";
+
+export interface RootState {
+  home: HomeState;
+}
 
 const rootReducer = combineReducers({
-  home: homeReducer,
+  home: homeSlice,
 });
 
 export default rootReducer;
