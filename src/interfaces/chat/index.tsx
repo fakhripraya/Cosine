@@ -1,4 +1,4 @@
-import { BuildingDetails } from "../building";
+import { IBuildingDetails } from "../building";
 
 export interface IChatData {
   id: string;
@@ -8,7 +8,7 @@ export interface IChatData {
     profilePictureURI?: string;
   };
   content: OneToOneChat;
-  buildingContents?: BuildingDetails[];
+  buildingContents?: IBuildingDetails[];
   timestamp: string;
 }
 

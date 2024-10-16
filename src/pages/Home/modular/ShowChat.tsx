@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { OneToOneChat } from "../../../interfaces/home";
+import { OneToOneChat } from "../../../interfaces/chat";
 
 interface ShowChatProps {
   content: OneToOneChat;

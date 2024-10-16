@@ -12,4 +12,4 @@ export const PAGE_LOADING_MESSAGE =
   "Tunggu bentar ya \n Kita bangunin dulu si Pintrail, hahaha...";
 export const LOGIN_UNAUTHORIZED_REDIRECTING_MESSAGE =
   "Belom login nih bro, login dulu ya...";
-export const INITIAL_PINTRAIL_MESSAGE = `Hai bro,\n\nKalau kamu mau nanya - nanya seputar Kostan, Kontrakan, dan Apartment tinggal tanya aja ya pakai textbox dibawah ini\n\nSaat ini info yang tersedia hanya bertempat di Jakarta, tapi kedepannya kita bakal perbanyak lokasi di kota - kota lain. jadi stay tune ya !`;
+export const INITIAL_PINTRAIL_MESSAGE = `Hai bro,\n\nKalau kamu mau nanya - nanya seputar Kostan, Kontrakan, dan Apartment tinggal tanya aja ya pakai textbox dibawah ini\n\nSaat ini info yang tersedia hanya bertempat di Jakarta, tapi kedepannya kita bakal perbanyak lokasi di kota - kota lain\n\nAku juga mau kasih tau kalau aku belum tentu benar dan masih bisa salah jadi double check semuanya ya !`;

@@ -15,6 +15,9 @@ interface CardProps {
 const Card: React.FC<CardProps> = (props) => {
   const [isMouseDown, setIsMouseDown] =
     useState<boolean>(false);
+  const style = {
+    cursor: isMouseDown ? "grabbing" : "pointer",
+  };
 
   const handleMouseDown = (
     event: React.MouseEvent<HTMLDivElement>
@@ -35,9 +38,7 @@ const Card: React.FC<CardProps> = (props) => {
       onClick={props.onClick}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
-      style={{
-        cursor: isMouseDown ? "grabbing" : "pointer",
-      }}
+      style={style}
       className={"card-container " + props.className}>
       {props.children}
     </div>

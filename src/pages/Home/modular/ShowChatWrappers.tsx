@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import ShowChatWrapper from "./ShowChatWrapper";
-import { IChatData } from "../../../interfaces/home";
+import { IChatData } from "../../../interfaces/chat";
 
 interface ShowChatWrappersProps {
   chats: IChatData[];

@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
 import {
   INITIAL_PINTRAIL_MESSAGE,
-  LOGIN_UNAUTHORIZED_REDIRECTING_MESSAGE,
   PAGE_LOADING_MESSAGE,
 } from "../../variables/constants/home";
 import TextInput from "../../components/TextInput";
@@ -16,7 +15,7 @@ import { useAxios } from "../../utils/hooks/useAxios";
 import {
   IChatData,
   OneToOneChat,
-} from "../../interfaces/home";
+} from "../../interfaces/chat";
 import { cookies } from "../../config/cookie";
 import {
   HERMES_SERVICE,
@@ -48,7 +47,10 @@ import {
   AI_NAME,
   AI_PROFILE_PIC_URL,
 } from "../../variables/constants/ai";
-import { BuildingDetails } from "../../interfaces/building";
+import {
+  IBuildingDetails,
+  IUserSavedLocation,
+} from "../../interfaces/building";
 import { BuildingDetailsDTO } from "../../dtos/building";
 import {
   AdvanceAxiosRequestHeaders,
@@ -56,7 +58,12 @@ import {
 } from "../../interfaces/axios";
 import { trackPromise } from "react-promise-tracker";
 import { IS_NOT_AUTHENTICATE } from "../../utils/validations/credential";
-import MainLogo from "../../assets/svg/pintrail.svg";
+import HamburgerIcon from "../../assets/svg/ic_hamburg_3.svg";
+import ClearIcon from "../../assets/svg/clear-icon-solid.svg";
+import {
+  createChatData,
+  createSavedLocationData,
+} from "../../utils/functions/db";
 
 export default function Home() {
   // REFS //
@@ -70,8 +77,13 @@ export default function Home() {
   // STATES //
   const [user, setUser] = useState<IUserData | null>(null);
   const [rendered, setRendered] = useState<boolean>(false);
+  const [showSidebar, setShowSidebar] =
+    useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [chats, setChats] = useState<IChatData[]>([]);
+  const [savedLocation, setSavedLocation] = useState<
+    IUserSavedLocation[]
+  >([]);
 
   // VARIABLES //
   const pageLoadingClassName = rendered
@@ -80,6 +92,12 @@ export default function Home() {
   const parentContainerClassName = rendered
     ? "visible home-page-container"
     : "hidden no-height";
+  const sidebarContainerClassName = showSidebar
+    ? "visible home-page-sidebar-container dark-bg-color"
+    : "hidden no-width";
+  const chatContainerClassName = showSidebar
+    ? ""
+    : "max-width full-width";
 
   // FUNCTIONS //
   const handleInitialize = async () => {
@@ -98,22 +116,37 @@ export default function Home() {
         await handleGoogleAuthListener(scopes);
       }
 
-      const allChatData = await db.transaction(
-        "rw",
-        db.chat_data,
-        async () => {
-          return await db.chat_data
-            .filter(
-              (chat) =>
-                chat.sender.id ===
-                  clientUserInfo?.user.userId ||
-                (chat.sender.id === AI_ID &&
-                  chat.content.sendSpecificToId ===
-                    clientUserInfo?.user.userId)
-            )
-            .sortBy("timestamp");
-        }
-      );
+      const { chatDatas, locationDatas } =
+        await db.transaction(
+          "rw",
+          [db.chat_data, db.user_saved_location_data],
+          async () => {
+            const chatDatas = await db.chat_data
+              .filter(
+                (chat) =>
+                  chat.sender.id ===
+                    clientUserInfo?.user.userId ||
+                  (chat.sender.id === AI_ID &&
+                    chat.content.sendSpecificToId ===
+                      clientUserInfo?.user.userId)
+              )
+              .sortBy("timestamp");
+
+            const locationDatas =
+              await db.user_saved_location_data
+                .filter(
+                  (location) =>
+                    location.userId ===
+                    clientUserInfo?.user.userId
+                )
+                .sortBy("timestamp");
+
+            return {
+              chatDatas: chatDatas,
+              locationDatas: locationDatas,
+            };
+          }
+        );
 
       const timeNow = moment(new Date())
         .format("dddd, MMMM Do YYYY, h:mm:ss a")
@@ -128,9 +161,10 @@ export default function Home() {
         createdAt: timeNow,
       };
 
-      const initData = handleCreateMessage(initMessage);
-      allChatData.push(initData);
-      setChats(allChatData);
+      const initData = createChatData(initMessage);
+      chatDatas.push(initData);
+      setChats(chatDatas);
+      setSavedLocation(locationDatas);
     } catch (error) {
       console.error("Failed to initialize:", error);
     } finally {
@@ -142,7 +176,7 @@ export default function Home() {
     try {
       if (loading)
         return window.alert("Sabar lagi loading nih !");
-      if (!user) return;
+      if (!user) return navigate("/login");
       if (chatInputRef.current?.value !== "") {
         setLoading(true);
         const timeNow = moment(new Date())
@@ -160,7 +194,7 @@ export default function Home() {
         chatInputRef.current!.value = "";
 
         const chatData: IChatData =
-          handleCreateMessage(userMessage);
+          createChatData(userMessage);
 
         setChats((record) => {
           const temp: IChatData[] = [...record];
@@ -226,7 +260,7 @@ export default function Home() {
         JSON.parse(response.responseData?.output_content);
 
       const buildingContents = parsedContent?.map(
-        (obj): BuildingDetails => {
+        (obj): IBuildingDetails => {
           obj.image_url = obj.image_url.replace(/'/g, '"');
           const actualImages: string[] = JSON.parse(
             obj.image_url
@@ -239,7 +273,7 @@ export default function Home() {
         }
       );
 
-      const chatData: IChatData = handleCreateMessage(
+      const chatData: IChatData = createChatData(
         aiMessage,
         buildingContents
       );
@@ -267,22 +301,29 @@ export default function Home() {
     }
   };
 
-  const handleCreateMessage = (
-    message: OneToOneChat,
-    buildingContents?: BuildingDetails[]
+  const handleOnSaveLocation = async (
+    location: IBuildingDetails
   ) => {
-    const chatData: IChatData = {
-      id: uuidv4(),
-      sender: {
-        id: message.senderId,
-        fullName: message.senderFullName,
-        profilePictureURI: message.senderProfilePictureUri,
-      },
-      content: message,
-      buildingContents: buildingContents,
-      timestamp: new Date().toISOString(),
-    };
-    return chatData;
+    try {
+      if (loading)
+        return window.alert("Sabar lagi loading nih !");
+      if (!user) return navigate("/login");
+      if (location) {
+        setLoading(true);
+
+        const locationData: IUserSavedLocation =
+          createSavedLocationData(location);
+
+        setSavedLocation((record) => {
+          const temp: IUserSavedLocation[] = [...record];
+          temp.push(locationData);
+          return temp;
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
   };
 
   const handleGoogleAuthListener = async (
@@ -350,12 +391,10 @@ export default function Home() {
     handleInitialize();
   }, []);
 
+  // Scroll to the bottom of the chat body container
   useEffect(() => {
-    // Scroll to the bottom of the chat body container
-    if (chatBodyContainerRef.current) {
-      chatBodyContainerRef.current.scrollTop =
-        chatBodyContainerRef.current.scrollHeight;
-    }
+    const current = chatBodyContainerRef.current;
+    if (current) current.scrollTop = current.scrollHeight;
   }, [chats]);
 
   // Placeholder message while redirecting to home page
@@ -369,43 +408,93 @@ export default function Home() {
     );
   }
 
-  if (rendered && !user) {
-    navigate("/login");
-    return (
-      <PageLoading
-        className={pageLoadingClassName}
-        loadingMessage={
-          LOGIN_UNAUTHORIZED_REDIRECTING_MESSAGE
-        }
-        noLogo={false}
-      />
-    );
-  }
-
   return (
     <div className="home-page">
       <div className={parentContainerClassName}>
         <div className="home-page-wrapper">
           <div className="home-page-flex-container">
-            <div className="home-page-body-container">
+            <div className={sidebarContainerClassName}>
+              <div className="home-page-sidebar-header ">
+                {showSidebar && (
+                  <img
+                    onClick={() => setShowSidebar(false)}
+                    className="home-page-body-header-icon cursor-pointer"
+                    src={HamburgerIcon}
+                    alt="hamburger-icon-header"
+                  />
+                )}
+                <img
+                  className="home-page-body-clear-icon cursor-pointer"
+                  src={ClearIcon}
+                  alt="clear-icon"
+                />
+              </div>
+              <hr className="max-width standard-line" />
+              <div className="home-page-sidebar-body">
+                {savedLocation.length > 0 ? (
+                  savedLocation.map((location) => (
+                    <div className="home-page-sidebar-body-item">
+                      <label>
+                        {
+                          location.savedLocation
+                            .building_title
+                        }
+                      </label>
+                    </div>
+                  ))
+                ) : (
+                  <label>Belum ada lokasi tersimpan</label>
+                )}
+              </div>
+              <hr className="max-width standard-line" />
+              <div className="home-page-sidebar-footer ">
+                <label>© 2024 All Rights Reserved</label>
+                <div className="home-page-sidebar-footer-info">
+                  <label className="main-color cursor-pointer">
+                    Privacy
+                  </label>
+                  <label className="main-color cursor-pointer">
+                    Terms
+                  </label>
+                  <label className="main-color cursor-pointer">
+                    FAQ
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              className={`home-page-body-container ${chatContainerClassName}`}>
               <div className="home-page-body-header-container">
                 <div className="home-page-body-header">
                   <p className="home-page-body-header-icon-container">
-                    <img
-                      className="home-page-body-header-icon"
-                      src={MainLogo}
-                      alt="main_logo"
-                    />
+                    {!showSidebar && (
+                      <img
+                        onClick={() => setShowSidebar(true)}
+                        className="home-page-body-header-icon cursor-pointer"
+                        src={HamburgerIcon}
+                        alt="hamburger-icon-header"
+                      />
+                    )}
                   </p>
                   <h4>{AI_NAME}</h4>
                 </div>
-                <div className="home-page-body-header">
-                  <p
-                    onClick={handleLogout}
-                    className="red-color cursor-pointer">
-                    Log out
-                  </p>
-                </div>
+                {user ? (
+                  <div className="home-page-body-header">
+                    <p
+                      onClick={handleLogout}
+                      className="red-color cursor-pointer">
+                      Logout
+                    </p>
+                  </div>
+                ) : (
+                  <div className="home-page-body-header">
+                    <p
+                      onClick={() => navigate("/login")}
+                      className="main-color cursor-pointer">
+                      Login
+                    </p>
+                  </div>
+                )}
               </div>
               <div
                 ref={chatBodyContainerRef}

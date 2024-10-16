@@ -7,60 +7,19 @@
 
 // COMPONENT BASE
 .footer-button-container {
-  min-width: 200px;
-  min-height: 100px;
+  margin: 8px 0px;
+  margin-right: 12px;
   display: flex;
   align-items: center;
   -webkit-box-align: center;
-
-  @media screen and (max-width: 1000px) {
-    min-width: 175px;
-    min-height: 75px;
-  }
-  @media screen and (max-width: 768px) {
-    min-width: 150px;
-    min-height: 75px;
-  }
-  @media screen and (max-width: 400px) {
-    min-width: 125px;
-    min-height: 55px;
-  }
-  @media screen and (max-width: 300px) {
-    min-width: 100px;
-    min-height: 50px;
-  }
 }
 
 .footer-button {
   background-color: #151515 !important;
   border-color: transparent !important;
-  max-width: 125px;
-  width: 100%;
-  min-height: 50px;
-  border-radius: 100px;
+  width: 125px;
+  min-height: 30px;
   font-size: large;
-
-  @media screen and (max-width: 1000px) {
-    max-width: 125px;
-    min-height: 40px;
-    font-size: 1.25rem;
-  }
-
-  @media screen and (max-width: 768px) {
-    max-width: 100px;
-    min-height: 25px;
-    font-size: 1rem;
-  }
-  @media screen and (max-width: 400px) {
-    max-width: 75px;
-    min-height: 20px;
-    font-size: 1rem;
-  }
-  @media screen and (max-width: 300px) {
-    max-width: 65px;
-    min-height: 20px;
-    font-size: 1rem;
-  }
 }
 
 .footer-button-outlined {
@@ -79,16 +38,8 @@
 }
 
 .footer-button-block {
+  width: 100%;
   background-color: #151515 !important;
-}
-
-.footer-button-block-overriding {
-  background-color: #0da34d !important;
-}
-
-.footer-button-block-overriding:hover {
-  transform: scale(1.01) !important;
-  opacity: 1 !important;
 }
 
 // GRID //

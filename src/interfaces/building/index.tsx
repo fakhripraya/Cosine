@@ -1,4 +1,4 @@
-export interface BuildingDetails {
+export interface IBuildingDetails {
   id: string;
   building_title?: string;
   building_address: string;
@@ -9,4 +9,11 @@ export interface BuildingDetails {
   owner_phone_number: string;
   owner_email: string;
   image_url: string[];
+}
+
+export interface IUserSavedLocation {
+  id: string;
+  userId: string;
+  savedLocation: IBuildingDetails;
+  timestamp: string;
 }

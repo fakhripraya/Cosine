@@ -2,7 +2,7 @@
 import React, { Fragment, useMemo } from "react";
 import Avatar from "react-avatar";
 import ShowChat from "./ShowChat";
-import { IChatData } from "../../../interfaces/home";
+import { IChatData } from "../../../interfaces/chat";
 import { ShowGrabableStoreCardCarousel } from "./ShowCarousels";
 
 interface ShowChatWrapperProps {

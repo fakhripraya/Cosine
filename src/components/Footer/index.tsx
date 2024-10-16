@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import "./style.scss";
 import Button from "../Button";
 import { useNavigate } from "react-router-dom";
 import { sendWACS } from "../../utils/functions/global";
+import { useLocation } from "react-router-dom";
 
 const socialMedia = [
   {
@@ -43,10 +44,10 @@ const StyledButton: React.FC<StyledButtonProps> = (
 };
 
 const Footer: React.FC<FooterProps> = () => {
-  // VARIABLES
+  const [isRender, setIsRender] = useState(false);
   const navigation = useNavigate();
+  const location = useLocation();
 
-  // FUNCTIONS SPECIFIC //
   function sendWA(): void {
     sendWACS();
   }
@@ -59,64 +60,74 @@ const Footer: React.FC<FooterProps> = () => {
     navigation("/privacy-policy");
   }
 
+  useLayoutEffect(() => {
+    setIsRender(() => {
+      if (location.pathname === "/") return false;
+      if (location.pathname === "/detail") return false;
+      else return true;
+    });
+  }, [location]);
+
   return (
-    <div className="footer-container dark-bg-color">
-      <div className="footer-grid-wrapper grid-false">
-        <div className="footer-column-1">
-          <div className="footer-column-1-wrapper">
-            <div className="footer-column-1-media-social">
-              {socialMedia.map((social, index) => (
+    isRender && (
+      <div className="footer-container dark-bg-color">
+        <div className="footer-grid-wrapper grid-false">
+          <div className="footer-column-1">
+            <div className="footer-column-1-wrapper">
+              <div className="footer-column-1-media-social">
+                {socialMedia.map((social, index) => (
+                  <StyledButton
+                    key={`footer-styled-button-${index}`}
+                    className={"footer-button-outlined"}>
+                    {social.name}
+                  </StyledButton>
+                ))}
+              </div>
+              <h3> We are based in </h3>
+              <h3>Jakarta,&nbsp;</h3>
+              <h1 className="break-word">Indonesia</h1>
+              <h3 className="footer-column-1-email">
+                Drop us a line at
+              </h3>
+              <h2 className="break-word">
+                <a
+                  className="footer-column-1-email-text main-color"
+                  href="mailto:letmeask@wg.com">
+                  letmeask@pintrail.com
+                </a>
+              </h2>
+              <div className="footer-column-1-help">
                 <StyledButton
-                  key={`footer-styled-button-${index}`}
-                  className={"footer-button-outlined"}>
-                  {social.name}
+                  onClick={handleGoToPrivacyPolicy}
+                  className="footer-button-block">
+                  Privacy
                 </StyledButton>
-              ))}
-            </div>
-            <h3> We are based in </h3>
-            <h3>Jakarta,&nbsp;</h3>
-            <h1 className="break-word`">Indonesia</h1>
-            <h3 className="footer-column-1-email">
-              Drop us a line at
-            </h3>
-            <h2 className="break-word">
-              <a
-                className="footer-column-1-email-text"
-                href="mailto:letmeask@wg.com">
-                letmeask@pintrail.com
-              </a>
-            </h2>
-            <div className="footer-column-1-help">
-              <StyledButton
-                onClick={handleGoToPrivacyPolicy}
-                className="max-width footer-button-block">
-                Privacy Policy
-              </StyledButton>
-              <StyledButton
-                onClick={handleGoToTNC}
-                className="max-width footer-button-block">
-                Terms and Condition
-              </StyledButton>
-              <StyledButton
-                onClick={sendWA}
-                className="max-width footer-button-block">
-                Customer Service
-              </StyledButton>
+                <StyledButton
+                  onClick={handleGoToTNC}
+                  className="footer-button-block">
+                  Our Terms
+                </StyledButton>
+                <StyledButton
+                  onClick={sendWA}
+                  className="footer-button-block">
+                  FAQ
+                </StyledButton>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="footer-column-2">
-          <div className="footer-column-2-wrapper">
-            <p>
-              © {"2022"} All Rights Reserved,{" "}
-              <span className="main-color font-bold">
-                Pintrail
-              </span>
-            </p>
+          <div className="footer-column-2">
+            <div className="footer-column-2-wrapper">
+              <p>
+                © {"2024"} All Rights Reserved,{" "}
+                <span className="main-color font-bold">
+                  Pintrail
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    )
   );
 };
 

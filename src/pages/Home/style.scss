@@ -19,8 +19,8 @@
   flex-direction: column;
 
   @media screen and (min-width: 768px) {
-    width: 100vw;
-    max-width: 767px;
+    width: 100%;
+    max-width: 1000px;
   }
 }
 
@@ -30,11 +30,75 @@
   display: flex;
   margin-left: 0px;
   margin-right: 0px;
-  width: 100%;
+  width: inherit;
   box-sizing: border-box;
   height: calc(100svh - 24px);
   background-color: #151515;
+}
+
+.home-page-sidebar-container {
+  position: relative;
+  box-sizing: border-box;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  padding: 12px;
+  margin-right: 12px;
   border-radius: 1em;
+
+  transition: all 0.3s ease-in-out;
+}
+
+.home-page-sidebar-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.home-page-sidebar-body {
+  display: flex;
+  height: -webkit-fill-available;
+  height: fill-available;
+  flex-direction: column;
+}
+
+.home-page-sidebar-body-item {
+  display: flex;
+  padding: 12px;
+  margin: 8px 0px;
+  height: fit-content;
+  flex-direction: column;
+  background-color: #151515;
+  border-radius: 1em;
+}
+
+.home-page-sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.home-page-sidebar-footer-info {
+  display: flex;
+  width: 30%;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.home-page-body-container {
+  position: relative;
+  box-sizing: border-box;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  transition: all 0.5s ease-in-out;
+
+  @media screen and (max-width: 769px) {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }
 
 .home-page-body-header-container {
@@ -66,19 +130,9 @@
   width: 30px;
 }
 
-.home-page-body-container {
-  position: relative;
-  box-sizing: border-box;
-  width: -webkit-fill-available;
-  width: fill-available;
-  display: flex;
-  flex-direction: column;
-  height: inherit;
-
-  @media screen and (max-width: 769px) {
-    padding-left: 0px;
-    padding-right: 0px;
-  }
+.home-page-body-clear-icon {
+  height: 26px;
+  width: 26px;
 }
 
 .home-page-mainbody-container {

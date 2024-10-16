@@ -1,27 +1,24 @@
 import { URLSearchParams } from "url";
 import { CUSTOMER_SERVICE } from "../../config/environment";
 
-// Whatsapp sender
+// Send static Whatsapp messages to Customer Service
 export function sendWACS() {
-  // Send static Whatsapp messages to Customer Service
-  // TODO: Insert the Whatsapp number to ENV
   return window.open(
     `https://wa.me/${CUSTOMER_SERVICE}?text=Hi%20kak%20mau%20nanya%20dong%20!%20!%20!`,
     "_blank"
   );
 }
 
-let pos = { left: 0, x: 0, y: 0 };
 export function scrollCarousel(
   e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ele: HTMLDivElement | null
 ): void {
   if (!ele) return;
 
-  pos = {
-    left: ele.scrollLeft,
-    x: e.clientX,
-    y: e.clientY,
+  const pos = {
+    left: ele.scrollLeft ?? 0,
+    x: e.clientX ?? 0,
+    y: e.clientY ?? 0,
   };
 
   function mouseMoveHandler(e: MouseEvent) {

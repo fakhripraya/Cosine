@@ -3,8 +3,8 @@ export const OLYMPUS_SERVICE = import.meta.env
 export const HERMES_SERVICE = import.meta.env
   .VITE_HERMES_SERVICE as string;
 
-export const CHAT_DB = import.meta.env
-  .VITE_CHAT_DB as string;
+export const DB_NAME = import.meta.env
+  .VITE_DB_NAME as string;
 
 export const CUSTOMER_SERVICE = import.meta.env
   .VITE_CUSTOMER_SERVICE as string;
