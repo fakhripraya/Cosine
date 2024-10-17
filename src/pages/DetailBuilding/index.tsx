@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import "./style.scss";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { IBuildingDetails } from "../../interfaces/building";
-// import TextArea from "../../components/TextArea";
 import TextInput from "../../components/TextInput";
 import {
   formattedNumber,
@@ -15,36 +13,43 @@ import TextArea from "../../components/TextArea";
 import WhatsappIcon from "../../assets/svg/whatsapp_icon.svg";
 import PageLoading from "../PageLoading";
 import { PAGE_LOADING_MESSAGE } from "../../variables/constants/home";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../utils/hooks/useRedux";
+import {
+  setFailedImages,
+  setSelectedImage,
+} from "../../redux/reducers/pages/DetailBuilding";
+import { setRendered } from "../../redux/reducers/pages/Home";
 
 export default function DetailBuilding() {
+  // HOOKS //
   const location = useLocation();
   const navigation = useNavigate();
+
+  // STATES //
   const data = location.state as IBuildingDetails;
+  const { rendered, selectedImage, failedImages } =
+    useAppSelector((state) => state.detailBuilding);
+  const dispatch = useAppDispatch();
 
-  const [rendered, setRendered] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] =
-    useState<number>(0);
-  const [failedImages, setFailedImages] = useState<
-    number[]
-  >([]);
-
+  // VARIABLES //
   const pageLoadingClassName = rendered
     ? "hidden no-height"
     : "visible";
 
+  // FUNCTIONS //
   const handleImageError = (index: number) => {
-    setFailedImages((prevFailedImages) => [
-      ...prevFailedImages,
-      index,
-    ]);
+    const newFailedImages = [...failedImages, index];
+    dispatch(setFailedImages(newFailedImages));
   };
 
   useEffect(() => {
     if (!data) return navigation("/");
-    setRendered(true);
+    dispatch(setRendered(true));
   }, []);
 
-  // Placeholder message while redirecting to home page
   if (!rendered) {
     return (
       <PageLoading
@@ -90,7 +95,9 @@ export default function DetailBuilding() {
                         className="dark-bg-color margin-top-0 detail-building-card">
                         <img
                           onClick={() =>
-                            setSelectedImage(index)
+                            dispatch(
+                              setSelectedImage(index)
+                            )
                           }
                           onError={() =>
                             handleImageError(index)

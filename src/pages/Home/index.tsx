@@ -66,7 +66,7 @@ import {
   setShowMobileSidebar,
   setShowSidebar,
   setUser,
-} from "../../redux/reducers/pages/home";
+} from "../../redux/reducers/pages/Home";
 import {
   MobileSidebar,
   Sidebar,

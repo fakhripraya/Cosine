@@ -3,7 +3,7 @@ import {
   setShowSidebar,
   setShowMobileSidebar,
   setSavedLocations,
-} from "../../../redux/reducers/pages/home";
+} from "../../../redux/reducers/pages/Home";
 import { useAppSelector } from "../../../utils/hooks/useRedux";
 import HamburgerIcon from "../../../assets/svg/ic_hamburg_3.svg";
 import DeleteIcon from "../../../assets/svg/trash-solid.svg";

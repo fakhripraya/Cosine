@@ -3,7 +3,6 @@ import { IUserSavedLocation } from "../../../../interfaces/building";
 import { IChatData } from "../../../../interfaces/chat";
 import { IUserData } from "../../../../interfaces/credential";
 
-// Define a type for the slice state
 export interface HomeState {
   user: IUserData | null;
   rendered: boolean;
@@ -14,7 +13,6 @@ export interface HomeState {
   savedLocations: IUserSavedLocation[];
 }
 
-// Define the initial state using that type
 const initialState: HomeState = {
   user: null,
   rendered: false,
