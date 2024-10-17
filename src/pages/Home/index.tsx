@@ -407,22 +407,28 @@ export default function Home() {
               <div className="home-page-body-header-container">
                 <div className="home-page-body-header">
                   <p className="home-page-body-header-icon-container">
-                    <img
-                      onClick={() =>
-                        dispatch(
-                          showSidebar
-                            ? setShowMobileSidebar(true)
-                            : setShowSidebar(true)
-                        )
-                      }
-                      className={`home-page-body-header-icon cursor-pointer ${
-                        showSidebar
-                          ? "show-on-mobile-flex"
-                          : "hide-on-mobile-flex"
-                      }`}
-                      src={HamburgerIcon}
-                      alt="hamburger-icon-header"
-                    />
+                    {!showSidebar && (
+                      <img
+                        onClick={() =>
+                          dispatch(setShowSidebar(true))
+                        }
+                        className="home-page-body-header-icon hide-on-mobile-flex wcursor-pointer"
+                        src={HamburgerIcon}
+                        alt="hamburger-icon-header"
+                      />
+                    )}
+                    {!showMobileSidebar && (
+                      <img
+                        onClick={() =>
+                          dispatch(
+                            setShowMobileSidebar(true)
+                          )
+                        }
+                        className="home-page-body-header-icon show-on-mobile-flex cursor-pointer"
+                        src={HamburgerIcon}
+                        alt="hamburger-icon-header"
+                      />
+                    )}
                   </p>
                   <h4>{AI_NAME}</h4>
                 </div>
