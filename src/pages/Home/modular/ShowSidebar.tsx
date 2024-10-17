@@ -165,13 +165,19 @@ const SidebarContent = () => {
       <div className="home-page-sidebar-footer ">
         <label>© 2024 All Rights Reserved</label>
         <div className="home-page-sidebar-footer-info">
-          <label className="main-color cursor-pointer">
+          <label
+            onClick={() => navigate("/privacy-policy")}
+            className="main-color cursor-pointer">
             Privacy
           </label>
-          <label className="main-color cursor-pointer">
+          <label
+            onClick={() => navigate("/tnc")}
+            className="main-color cursor-pointer">
             Terms
           </label>
-          <label className="main-color cursor-pointer">
+          <label
+            onClick={() => navigate("/tnc")}
+            className="main-color cursor-pointer">
             FAQ
           </label>
         </div>

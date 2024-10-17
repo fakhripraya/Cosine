@@ -5,7 +5,9 @@ import Home from "../../pages/Home/index.tsx";
 import Login from "../../pages/Login/index.tsx";
 import NewPassword from "../../pages/NewPassword/index.tsx";
 import OTP from "../../pages/OTP/index.tsx";
+import PrivacyPolicy from "../../pages/PrivacyPolicy/index.tsx";
 import Register from "../../pages/Register/index.tsx";
+import TermsAndConditions from "../../pages/TermsAndConditions/index.tsx";
 
 export const routes = [
   {
@@ -35,6 +37,14 @@ export const routes = [
   {
     path: "/otp",
     component: <OTP />,
+  },
+  {
+    path: "/privacy-policy",
+    component: <PrivacyPolicy />,
+  },
+  {
+    path: "/tnc",
+    component: <TermsAndConditions />,
   },
   {
     path: "*",
