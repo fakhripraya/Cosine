@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 import Spinner from "./components/Spinner/index.tsx";
 import Footer from "./components/Footer/index.tsx";
+import PageLoading from "./pages/PageLoading/index.tsx";
+import { PAGE_LOADING_MESSAGE } from "./variables/constants/global.ts";
 
 function App() {
   return (
@@ -18,7 +20,13 @@ function App() {
             key={`route-${index}`}
             path={item.path}
             element={
-              <Suspense fallback={<p>Loading...</p>}>
+              <Suspense
+                fallback={
+                  <PageLoading
+                    loadingMessage={PAGE_LOADING_MESSAGE}
+                    noLogo={false}
+                  />
+                }>
                 {item.component}
               </Suspense>
             }

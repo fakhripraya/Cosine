@@ -12,7 +12,7 @@ import Card from "../../components/Card";
 import TextArea from "../../components/TextArea";
 import WhatsappIcon from "../../assets/svg/whatsapp_icon.svg";
 import PageLoading from "../PageLoading";
-import { PAGE_LOADING_MESSAGE } from "../../variables/constants/home";
+import { PAGE_LOADING_MESSAGE } from "../../variables/constants/building";
 import {
   useAppDispatch,
   useAppSelector,
