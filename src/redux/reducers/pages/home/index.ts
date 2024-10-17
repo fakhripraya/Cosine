@@ -3,6 +3,8 @@ import { IUserSavedLocation } from "../../../../interfaces/building";
 import { IChatData } from "../../../../interfaces/chat";
 import { IUserData } from "../../../../interfaces/credential";
 
+export const HOME_SLICE_KEY = "home_slice";
+
 export interface HomeState {
   user: IUserData | null;
   rendered: boolean;
@@ -24,7 +26,7 @@ const initialState: HomeState = {
 };
 
 const homeSlice = createSlice({
-  name: "home_slice",
+  name: HOME_SLICE_KEY,
   initialState: initialState,
   reducers: {
     setUser: (state, action) => {

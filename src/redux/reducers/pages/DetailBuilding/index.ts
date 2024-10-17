@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export const DETAIL_BUILDING_SLICE_KEY =
+  "detail_building_slice";
+
 export interface DetailBuildingState {
   rendered: boolean;
   selectedImage: number;
@@ -13,7 +16,7 @@ const initialState: DetailBuildingState = {
 };
 
 const detailBuildingSlice = createSlice({
-  name: "detail_building_slice",
+  name: DETAIL_BUILDING_SLICE_KEY,
   initialState: initialState,
   reducers: {
     setRendered: (state, action) => {
