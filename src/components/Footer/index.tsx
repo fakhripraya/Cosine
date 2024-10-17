@@ -117,15 +117,18 @@ const Footer: React.FC<FooterProps> = () => {
           </div>
           <div className="footer-column-2">
             <div className="footer-column-2-wrapper">
-              <p>
+              <label>
                 © {"2024"} All Rights Reserved,{" "}
                 <span className="main-color font-bold">
                   Pintrail
                 </span>
-              </p>
-              <p onClick={() => sendWA()}>
+              </label>
+              <p
+                className="text-align-start"
+                onClick={() => sendWA()}>
+                Daftarin propertimu{" "}
                 <span className="main-color font-bold cursor-pointer">
-                  Daftarin propertimu disini !
+                  disini !
                 </span>
               </p>
             </div>
