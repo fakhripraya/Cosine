@@ -26,7 +26,7 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
               name={chat.sender.fullName}
             />
           </div>
-          <div className="home-page-chattext-wrapper">
+          <div className="home-page-chattext-wrapper max-width full-width">
             <div>
               <p className="home-page-chattext-username font-bold">
                 {chat.sender.fullName}

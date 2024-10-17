@@ -71,6 +71,7 @@ import {
   MobileSidebar,
   Sidebar,
 } from "./modular/ShowSidebar";
+import { MessagingDTO } from "../../dtos/messaging";
 
 export default function Home() {
   // REFS //
@@ -102,6 +103,12 @@ export default function Home() {
   const chatContainerClassName = showSidebar
     ? ""
     : "max-width full-width";
+  const chatButtonSendClassName = isLoading
+    ? "hidden no-width"
+    : "visible";
+  const chatTextboxClassName = isLoading
+    ? "Loading..."
+    : "";
 
   // FUNCTIONS //
   const handleInitialize = async () => {
@@ -243,13 +250,15 @@ export default function Home() {
         },
         controller: abortController,
       });
-
       clearTimeout(axiosTimeout);
 
+      const messagingOutput: MessagingDTO = JSON.parse(
+        response.responseData
+      );
       const aiMessage: OneToOneChat = {
         id: uuidv4(),
         chatContent: removeTrailingNewlines(
-          response.responseData?.output
+          messagingOutput?.output
         ),
         senderId: AI_ID,
         senderFullName: AI_NAME,
@@ -258,8 +267,9 @@ export default function Home() {
         createdAt: timeNow,
       };
 
-      const parsedContent: BuildingDetailsDTO[] =
-        JSON.parse(response.responseData?.output_content);
+      const parsedContent:
+        | BuildingDetailsDTO[]
+        | undefined = messagingOutput?.output_content;
 
       const buildingContents = parsedContent?.map(
         (obj): IBuildingDetails => {
@@ -455,17 +465,11 @@ export default function Home() {
                   onEnter={handleOnSendMessage}
                   ref={chatInputRef}
                   className="home-page-chat-textinput light-color darker-bg-color max-width"
-                  placeholder={
-                    isLoading ? "Loading..." : ""
-                  }
+                  placeholder={chatTextboxClassName}
                   readOnly={isLoading}
                 />
                 <Button
-                  className={
-                    isLoading
-                      ? "hidden no-width"
-                      : "visible"
-                  }
+                  className={chatButtonSendClassName}
                   onClick={handleOnSendMessage}>
                   <span className="text-ellipsis">
                     Send
