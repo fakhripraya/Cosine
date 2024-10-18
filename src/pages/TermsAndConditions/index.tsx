@@ -15,7 +15,6 @@ const TermsAndConditions: React.FC = () => {
         <h2 className="align-self-start main-color">
           Syarat dan Ketentuan
         </h2>
-        <div className="breakline" />
         <p className="align-self-start white-space-pre-line">
           Selamat datang di Pintrail! Syarat dan Ketentuan
           ini mengatur penggunaan platform Pintrail di mana
@@ -45,7 +44,6 @@ const TermsAndConditions: React.FC = () => {
           pengguna meminta dicarikan dan menyimpan lokasi
           yang telah diberikan oleh Pintrail.
         </p>
-        <div className="breakline" />
         <h3 className="align-self-start main-color">
           2. Ketentuan Umum Penggunaan
         </h3>
@@ -71,7 +69,7 @@ const TermsAndConditions: React.FC = () => {
           izin orang tua atau wali sah sebelum menggunakan
           layanan kami.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           3. Tanggung Jawab Pengguna
         </h3>
@@ -93,7 +91,7 @@ const TermsAndConditions: React.FC = () => {
           lakukan di platform, termasuk percakapan dan
           penyimpanan data lokasi.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           4. Keamanan Akun
         </h3>
@@ -105,7 +103,7 @@ const TermsAndConditions: React.FC = () => {
           penyalahgunaan akun yang disebabkan oleh kelalaian
           pengguna dalam menjaga keamanan akun mereka.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           5. Penggunaan Data Pribadi
         </h3>
@@ -120,7 +118,7 @@ const TermsAndConditions: React.FC = () => {
           digunakan oleh platform untuk memberikan layanan
           yang lebih baik sesuai dengan preferensi pengguna.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           6. Penangguhan dan Penghentian Layanan
         </h3>
@@ -133,7 +131,7 @@ const TermsAndConditions: React.FC = () => {
           layanan, baik sebagian maupun seluruhnya, dengan
           atau tanpa pemberitahuan sebelumnya.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           7. Batasan Tanggung Jawab
         </h3>
@@ -147,7 +145,7 @@ const TermsAndConditions: React.FC = () => {
           akses yang terhenti, atau kehilangan data yang
           terjadi di luar kendali kami.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           8. Perubahan Syarat dan Ketentuan
         </h3>
@@ -161,7 +159,7 @@ const TermsAndConditions: React.FC = () => {
           setelah perubahan dipublikasikan, pengguna
           dianggap telah menyetujui perubahan tersebut.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           9. Hukum yang Berlaku
         </h3>

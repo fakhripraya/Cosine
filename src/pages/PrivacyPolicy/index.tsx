@@ -19,7 +19,6 @@ const PrivacyPolicy: React.FC = () => {
         <h2 className="align-self-start main-color">
           Kebijakan Privasi
         </h2>
-        <div className="breakline" />
         <p>
           Kami menghargai dan melindungi privasi Anda.
           Kebijakan Privasi ini menjelaskan bagaimana kami
@@ -66,7 +65,7 @@ const PrivacyPolicy: React.FC = () => {
           tersedia secara publik dan tidak mengakses data
           pribadi tanpa izin.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           2. Penggunaan Informasi
         </h3>
@@ -83,7 +82,7 @@ const PrivacyPolicy: React.FC = () => {
           notifikasi, dan komunikasi terkait penggunaan
           layanan.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           3. Keamanan Data Pribadi
         </h3>
@@ -100,7 +99,7 @@ const PrivacyPolicy: React.FC = () => {
           kata sandi yang kuat dan tidak membagikan
           kredensial akun dengan orang lain.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           4. Pembagian Informasi
         </h3>
@@ -116,7 +115,7 @@ const PrivacyPolicy: React.FC = () => {
           diperlukan untuk memberikan layanan tersebut dan
           wajib menjaga kerahasiaan data.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           5. Hak Pengguna
         </h3>
@@ -138,7 +137,7 @@ const PrivacyPolicy: React.FC = () => {
           data tersebut diperlukan untuk memenuhi kewajiban
           hukum kami.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           6. Cookie dan Teknologi Pelacakan
         </h3>
@@ -151,7 +150,7 @@ const PrivacyPolicy: React.FC = () => {
           browser Anda, namun beberapa fitur mungkin tidak
           berfungsi dengan baik.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           7. Perubahan pada Kebijakan Privasi
         </h3>
@@ -162,7 +161,7 @@ const PrivacyPolicy: React.FC = () => {
           email. Kami menganjurkan Anda untuk meninjau
           Kebijakan Privasi ini secara berkala.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           8. Hukum yang Berlaku
         </h3>
@@ -175,7 +174,7 @@ const PrivacyPolicy: React.FC = () => {
           No. 27 Tahun 2022 tentang Perlindungan Data
           Pribadi.
         </p>
-        <div className="breakline" />
+
         <h3 className="align-self-start main-color">
           9. Kontak Kami
         </h3>
