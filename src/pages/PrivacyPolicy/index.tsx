@@ -5,9 +5,13 @@ import {
   smoothScrollTop,
 } from "../../utils/functions/global";
 import { APP_EMAIL } from "../../config/environment";
+import { useNavigate } from "react-router-dom";
+import BackIcon from "../../assets/svg/arrow-left.svg";
 
 const PrivacyPolicy: React.FC = () => {
-  // INITIAL RENDER
+  // HOOKS
+  const navigation = useNavigate();
+
   useEffect(() => {
     // scroll to top on entering
     smoothScrollTop();
@@ -16,6 +20,12 @@ const PrivacyPolicy: React.FC = () => {
   return (
     <div className="privacy-policy-container">
       <div className="privacy-policy-wrapper">
+        <img
+          onClick={() => navigation("/")}
+          className="align-self-start cursor-pointer icon-medium"
+          src={BackIcon}
+          alt="back-icon"
+        />
         <h2 className="align-self-start main-color">
           Kebijakan Privasi
         </h2>

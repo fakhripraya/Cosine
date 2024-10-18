@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
 import "./style.scss";
 import { smoothScrollTop } from "../../utils/functions/global";
+import { useNavigate } from "react-router-dom";
+import BackIcon from "../../assets/svg/arrow-left.svg";
 
 const TermsAndConditions: React.FC = () => {
-  // INITIAL RENDER
+  // HOOKS
+  const navigation = useNavigate();
+
   useEffect(() => {
     // scroll to top on entering
     smoothScrollTop();
@@ -12,6 +16,12 @@ const TermsAndConditions: React.FC = () => {
   return (
     <div className="privacy-policy-container">
       <div className="privacy-policy-wrapper">
+        <img
+          onClick={() => navigation("/")}
+          className="align-self-start cursor-pointer icon-medium"
+          src={BackIcon}
+          alt="back-icon"
+        />
         <h2 className="align-self-start main-color">
           Syarat dan Ketentuan
         </h2>

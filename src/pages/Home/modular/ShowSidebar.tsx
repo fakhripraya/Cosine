@@ -107,6 +107,7 @@ const SidebarContent = () => {
           alt="clear-icon"
         />
       </div>
+      <div className="breakline" />
       <hr className="max-width standard-line" />
       <div className="home-page-sidebar-body">
         {savedLocations.length > 0 ? (

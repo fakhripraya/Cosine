@@ -463,6 +463,22 @@ body h6 {
   opacity: 0.1;
 }
 
+// Icons
+.icon-small {
+  height: 18px !important;
+  width: 18px !important;
+}
+
+.icon-medium {
+  height: 24px !important;
+  width: 24px !important;
+}
+
+.icon-large {
+  height: 30px !important;
+  width: 30px !important;
+}
+
 /* Scrollbar */
 /* width */
 ::-webkit-scrollbar {
