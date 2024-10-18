@@ -412,7 +412,7 @@ export default function Home() {
                         onClick={() =>
                           dispatch(setShowSidebar(true))
                         }
-                        className="home-page-body-header-icon hide-on-mobile-flex wcursor-pointer"
+                        className="home-page-body-header-icon hide-on-mobile-flex cursor-pointer"
                         src={HamburgerIcon}
                         alt="hamburger-icon-header"
                       />
