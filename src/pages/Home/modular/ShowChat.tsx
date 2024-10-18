@@ -14,7 +14,7 @@ const ShowChat: React.FC<ShowChatProps> = ({
     () => (
       <p
         key={`${uniqueKey}-chat`}
-        style={{ whiteSpace: "pre-line" }}>
+        className="white-space-pre-line">
         {content.chatContent}
       </p>
     ),

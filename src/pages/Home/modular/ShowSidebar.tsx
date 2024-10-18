@@ -178,7 +178,7 @@ const SidebarContent = () => {
           <label
             onClick={() => navigate("/tnc")}
             className="main-color cursor-pointer">
-            FAQ
+            Feedback
           </label>
         </div>
       </div>

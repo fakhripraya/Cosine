@@ -4,6 +4,7 @@ import Button from "../Button";
 import { useNavigate } from "react-router-dom";
 import { sendWACS } from "../../utils/functions/global";
 import { useLocation } from "react-router-dom";
+import { APP_EMAIL } from "../../config/environment";
 
 const socialMedia = [
   {
@@ -92,8 +93,8 @@ const Footer: React.FC<FooterProps> = () => {
               <h2 className="break-word">
                 <a
                   className="footer-column-1-email-text main-color"
-                  href="mailto:letmeask@wg.com">
-                  letmeask@pintrail.com
+                  href={`mailto:${APP_EMAIL}`}>
+                  {APP_EMAIL}
                 </a>
               </h2>
               <div className="footer-column-1-help">
@@ -110,7 +111,7 @@ const Footer: React.FC<FooterProps> = () => {
                 <StyledButton
                   onClick={sendWA}
                   className="footer-button-block">
-                  FAQ
+                  Give Us Feedback
                 </StyledButton>
               </div>
             </div>

@@ -8,3 +8,7 @@ export const DB_NAME = import.meta.env
 
 export const CUSTOMER_SERVICE = import.meta.env
   .VITE_CUSTOMER_SERVICE as string;
+
+export const APP_EMAIL =
+  (import.meta.env.VITE_APP_EMAIL as string) ??
+  "letmeask@pintrail.app";

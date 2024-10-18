@@ -137,10 +137,10 @@ export default function Home() {
             const chatDatas = await db.chat_data
               .filter(
                 (chat) =>
-                  chat.sender.id === loggedUser.userId ||
+                  chat.sender.id === loggedUser?.userId ||
                   (chat.sender.id === AI_ID &&
                     chat.content.sendSpecificToId ===
-                      loggedUser.userId)
+                      loggedUser?.userId)
               )
               .sortBy("timestamp");
 
@@ -148,7 +148,7 @@ export default function Home() {
               await db.user_saved_location_data
                 .filter(
                   (location) =>
-                    location.userId === loggedUser.userId
+                    location.userId === loggedUser?.userId
                 )
                 .sortBy("timestamp");
 
