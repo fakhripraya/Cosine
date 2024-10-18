@@ -466,7 +466,7 @@ export default function Home() {
                   ref={chatInputRef}
                   className="home-page-chat-textinput light-color darker-bg-color max-width"
                   placeholder={chatTextboxClassName}
-                  readOnly={isLoading}
+                  readOnly={isLoading || showMobileSidebar}
                 />
                 <Button
                   className={chatButtonSendClassName}
