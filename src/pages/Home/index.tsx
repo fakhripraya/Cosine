@@ -21,10 +21,7 @@ import {
   HERMES_SERVICE,
   OLYMPUS_SERVICE,
 } from "../../config/environment";
-import {
-  URL_POST_GOOGLE_CALLBACK,
-  URL_POST_LOGOUT,
-} from "../../config/xhr/routes/credentials";
+import { URL_POST_GOOGLE_CALLBACK } from "../../config/xhr/routes/credentials";
 import {
   AUTHORIZATION,
   CLIENT_USER_INFO,
@@ -32,6 +29,7 @@ import {
 } from "../../variables/global";
 import {
   clearAllUrlParameters,
+  handleError,
   removeTrailingNewlines,
 } from "../../utils/functions/global";
 import { URL_POST_AGENT_MESSAGING } from "../../config/xhr/routes/home";
@@ -50,7 +48,6 @@ import {
   AdvanceAxiosRequestHeaders,
   isIResponseObject,
 } from "../../interfaces/axios";
-import { trackPromise } from "react-promise-tracker";
 import { IS_NOT_AUTHENTICATE } from "../../utils/validations/credential";
 import HamburgerIcon from "../../assets/svg/ic_hamburg_3.svg";
 import { createChatData } from "../../utils/functions/db";
@@ -72,6 +69,7 @@ import {
   Sidebar,
 } from "./modular/ShowSidebar";
 import { MessagingDTO } from "../../dtos/messaging";
+import ShowHeader from "./modular/ShowHeader";
 
 export default function Home() {
   // REFS //
@@ -340,40 +338,6 @@ export default function Home() {
     }
   };
 
-  const handleLogout = () => {
-    const abortController = new AbortController();
-    const axiosTimeout =
-      axiosService.setAxiosTimeout(abortController);
-    const clientUserInfo: ICookieInfo = cookies.get(
-      CLIENT_USER_INFO
-    );
-    if (!clientUserInfo?.user) return;
-    trackPromise(
-      axiosService
-        .postData({
-          headers: {
-            [X_SID]: clientUserInfo?.sid || "",
-          } as unknown as AdvanceAxiosRequestHeaders,
-          endpoint: OLYMPUS_SERVICE,
-          url: URL_POST_LOGOUT,
-          controller: abortController,
-        })
-        .then(() => navigate("/login"))
-        .catch((error) => handleError(error))
-        .finally(() => {
-          cookies.remove(CLIENT_USER_INFO, { path: "/" });
-          clearTimeout(axiosTimeout);
-        })
-    );
-  };
-
-  const handleError = (error: any) => {
-    console.log(error);
-    if (isIResponseObject(error))
-      return alert(JSON.stringify(error.errorContent));
-    alert(JSON.stringify(error));
-  };
-
   useEffect(() => {
     handleInitialize();
   }, []);
@@ -432,23 +396,7 @@ export default function Home() {
                   </p>
                   <h4>{AI_NAME}</h4>
                 </div>
-                {user ? (
-                  <div className="home-page-body-header">
-                    <p
-                      onClick={handleLogout}
-                      className="red-color cursor-pointer">
-                      Logout
-                    </p>
-                  </div>
-                ) : (
-                  <div className="home-page-body-header">
-                    <p
-                      onClick={() => navigate("/login")}
-                      className="main-color cursor-pointer">
-                      Login
-                    </p>
-                  </div>
-                )}
+                <ShowHeader user={user} />
               </div>
               <div
                 ref={chatBodyContainerRef}

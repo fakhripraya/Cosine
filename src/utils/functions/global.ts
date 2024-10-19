@@ -1,5 +1,6 @@
 import { URLSearchParams } from "url";
 import { CUSTOMER_SERVICE } from "../../config/environment";
+import { isIResponseObject } from "../../interfaces/axios";
 
 // Send static Whatsapp messages to Customer Service
 export function sendWACS() {
@@ -146,4 +147,12 @@ export const formatDateID = (date: string) => {
     .padStart(2, "0")}-${year}`;
 
   return formattedDate;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const handleError = (error: any) => {
+  console.log(error);
+  if (isIResponseObject(error))
+    return alert(JSON.stringify(error.errorContent));
+  alert(JSON.stringify(error));
 };
