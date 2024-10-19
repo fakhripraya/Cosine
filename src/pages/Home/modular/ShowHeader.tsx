@@ -109,7 +109,7 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
           </label>
           <label
             onClick={handleLogout}
-            className="cursor-pointer">
+            className="red-color cursor-pointer">
             Logout
           </label>
         </div>
