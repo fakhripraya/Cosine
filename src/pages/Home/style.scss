@@ -302,5 +302,12 @@
 .home-page-pricing-plan-container {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 8px;
+}
+
+.home-page-pricing-plan-card {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
 }

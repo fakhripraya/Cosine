@@ -1,13 +1,30 @@
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
+import { setShowTopUpMenu } from "../../../redux/reducers/pages/Home";
 import { formattedCurrencyIDR } from "../../../utils/functions/global";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../utils/hooks/useRedux";
 
 export const ShowTopUp = () => {
+  // STATES
+  const { showTopUpMenu } = useAppSelector(
+    (state) => state.home
+  );
+  const dispatch = useAppDispatch();
+
   return (
-    <Modal toggle={true}>
+    <Modal
+      clicked={() => dispatch(setShowTopUpMenu(false))}
+      toggle={showTopUpMenu}>
       <div className="child-modal-container dark-bg-color">
         <div className="child-modal-wrapper">
-          <Button className="align-self-end child-modal-button red-bg-color">
+          <Button
+            onClick={() =>
+              dispatch(setShowTopUpMenu(false))
+            }
+            className="align-self-end child-modal-button red-bg-color">
             <h4 className="child-modal-button-text">X</h4>
           </Button>
           <div className="breakline" />
@@ -15,7 +32,7 @@ export const ShowTopUp = () => {
             Pilih Paket
           </label>
           <div className="home-page-pricing-plan-container">
-            <div className="darker-bg-color padding-12 border-radius-12">
+            <div className="home-page-pricing-plan-card darker-bg-color padding-12 border-radius-12">
               <h2 className="margin-top-0 margin-bottom-12-18">
                 Basic
               </h2>
@@ -23,11 +40,13 @@ export const ShowTopUp = () => {
                 {formattedCurrencyIDR(25000)}
               </p>
               <h1>{formattedCurrencyIDR(19999)}</h1>
-              <p>Paket basic berisikan 40 token</p>
+              <p className="text-ellipsis">
+                Berisikan 40 Trailtokens
+              </p>
               <Button>Beli</Button>
               <div className="breakline" />
             </div>
-            <div className="darker-bg-color padding-12 border-radius-12">
+            <div className="home-page-pricing-plan-card darker-bg-color padding-12 border-radius-12">
               <h2 className="margin-top-0 margin-bottom-12-18">
                 Premium
               </h2>
@@ -35,11 +54,13 @@ export const ShowTopUp = () => {
                 {formattedCurrencyIDR(75000)}
               </p>
               <h1>{formattedCurrencyIDR(49999)}</h1>
-              <p>Paket Premium berisikan 110 token</p>
+              <p className="text-ellipsis">
+                Berisikan 110 Trailtokens
+              </p>
               <Button>Beli</Button>
               <div className="breakline" />
             </div>
-            <div className="darker-bg-color padding-12 border-radius-12">
+            <div className="home-page-pricing-plan-card darker-bg-color padding-12 border-radius-12">
               <h2 className="margin-top-0 margin-bottom-12-18">
                 Platinum
               </h2>
@@ -47,7 +68,9 @@ export const ShowTopUp = () => {
                 {formattedCurrencyIDR(150000)}
               </p>
               <h1>{formattedCurrencyIDR(99999)}</h1>
-              <p>Paket Platinum berisikan 230 token</p>
+              <p className="text-ellipsis">
+                Berisikan 230 Trailtokens
+              </p>
               <Button>Beli</Button>
               <div className="breakline" />
             </div>

@@ -8,6 +8,7 @@ export const HOME_SLICE_KEY = "home_slice";
 export interface HomeState {
   user: IUserData | null;
   rendered: boolean;
+  showTopUpMenu: boolean;
   showHeaderMenu: boolean;
   showSidebar: boolean;
   showMobileSidebar: boolean;
@@ -19,6 +20,7 @@ export interface HomeState {
 const initialState: HomeState = {
   user: null,
   rendered: false,
+  showTopUpMenu: false,
   showHeaderMenu: false,
   showSidebar: true,
   showMobileSidebar: false,
@@ -36,6 +38,9 @@ const homeSlice = createSlice({
     },
     setRendered: (state, action) => {
       state.rendered = action.payload;
+    },
+    setShowTopUpMenu: (state, action) => {
+      state.showTopUpMenu = action.payload;
     },
     setShowHeaderMenu: (state, action) => {
       state.showHeaderMenu = action.payload;
@@ -61,6 +66,7 @@ const homeSlice = createSlice({
 export const {
   setUser,
   setRendered,
+  setShowTopUpMenu,
   setShowHeaderMenu,
   setShowSidebar,
   setShowMobileSidebar,

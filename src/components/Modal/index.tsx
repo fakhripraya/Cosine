@@ -20,8 +20,14 @@ const Modal: React.FC<ModalProps> = ({
   toggle,
   clicked,
 }) => {
-  if (!clicked) clicked = () => null;
+  const backgroundClassName = toggle
+    ? `modal-background ${bgClassName}`
+    : "";
+  const containerInline = {
+    display: toggle ? "block" : "none",
+  };
 
+  if (!clicked) clicked = () => null;
   const handleOnClick = () => {
     clicked();
   };
@@ -34,15 +40,11 @@ const Modal: React.FC<ModalProps> = ({
     <Fragment>
       <div
         onClick={handleOnClick}
-        className={
-          toggle ? `modal-background ${bgClassName}` : ""
-        }
+        className={backgroundClassName}
       />
       <div
-        style={{
-          display: toggle ? "block" : "none",
-        }}
-        className={"modal-container " + (className || "")}>
+        style={containerInline}
+        className={`modal-container ${className || ""}`}>
         {children}
       </div>
     </Fragment>

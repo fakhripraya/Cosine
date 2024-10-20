@@ -19,7 +19,10 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../utils/hooks/useRedux";
-import { setShowHeaderMenu } from "../../../redux/reducers/pages/Home";
+import {
+  setShowHeaderMenu,
+  setShowTopUpMenu,
+} from "../../../redux/reducers/pages/Home";
 
 interface ShowHeaderProps {
   user: IUserData | null;
@@ -80,7 +83,7 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
           {user.fullName ?? "Guest"}
           {"\n"}
           <span
-            onClick={() => {}}
+            onClick={() => dispatch(setShowTopUpMenu(true))}
             className="cursor-pointer ">
             0 TrailTokens
           </span>
@@ -103,7 +106,7 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
         <div
           className={`home-page-body-header-menu-container darker-bg-color ${headerMenuClassName}`}>
           <label
-            onClick={() => {}}
+            onClick={() => dispatch(setShowTopUpMenu(true))}
             className="cursor-pointer">
             Top up
           </label>
