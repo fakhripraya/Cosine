@@ -1,5 +1,6 @@
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
+import { formattedCurrencyIDR } from "../../../utils/functions/global";
 
 export const ShowTopUp = () => {
   return (
@@ -15,28 +16,37 @@ export const ShowTopUp = () => {
           </label>
           <div className="home-page-pricing-plan-container">
             <div className="darker-bg-color padding-12 border-radius-12">
-              <label className="font-bold margin-top-0 margin-bottom-12-18">
+              <h2 className="margin-top-0 margin-bottom-12-18">
                 Basic
-              </label>
-              <p>Rp. 19999 {"~50~"}</p>
+              </h2>
+              <p className="font-strikethrough">
+                {formattedCurrencyIDR(25000)}
+              </p>
+              <h1>{formattedCurrencyIDR(19999)}</h1>
               <p>Paket basic berisikan 40 token</p>
               <Button>Beli</Button>
               <div className="breakline" />
             </div>
             <div className="darker-bg-color padding-12 border-radius-12">
-              <label className="font-bold margin-top-0 margin-bottom-12-18">
+              <h2 className="margin-top-0 margin-bottom-12-18">
                 Premium
-              </label>
-              <p>Rp. 49999</p>
+              </h2>
+              <p className="font-strikethrough">
+                {formattedCurrencyIDR(75000)}
+              </p>
+              <h1>{formattedCurrencyIDR(49999)}</h1>
               <p>Paket Premium berisikan 110 token</p>
               <Button>Beli</Button>
               <div className="breakline" />
             </div>
             <div className="darker-bg-color padding-12 border-radius-12">
-              <label className="font-bold margin-top-0 margin-bottom-12-18">
+              <h2 className="margin-top-0 margin-bottom-12-18">
                 Platinum
-              </label>
-              <p>Rp. 99999</p>
+              </h2>
+              <p className="font-strikethrough">
+                {formattedCurrencyIDR(150000)}
+              </p>
+              <h1>{formattedCurrencyIDR(99999)}</h1>
               <p>Paket Platinum berisikan 230 token</p>
               <Button>Beli</Button>
               <div className="breakline" />
