@@ -167,6 +167,7 @@
   height: fit-content;
   padding: 12px;
   border-radius: 12px;
+  z-index: 9999;
 
   transition: all 0.5s ease-in-out;
 }
@@ -296,4 +297,10 @@
   cursor: grab;
   padding: 12px 0px;
   padding-bottom: 0px !important;
+}
+
+.home-page-pricing-plan-container {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 }

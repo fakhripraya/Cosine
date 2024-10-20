@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "./style.scss";
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
@@ -70,6 +70,7 @@ import {
 } from "./modular/ShowSidebar";
 import { MessagingDTO } from "../../dtos/messaging";
 import ShowHeader from "./modular/ShowHeader";
+import { ShowTopUp } from "./modular/ShowModal";
 
 export default function Home() {
   // REFS //
@@ -360,74 +361,79 @@ export default function Home() {
   }
 
   return (
-    <div className="home-page">
-      <div className={parentContainerClassName}>
-        <div className="home-page-wrapper">
-          <div className="home-page-flex-container">
-            <Sidebar />
-            <MobileSidebar />
-            <div
-              className={`home-page-body-container ${chatContainerClassName}`}>
-              <div className="home-page-body-header-container">
-                <div className="home-page-body-header">
-                  <p className="home-page-body-header-icon-container">
-                    {!showSidebar && (
-                      <img
-                        onClick={() =>
-                          dispatch(setShowSidebar(true))
-                        }
-                        className="home-page-body-header-icon hide-on-mobile-flex cursor-pointer"
-                        src={HamburgerIcon}
-                        alt="hamburger-icon-header"
-                      />
-                    )}
-                    {!showMobileSidebar && (
-                      <img
-                        onClick={() =>
-                          dispatch(
-                            setShowMobileSidebar(true)
-                          )
-                        }
-                        className="home-page-body-header-icon show-on-mobile-flex cursor-pointer"
-                        src={HamburgerIcon}
-                        alt="hamburger-icon-header"
-                      />
-                    )}
-                  </p>
-                  <h4>{AI_NAME}</h4>
-                </div>
-                <ShowHeader user={user} />
-              </div>
+    <Fragment>
+      <ShowTopUp />
+      <div className="home-page">
+        <div className={parentContainerClassName}>
+          <div className="home-page-wrapper">
+            <div className="home-page-flex-container">
+              <Sidebar />
+              <MobileSidebar />
               <div
-                ref={chatBodyContainerRef}
-                className="home-page-mainbody-container home-page-chatbody-container dark-bg-color">
-                <div className="home-page-mainbody-wrapper">
-                  <ShowChatWrappers
-                    uniqueKey={"chats"}
-                    chats={chats}
-                  />
+                className={`home-page-body-container ${chatContainerClassName}`}>
+                <div className="home-page-body-header-container">
+                  <div className="home-page-body-header">
+                    <p className="home-page-body-header-icon-container">
+                      {!showSidebar && (
+                        <img
+                          onClick={() =>
+                            dispatch(setShowSidebar(true))
+                          }
+                          className="home-page-body-header-icon hide-on-mobile-flex cursor-pointer"
+                          src={HamburgerIcon}
+                          alt="hamburger-icon-header"
+                        />
+                      )}
+                      {!showMobileSidebar && (
+                        <img
+                          onClick={() =>
+                            dispatch(
+                              setShowMobileSidebar(true)
+                            )
+                          }
+                          className="home-page-body-header-icon show-on-mobile-flex cursor-pointer"
+                          src={HamburgerIcon}
+                          alt="hamburger-icon-header"
+                        />
+                      )}
+                    </p>
+                    <h4>{AI_NAME}</h4>
+                  </div>
+                  <ShowHeader user={user} />
                 </div>
-              </div>
-              <div className="home-page-chat-container dark-bg-color">
-                <TextInput
-                  onEnter={handleOnSendMessage}
-                  ref={chatInputRef}
-                  className="home-page-chat-textinput light-color darker-bg-color max-width"
-                  placeholder={chatTextboxClassName}
-                  readOnly={isLoading || showMobileSidebar}
-                />
-                <Button
-                  className={chatButtonSendClassName}
-                  onClick={handleOnSendMessage}>
-                  <span className="text-ellipsis">
-                    Send
-                  </span>
-                </Button>
+                <div
+                  ref={chatBodyContainerRef}
+                  className="home-page-mainbody-container home-page-chatbody-container dark-bg-color">
+                  <div className="home-page-mainbody-wrapper">
+                    <ShowChatWrappers
+                      uniqueKey={"chats"}
+                      chats={chats}
+                    />
+                  </div>
+                </div>
+                <div className="home-page-chat-container dark-bg-color">
+                  <TextInput
+                    onEnter={handleOnSendMessage}
+                    ref={chatInputRef}
+                    className="home-page-chat-textinput light-color darker-bg-color max-width"
+                    placeholder={chatTextboxClassName}
+                    readOnly={
+                      isLoading || showMobileSidebar
+                    }
+                  />
+                  <Button
+                    className={chatButtonSendClassName}
+                    onClick={handleOnSendMessage}>
+                    <span className="text-ellipsis">
+                      Send
+                    </span>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 }

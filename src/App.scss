@@ -41,6 +41,14 @@ body h6 {
   opacity: 0.9;
 }
 
+.font-bold {
+  font-weight: bold !important;
+}
+
+.font-strikethrough {
+  text-decoration: line-through;
+}
+
 /* Colors */
 .main-color {
   color: #10df6a !important;
@@ -130,6 +138,28 @@ body h6 {
   max-width: 100% !important;
 }
 
+.no-height {
+  height: 0px !important;
+}
+
+.no-width {
+  width: 0px !important;
+}
+
+.max-width {
+  width: 100%;
+  max-width: 100% !important;
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+.stretch-width {
+  width: -webkit-fill-available !important;
+  width: fill-available !important;
+}
+
 .pointer-all {
   pointer-events: all !important;
 }
@@ -159,20 +189,8 @@ body h6 {
   margin: 0px !important;
 }
 
-.no-height {
-  height: 0px !important;
-}
-
-.no-width {
-  width: 0px !important;
-}
-
 .break-word {
   overflow-wrap: break-word !important;
-}
-
-.white-space-pre-line {
-  white-space: pre-line !important;
 }
 
 .text-ellipsis {
@@ -181,16 +199,24 @@ body h6 {
   text-overflow: ellipsis !important;
 }
 
+.white-space-pre-line {
+  white-space: pre-line !important;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.text-align-start {
+  text-align: start !important;
+}
+
 .text-align-center {
   text-align: center !important;
 }
 
 .text-align-end {
   text-align: end !important;
-}
-
-.text-align-start {
-  text-align: start !important;
 }
 
 .align-self-start {
@@ -205,22 +231,20 @@ body h6 {
   align-self: flex-end !important;
 }
 
-.max-width {
-  width: 100%;
-  max-width: 100% !important;
-}
-
-.full-width {
-  width: 100% !important;
-}
-
-.stretch-width {
-  width: -webkit-fill-available !important;
-  width: fill-available !important;
-}
-
 .padding-0 {
   padding: 0px !important;
+}
+
+.padding-8 {
+  padding: 8px !important;
+}
+
+.padding-12 {
+  padding: 12px !important;
+}
+
+.padding-16 {
+  padding: 16px !important;
 }
 
 .padding-top-0 {
@@ -229,6 +253,18 @@ body h6 {
 
 .margin-0 {
   margin: 0px !important;
+}
+
+.margin-8 {
+  margin: 8px !important;
+}
+
+.margin-12 {
+  margin: 12px !important;
+}
+
+.margin-16 {
+  margin: 16px !important;
 }
 
 .margin-bottom-0 {
@@ -330,42 +366,6 @@ body h6 {
   margin-left: 16px !important;
 }
 
-.cursor-pointer {
-  cursor: pointer !important;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.justify-content-flex-end {
-  justify-content: flex-end !important;
-}
-
-.justify-center {
-  justify-content: center !important;
-}
-
-.justify-flex-end {
-  justify-self: flex-end !important;
-}
-
-.justify-flex-start {
-  justify-self: flex-start !important;
-}
-
-.flex-direction-column {
-  flex-direction: column !important;
-}
-
-.flex-direction-row {
-  flex-direction: row !important;
-}
-
-.white-space-no-wrap {
-  white-space: nowrap !important;
-}
-
 .margin-top-12-18 {
   margin-top: 18px;
   @media screen and (max-width: 2500px) {
@@ -422,19 +422,55 @@ body h6 {
   }
 }
 
-.display-mobile {
-  display: none !important;
-  @media screen and (max-width: 680px) {
-    display: block !important;
-  }
+.justify-content-flex-start {
+  justify-content: flex-start !important;
+}
+
+.justify-content-center {
+  justify-content: center !important;
+}
+
+.justify-content-flex-end {
+  justify-content: flex-end !important;
+}
+
+.justify-flex-start {
+  justify-self: flex-start !important;
+}
+
+.justify-flex-center {
+  justify-self: center !important;
+}
+
+.justify-flex-end {
+  justify-self: flex-end !important;
+}
+
+.flex-direction-column {
+  flex-direction: column !important;
+}
+
+.flex-direction-row {
+  flex-direction: row !important;
+}
+
+.white-space-no-wrap {
+  white-space: nowrap !important;
+}
+
+.display-flex {
+  display: flex !important;
 }
 
 .display-none {
   display: none !important;
 }
 
-.display-flex {
-  display: flex !important;
+.display-mobile {
+  display: none !important;
+  @media screen and (max-width: 680px) {
+    display: block !important;
+  }
 }
 
 .show-on-mobile-flex {
@@ -455,10 +491,6 @@ body h6 {
   margin: 8px 0px 8px 0px;
 }
 
-.font-bold {
-  font-weight: bold !important;
-}
-
 .standard-line {
   opacity: 0.1;
 }
@@ -477,6 +509,15 @@ body h6 {
 .icon-large {
   height: 30px !important;
   width: 30px !important;
+}
+
+// Borders
+.border-radius-8 {
+  border-radius: 8px !important;
+}
+
+.border-radius-12 {
+  border-radius: 12px !important;
 }
 
 /* Scrollbar */

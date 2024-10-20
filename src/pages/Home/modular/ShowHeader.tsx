@@ -73,7 +73,7 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
     );
   };
 
-  if (user) {
+  if (user)
     return (
       <div className="home-page-body-header">
         <label className="margin-right-8 white-space-pre-line">
@@ -105,8 +105,9 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
           <label
             onClick={() => {}}
             className="cursor-pointer">
-            0 TrailTokens
+            Top up
           </label>
+          <div className="breakline" />
           <label
             onClick={handleLogout}
             className="red-color cursor-pointer">
@@ -115,17 +116,16 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className="home-page-body-header">
-        <p
-          onClick={() => navigate("/login")}
-          className="main-color cursor-pointer">
-          Login
-        </p>
-      </div>
-    );
-  }
+
+  return (
+    <div className="home-page-body-header">
+      <p
+        onClick={() => navigate("/login")}
+        className="main-color cursor-pointer">
+        Login
+      </p>
+    </div>
+  );
 };
 
 export default ShowHeader;

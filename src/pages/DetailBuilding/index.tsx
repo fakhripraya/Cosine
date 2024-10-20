@@ -21,7 +21,7 @@ import {
   setFailedImages,
   setSelectedImage,
 } from "../../redux/reducers/pages/DetailBuilding";
-import { setRendered } from "../../redux/reducers/pages/Home";
+import { setRendered } from "../../redux/reducers/pages/DetailBuilding";
 
 export default function DetailBuilding() {
   // HOOKS //
