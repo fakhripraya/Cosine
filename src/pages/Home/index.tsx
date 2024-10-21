@@ -203,14 +203,14 @@ export default function Home() {
         };
         chatInputRef.current!.value = "";
 
-        const chatData: IChatData =
+        const userChatData: IChatData =
           createChatData(userMessage);
 
         const temp: IChatData[] = [...chats];
-        temp.push(chatData);
+        temp.push(userChatData);
         dispatch(setChats(temp));
 
-        handleOnMessageSaving(chatData, timeNow);
+        handleOnMessageSaving(userChatData, timeNow);
       }
     } catch (err) {
       console.error(err);
@@ -251,9 +251,12 @@ export default function Home() {
       });
       clearTimeout(axiosTimeout);
 
-      const messagingOutput: MessagingDTO = JSON.parse(
-        response.responseData
-      );
+      const messagingOutput: MessagingDTO = {
+        ...response.responseData,
+        output_content: JSON.parse(
+          response.responseData.output_content
+        ),
+      };
       const aiMessage: OneToOneChat = {
         id: uuidv4(),
         chatContent: removeTrailingNewlines(
@@ -284,17 +287,18 @@ export default function Home() {
         }
       );
 
-      const chatData: IChatData = createChatData(
+      const aiChatData: IChatData = createChatData(
         aiMessage,
         buildingContents
       );
 
       const temp: IChatData[] = [...chats];
-      temp.push(chatData);
+      temp.push(userChatData);
+      temp.push(aiChatData);
       dispatch(setChats(temp));
 
       await db.transaction("rw", db.chat_data, () => {
-        db.chat_data.bulkAdd([userChatData, chatData]);
+        db.chat_data.bulkAdd([userChatData, aiChatData]);
       });
     } catch (error) {
       if (
