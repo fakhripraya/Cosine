@@ -85,7 +85,7 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
           <span
             onClick={() => dispatch(setShowTopUpMenu(true))}
             className="cursor-pointer ">
-            0 TrailTokens
+            0 Trailtokens
           </span>
         </label>
         <Avatar

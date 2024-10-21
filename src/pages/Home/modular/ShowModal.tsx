@@ -37,11 +37,11 @@ export const ShowTopUp = () => {
                 Basic
               </h2>
               <p className="font-strikethrough">
-                {formattedCurrencyIDR(25000)}
+                {formattedCurrencyIDR(20000)}
               </p>
-              <h1>{formattedCurrencyIDR(19999)}</h1>
+              <h1>{formattedCurrencyIDR(9999)}</h1>
               <p className="text-ellipsis">
-                Berisikan 40 Trailtokens
+                Berisikan 30 Trailtokens
               </p>
               <Button>Beli</Button>
               <div className="breakline" />
@@ -51,11 +51,11 @@ export const ShowTopUp = () => {
                 Premium
               </h2>
               <p className="font-strikethrough">
-                {formattedCurrencyIDR(75000)}
+                {formattedCurrencyIDR(50000)}
               </p>
-              <h1>{formattedCurrencyIDR(49999)}</h1>
+              <h1>{formattedCurrencyIDR(29999)}</h1>
               <p className="text-ellipsis">
-                Berisikan 110 Trailtokens
+                Berisikan 120 Trailtokens
               </p>
               <Button>Beli</Button>
               <div className="breakline" />
@@ -65,11 +65,11 @@ export const ShowTopUp = () => {
                 Platinum
               </h2>
               <p className="font-strikethrough">
-                {formattedCurrencyIDR(150000)}
+                {formattedCurrencyIDR(100000)}
               </p>
-              <h1>{formattedCurrencyIDR(99999)}</h1>
+              <h1>{formattedCurrencyIDR(59999)}</h1>
               <p className="text-ellipsis">
-                Berisikan 230 Trailtokens
+                Berisikan 250 Trailtokens
               </p>
               <Button>Beli</Button>
               <div className="breakline" />
