@@ -111,53 +111,66 @@ const SidebarContent = () => {
       <hr className="max-width standard-line" />
       <div className="home-page-sidebar-body">
         {savedLocations.length > 0 ? (
-          savedLocations.map((location, index) => (
-            <div
-              key={`home-page-sidebar-body-item-${index}`}
-              className="home-page-sidebar-body-item">
-              <Card
-                className="margin-bottom-0"
-                onClick={() =>
-                  navigateToDetails(
-                    navigate,
-                    location.savedLocation
-                  )
-                }>
-                <img
-                  className="card-img"
-                  src={location.savedLocation.image_url[0]}
-                  alt={location.savedLocation.image_url[0]}
-                />
-                <div className="breakline" />
-                <div className="breakline" />
-                <p className="light-color font-bold">
-                  {location.savedLocation?.building_title}
-                </p>
-                <p className="margin-bottom-0 main-color">
-                  {formattedCurrencyIDR(
-                    parseFloat(
-                      location.savedLocation?.housing_price
+          savedLocations.map(
+            (
+              location: IUserSavedLocation,
+              index: number
+            ) => (
+              <div
+                key={`home-page-sidebar-body-item-${index}`}
+                className="home-page-sidebar-body-item">
+                <Card
+                  className="margin-bottom-0"
+                  onClick={() =>
+                    navigateToDetails(
+                      navigate,
+                      location.savedLocation
                     )
-                  )}
-                </p>
-                <p className="light-color">
-                  {location.savedLocation?.building_address}
-                </p>
-              </Card>
-              <img
-                onClick={() => {
-                  if (user)
-                    handleDeleteSavedLocation(
-                      user,
-                      location
-                    );
-                }}
-                className="home-page-body-trash-icon cursor-pointer margin-top-bottom-8"
-                src={DeleteIcon}
-                alt="delete-icon-sidebar"
-              />
-            </div>
-          ))
+                  }>
+                  <img
+                    className="card-img"
+                    src={
+                      location.savedLocation.image_url[0]
+                    }
+                    alt={
+                      location.savedLocation.image_url[0]
+                    }
+                  />
+                  <div className="breakline" />
+                  <div className="breakline" />
+                  <p className="light-color font-bold">
+                    {location.savedLocation?.building_title}
+                  </p>
+                  <p className="margin-bottom-0 main-color">
+                    {formattedCurrencyIDR(
+                      parseFloat(
+                        location.savedLocation
+                          ?.housing_price
+                      )
+                    )}
+                  </p>
+                  <p className="light-color">
+                    {
+                      location.savedLocation
+                        ?.building_address
+                    }
+                  </p>
+                </Card>
+                <img
+                  onClick={() => {
+                    if (user)
+                      handleDeleteSavedLocation(
+                        user,
+                        location
+                      );
+                  }}
+                  className="home-page-body-trash-icon cursor-pointer margin-top-bottom-8"
+                  src={DeleteIcon}
+                  alt="delete-icon-sidebar"
+                />
+              </div>
+            )
+          )
         ) : (
           <label>Belum ada lokasi tersimpan</label>
         )}

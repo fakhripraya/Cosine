@@ -4,7 +4,7 @@ import homeSlice, {
 } from "./pages/home/index.ts";
 import detailBuildingSlice, {
   DetailBuildingState,
-} from "./pages/detailBuilding/index.ts";
+} from "./pages/building/index.ts";
 
 export interface RootState {
   home: HomeState;
