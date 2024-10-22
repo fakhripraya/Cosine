@@ -1,10 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import homeSlice, {
   HomeState,
-} from "./pages/Home/index.ts";
+} from "./pages/home/index.ts";
 import detailBuildingSlice, {
   DetailBuildingState,
-} from "./pages/DetailBuilding/index.ts";
+} from "./pages/detailBuilding/index.ts";
 
 export interface RootState {
   home: HomeState;

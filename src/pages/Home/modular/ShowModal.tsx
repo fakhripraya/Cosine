@@ -1,6 +1,6 @@
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
-import { setShowTopUpMenu } from "../../../redux/reducers/pages/Home/index.ts";
+import { setShowTopUpMenu } from "../../../redux/reducers/pages/home/index.ts";
 import { formattedCurrencyIDR } from "../../../utils/functions/global";
 import {
   useAppDispatch,

@@ -22,7 +22,7 @@ import {
 import {
   setShowHeaderMenu,
   setShowTopUpMenu,
-} from "../../../redux/reducers/pages/Home/index.ts";
+} from "../../../redux/reducers/pages/home/index.ts";
 
 interface ShowHeaderProps {
   user: IUserData | null;

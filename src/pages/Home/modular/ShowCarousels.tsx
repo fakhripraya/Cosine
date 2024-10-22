@@ -14,7 +14,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../utils/hooks/useRedux";
-import { setSavedLocations } from "../../../redux/reducers/pages/Home";
+import { setSavedLocations } from "../../../redux/reducers/pages/home";
 import { createSavedLocationData } from "../../../utils/functions/db";
 import db from "../../../config/dexie/dexie";
 import { navigateToDetails } from "../../../utils/functions/navigation";

@@ -20,8 +20,8 @@ import {
 import {
   setFailedImages,
   setSelectedImage,
-} from "../../redux/reducers/pages/DetailBuilding";
-import { setRendered } from "../../redux/reducers/pages/DetailBuilding";
+} from "../../redux/reducers/pages/detailBuilding";
+import { setRendered } from "../../redux/reducers/pages/detailBuilding";
 
 export default function DetailBuilding() {
   // HOOKS //
