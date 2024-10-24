@@ -254,7 +254,7 @@ export default function Home() {
         sessionId: userChatData.sender.id,
         content: userChatData.content.chatContent,
         refreshToken:
-          clientUserInfo.credentialToken.refreshToken,
+          clientUserInfo?.credentialToken.refreshToken,
       },
       controller: abortController,
     });
