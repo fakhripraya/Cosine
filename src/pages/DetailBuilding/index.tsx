@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../../components/Card";
 import TextArea from "../../components/TextArea";
 import WhatsappIcon from "../../assets/svg/whatsapp_icon.svg";
+import BackIcon from "../../assets/svg/caret-angle-down.svg";
 import PageLoading from "../PageLoading";
 import { PAGE_LOADING_MESSAGE } from "../../variables/constants/building";
 import {
@@ -22,11 +23,12 @@ import {
   setSelectedImage,
 } from "../../redux/reducers/pages/building";
 import { setRendered } from "../../redux/reducers/pages/building";
+import { calculateRows } from "../../utils/functions/format";
 
 export default function DetailBuilding() {
   // HOOKS //
   const location = useLocation();
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   // STATES //
   const data = location.state as IBuildingDetails;
@@ -46,7 +48,7 @@ export default function DetailBuilding() {
   };
 
   useEffect(() => {
-    if (!data) return navigation("/");
+    if (!data) return navigate("/");
     dispatch(setRendered(true));
   }, []);
 
@@ -67,10 +69,21 @@ export default function DetailBuilding() {
           <div className="detail-building-flex-container">
             <div className="detail-building-body-container">
               <div className="detail-building-body-header-container">
-                <div className="detail-building-body-header-left">
-                  <h4>{data?.building_title}</h4>
+                <div className="detail-building-body-header margin-right-8">
+                  <img
+                    onClick={() => navigate("/")}
+                    className="detail-building-body-icon"
+                    style={{ rotate: "90deg" }}
+                    src={BackIcon}
+                    alt="back-icon"
+                  />
                 </div>
-                <div className="detail-building-body-header-right">
+                <div className="detail-building-body-header text-ellipsis full-width">
+                  <h4 className="text-ellipsis">
+                    {data?.building_title}
+                  </h4>
+                </div>
+                <div className="detail-building-body-header justify-flex-end">
                   <img
                     onClick={() => sendWACS()}
                     className="detail-building-body-icon"
@@ -120,10 +133,14 @@ export default function DetailBuilding() {
                     <label className="detail-building-input-title">
                       Alamat
                     </label>
-                    <TextInput
+                    <TextArea
+                      rows={calculateRows(
+                        data?.building_address,
+                        20
+                      )}
+                      readOnly={true}
+                      className="detail-building-longtext-area darker-bg-color"
                       value={data?.building_address}
-                      type="text"
-                      className="detail-building-textinput darker-bg-color"
                     />
                   </div>
                   <div className="detail-building-textinput-box">
@@ -190,6 +207,10 @@ export default function DetailBuilding() {
                       Keterangan
                     </label>
                     <TextArea
+                      rows={calculateRows(
+                        data?.building_description,
+                        20
+                      )}
                       readOnly={true}
                       className="detail-building-longtext-area darker-bg-color"
                       value={data?.building_description}

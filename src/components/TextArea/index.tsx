@@ -12,6 +12,7 @@ interface TextAreaProps {
   onChange?: ChangeEventHandler<HTMLTextAreaElement>;
   maxLength?: number;
   className?: string;
+  rows?: number;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -22,9 +23,11 @@ const TextArea: React.FC<TextAreaProps> = ({
   onChange,
   maxLength,
   className = "",
+  rows = 5,
 }: TextAreaProps) => {
   return (
     <textarea
+      rows={rows}
       placeholder={placeholder}
       readOnly={readOnly}
       value={value}
