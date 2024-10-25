@@ -30,9 +30,9 @@ const TermsAndConditions: React.FC = () => {
           ini mengatur penggunaan platform Pintrail di mana
           pengguna dapat mencari lokasi yang diinginkan
           berdasarkan percakapan dan menyimpan lokasi
-          tersebut di Halaman Home. Dengan menggunakan situs
-          ini, Anda dianggap telah membaca, memahami, dan
-          menyetujui seluruh Syarat dan Ketentuan ini.
+          tersebut. Dengan menggunakan situs ini, Anda
+          dianggap telah membaca, memahami, dan menyetujui
+          seluruh Syarat dan Ketentuan ini.
         </p>
         <div className="breakline" />
         <h3 className="align-self-start main-color">
@@ -40,19 +40,25 @@ const TermsAndConditions: React.FC = () => {
         </h3>
         <p className="align-self-start white-space-pre-line">
           <span className="font-bold">Pintrail</span>
-          {"\n"} Layanan yang kami sediakan, yang
+          {"\n"} Agent AI yang kami sediakan, yang
           memungkinkan pengguna mencari lokasi yang relevan
-          berdasarkan interaksi percakapan, serta menyimpan
-          lokasi tersebut. {"\n\n"}
+          ataupun sekedar informasi dasar berdasarkan
+          interaksi percakapan dengan Pintrail. {"\n\n"}
           <span className="font-bold">Pengguna</span>
           {"\n"} Orang yang menggunakan layanan Pintrail,
           baik yang membuat akun dengan email, nama
           pengguna, dan kata sandi, maupun yang masuk
-          menggunakan akun Gmail. Halaman {"\n\n"}
-          <span className="font-bold">Home</span>
-          {"\n"} Bagian dari situs yang memungkinkan
-          pengguna meminta dicarikan dan menyimpan lokasi
-          yang telah diberikan oleh Pintrail.
+          menggunakan akun Gmail. {"\n\n"}
+          <span className="font-bold">Trailtokens</span>
+          {"\n"} Trailtokens adalah bentuk token chat yang
+          diberikan kepada pengguna untuk berinteraksi dalam
+          percakapan. Pengguna dapat menggunakan token ini
+          untuk melakukan percakapan dengan Pintrail demi
+          menemukan lokasi yang diinginkan ataupun untuk
+          kepentingan mendapatkan informasi tambahan. Setiap
+          minggu, pengguna akan menerima 10 Trailtokens
+          secara gratis. Token ini akan digunakan setiap
+          kali pengguna melakukan percakapan.
         </p>
         <h3 className="align-self-start main-color">
           2. Ketentuan Umum Penggunaan
@@ -60,10 +66,11 @@ const TermsAndConditions: React.FC = () => {
         <p className="align-self-start white-space-pre-line">
           <span className="font-bold">Akses layanan</span>
           {"\n"} Pengguna harus mendaftar untuk dapat
-          mengakses layanan Pintrail. Pengguna dapat
-          mendaftar dengan dua cara: Membuat akun dengan
-          memasukkan email, nama pengguna, dan kata sandi.
-          Masuk dengan menggunakan akun Gmail. {"\n\n"}
+          memulai percakapan dengan Agent Pintrail. Pengguna
+          dapat mendaftar dengan dua cara: Membuat akun
+          dengan memasukkan email, nama pengguna, dan kata
+          sandi. Masuk dengan menggunakan akun Gmail.{" "}
+          {"\n\n"}
           <span className="font-bold">
             Keakuratan Data Pengguna
           </span>
@@ -85,6 +92,7 @@ const TermsAndConditions: React.FC = () => {
         </h3>
         <p className="align-self-start white-space-pre-line">
           Pengguna setuju untuk tidak menggunakan layanan
+          Pintrail ataupun melakukan percakapan dengan Agent
           Pintrail untuk tujuan ilegal atau melanggar hukum
           Indonesia, termasuk namun tidak terbatas pada:
           {"\n\n"}
@@ -98,10 +106,9 @@ const TermsAndConditions: React.FC = () => {
           sistem atau platform situs, seperti hacking,
           phishing, atau penyebaran malware. Pengguna
           bertanggung jawab penuh atas interaksi yang mereka
-          lakukan di platform, termasuk percakapan dan
-          penyimpanan data lokasi.
+          lakukan di platform, termasuk percakapan dengan
+          Agent dan/atau penggunaan layanan Pintrail.
         </p>
-
         <h3 className="align-self-start main-color">
           4. Keamanan Akun
         </h3>
@@ -113,7 +120,6 @@ const TermsAndConditions: React.FC = () => {
           penyalahgunaan akun yang disebabkan oleh kelalaian
           pengguna dalam menjaga keamanan akun mereka.
         </p>
-
         <h3 className="align-self-start main-color">
           5. Penggunaan Data Pribadi
         </h3>
@@ -124,11 +130,10 @@ const TermsAndConditions: React.FC = () => {
           kebijakan privasi kami dan Undang-Undang
           Perlindungan Data Pribadi yang berlaku di
           Indonesia. Pengguna setuju bahwa data percakapan
-          dan lokasi yang disimpan dalam Halaman Home akan
-          digunakan oleh platform untuk memberikan layanan
-          yang lebih baik sesuai dengan preferensi pengguna.
+          dan maupun informasi akun akan digunakan oleh
+          platform untuk mengembangkan layanan demi
+          memberikan layanan yang lebih baik.
         </p>
-
         <h3 className="align-self-start main-color">
           6. Penangguhan dan Penghentian Layanan
         </h3>
@@ -155,7 +160,6 @@ const TermsAndConditions: React.FC = () => {
           akses yang terhenti, atau kehilangan data yang
           terjadi di luar kendali kami.
         </p>
-
         <h3 className="align-self-start main-color">
           8. Perubahan Syarat dan Ketentuan
         </h3>
@@ -169,7 +173,6 @@ const TermsAndConditions: React.FC = () => {
           setelah perubahan dipublikasikan, pengguna
           dianggap telah menyetujui perubahan tersebut.
         </p>
-
         <h3 className="align-self-start main-color">
           9. Hukum yang Berlaku
         </h3>
