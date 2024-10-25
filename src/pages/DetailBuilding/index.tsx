@@ -196,17 +196,21 @@ export default function DetailBuilding() {
                     />
                   </div>
                   <hr className="max-width standard-line" />
-                  <label className="margin-top-bottom-16">
-                    Untuk detail lebih lanjut kami akan
-                    menghubungkan anda dengan pemilik via
-                    whatsapp untuk mengonfirmasi
-                    ketersediaan kamar, silahkan klik tombol{" "}
+                  <label className="margin-top-bottom-16 white-space-pre-line">
+                    Untuk detail lebih lanjut, kami akan
+                    menghubungkan Anda dengan pemilik via
+                    WhatsApp untuk mengonfirmasi
+                    ketersediaan kamar. Silakan klik tombol{" "}
                     <span
                       onClick={() => sendWACS()}
                       className="font-bold main-color cursor-pointer">
                       Whatsapp
                     </span>{" "}
-                    diatas
+                    di atas. Harap berhati-hati terhadap
+                    kontak palsu yang mengaku sebagai
+                    pemilik dan pastikan untuk membaca
+                    Syarat dan Ketentuan kami sebelum
+                    melanjutkan.
                   </label>
                 </div>
               </div>

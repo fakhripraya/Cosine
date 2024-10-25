@@ -60,7 +60,12 @@ const SidebarContent = () => {
   const handleClearSavedLocation = async (
     user: IUserData | null
   ) => {
-    if (user) {
+    const title = "Yakin mau bersihkan lokasi tersimpan?";
+    if (
+      user &&
+      savedLocations.length > 0 &&
+      confirm(title)
+    ) {
       try {
         await db.transaction(
           "rw",

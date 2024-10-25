@@ -213,6 +213,93 @@ export default function Home() {
         handleOnMessageSaving(userChatData, timeNow);
       }
     } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleOnMessageSaving = async (
+    userChatData: IChatData,
+    timeNow: string
+  ) => {
+    try {
+      const abortController = new AbortController();
+      const axiosTimeout = axiosService.setAxiosTimeout(
+        abortController,
+        120000
+      );
+
+      const clientUserInfo: ICookieInfo = cookies.get(
+        CLIENT_USER_INFO
+      );
+      const response = await axiosService.postData({
+        endpoint: HERMES_SERVICE,
+        url: `${URL_POST_AGENT_MESSAGING}`,
+        headers: {
+          [AUTHORIZATION]:
+            `Bearer ${clientUserInfo?.credentialToken.accessToken}` ||
+            "",
+          [X_SID]: clientUserInfo?.sid || "",
+        } as unknown as AdvanceAxiosRequestHeaders,
+        data: {
+          sessionId: userChatData.sender.id,
+          content: userChatData.content.chatContent,
+          refreshToken:
+            clientUserInfo?.credentialToken.refreshToken,
+        },
+        controller: abortController,
+      });
+      clearTimeout(axiosTimeout);
+
+      const messagingOutput: MessagingDTO = {
+        ...response.responseData,
+        output_content: JSON.parse(
+          response.responseData.output_content
+        ),
+      };
+      const aiMessage: OneToOneChat = {
+        id: uuidv4(),
+        chatContent: removeTrailingNewlines(
+          messagingOutput?.output
+        ),
+        senderId: AI_ID,
+        senderFullName: AI_NAME,
+        sendSpecificToId: user?.userId,
+        senderProfilePictureUri: AI_PROFILE_PIC_URL,
+        createdAt: timeNow,
+      };
+
+      const parsedContent:
+        | BuildingDetailsDTO[]
+        | undefined = messagingOutput?.output_content;
+
+      const buildingContents = parsedContent?.map(
+        (obj): IBuildingDetails => {
+          obj.image_url = obj.image_url.replace(/'/g, '"');
+          const actualImages: string[] = JSON.parse(
+            obj.image_url
+          );
+
+          return {
+            ...obj,
+            image_url: actualImages,
+          };
+        }
+      );
+
+      const aiChatData: IChatData = createChatData(
+        aiMessage,
+        buildingContents
+      );
+
+      const temp: IChatData[] = [...chats];
+      temp.push(userChatData);
+      temp.push(aiChatData);
+      dispatch(setChats(temp));
+
+      await db.transaction("rw", db.chat_data, () => {
+        db.chat_data.bulkAdd([userChatData, aiChatData]);
+      });
+    } catch (error) {
       if (
         isIResponseObject(error) &&
         IS_NOT_AUTHENTICATE(error)
@@ -226,88 +313,6 @@ export default function Home() {
     } finally {
       dispatch(setLoading(false));
     }
-  };
-
-  const handleOnMessageSaving = async (
-    userChatData: IChatData,
-    timeNow: string
-  ) => {
-    const abortController = new AbortController();
-    const axiosTimeout = axiosService.setAxiosTimeout(
-      abortController,
-      120000
-    );
-
-    const clientUserInfo: ICookieInfo = cookies.get(
-      CLIENT_USER_INFO
-    );
-    const response = await axiosService.postData({
-      endpoint: HERMES_SERVICE,
-      url: `${URL_POST_AGENT_MESSAGING}`,
-      headers: {
-        [AUTHORIZATION]:
-          `Bearer ${clientUserInfo?.credentialToken.accessToken}` ||
-          "",
-        [X_SID]: clientUserInfo?.sid || "",
-      } as unknown as AdvanceAxiosRequestHeaders,
-      data: {
-        sessionId: userChatData.sender.id,
-        content: userChatData.content.chatContent,
-        refreshToken:
-          clientUserInfo?.credentialToken.refreshToken,
-      },
-      controller: abortController,
-    });
-    clearTimeout(axiosTimeout);
-
-    const messagingOutput: MessagingDTO = {
-      ...response.responseData,
-      output_content: JSON.parse(
-        response.responseData.output_content
-      ),
-    };
-    const aiMessage: OneToOneChat = {
-      id: uuidv4(),
-      chatContent: removeTrailingNewlines(
-        messagingOutput?.output
-      ),
-      senderId: AI_ID,
-      senderFullName: AI_NAME,
-      sendSpecificToId: user?.userId,
-      senderProfilePictureUri: AI_PROFILE_PIC_URL,
-      createdAt: timeNow,
-    };
-
-    const parsedContent: BuildingDetailsDTO[] | undefined =
-      messagingOutput?.output_content;
-
-    const buildingContents = parsedContent?.map(
-      (obj): IBuildingDetails => {
-        obj.image_url = obj.image_url.replace(/'/g, '"');
-        const actualImages: string[] = JSON.parse(
-          obj.image_url
-        );
-
-        return {
-          ...obj,
-          image_url: actualImages,
-        };
-      }
-    );
-
-    const aiChatData: IChatData = createChatData(
-      aiMessage,
-      buildingContents
-    );
-
-    const temp: IChatData[] = [...chats];
-    temp.push(userChatData);
-    temp.push(aiChatData);
-    dispatch(setChats(temp));
-
-    await db.transaction("rw", db.chat_data, () => {
-      db.chat_data.bulkAdd([userChatData, aiChatData]);
-    });
   };
 
   const handleGoogleAuthListener = async (

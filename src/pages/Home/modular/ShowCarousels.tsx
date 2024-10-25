@@ -16,6 +16,7 @@ import {
 } from "../../../utils/hooks/useRedux";
 import {
   setSavedLocations,
+  setShowMobileSidebar,
   setShowSidebar,
 } from "../../../redux/reducers/pages/home";
 import { createSavedLocationData } from "../../../utils/functions/db";
@@ -68,6 +69,7 @@ export const ShowGrabableStoreCardCarousel: React.FC<
               );
               dispatch(setSavedLocations(temp));
               dispatch(setShowSidebar(true));
+              dispatch(setShowMobileSidebar(true));
             } else {
               alert("Lokasi sudah tersimpan");
             }
