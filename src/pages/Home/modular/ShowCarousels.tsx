@@ -14,7 +14,10 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../utils/hooks/useRedux";
-import { setSavedLocations } from "../../../redux/reducers/pages/home";
+import {
+  setSavedLocations,
+  setShowSidebar,
+} from "../../../redux/reducers/pages/home";
 import { createSavedLocationData } from "../../../utils/functions/db";
 import db from "../../../config/dexie/dexie";
 import { navigateToDetails } from "../../../utils/functions/navigation";
@@ -64,6 +67,9 @@ export const ShowGrabableStoreCardCarousel: React.FC<
                 locationData
               );
               dispatch(setSavedLocations(temp));
+              dispatch(setShowSidebar(true));
+            } else {
+              alert("Lokasi sudah tersimpan");
             }
           }
         );
