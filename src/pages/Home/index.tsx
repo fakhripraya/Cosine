@@ -71,6 +71,7 @@ import {
 import { MessagingDTO } from "../../dtos/messaging";
 import ShowHeader from "./modular/ShowHeader";
 import { ShowTopUp } from "./modular/ShowModal";
+import { SESSION_EXPIRED } from "../../variables/errorMessages/credential.ts";
 
 export default function Home() {
   // REFS //
@@ -306,7 +307,7 @@ export default function Home() {
       ) {
         cookies.remove(CLIENT_USER_INFO, { path: "/" });
         dispatch(setUser(null));
-        alert("Sesi login habis");
+        alert(SESSION_EXPIRED);
         return navigate("/login");
       }
       handleError(error);
