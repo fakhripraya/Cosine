@@ -16,6 +16,3 @@ docker logs <container-id>
 docker ps
 docker ps -a
 
-## Todo
--
-
