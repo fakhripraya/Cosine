@@ -150,7 +150,7 @@ export const formatDateID = (date: string) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const handleError = (error: any) => {
+export const handleException = (error: any) => {
   console.log(error);
   if (isIResponseObject(error))
     return alert(JSON.stringify(error.errorContent));

@@ -7,13 +7,13 @@ import {
 import { cookies } from "../../../config/cookie";
 import { trackPromise } from "react-promise-tracker";
 import { URL_POST_LOGOUT } from "../../../config/xhr/routes/credentials";
-import { OLYMPUS_SERVICE } from "../../../config/environment";
-import { AdvanceAxiosRequestHeaders } from "../../../interfaces/axios";
+import { ARES_SERVICE, OLYMPUS_SERVICE } from "../../../config/environment";
+import { AdvanceAxiosRequestHeaders, IResponseObject } from "../../../interfaces/axios";
 import {
   ICookieInfo,
   IUserData,
 } from "../../../interfaces/credential";
-import { handleError } from "../../../utils/functions/global";
+import { delayInMilliSecond, handleException } from "../../../utils/functions/global";
 import Avatar from "react-avatar";
 import {
   useAppDispatch,
@@ -22,7 +22,10 @@ import {
 import {
   setShowHeaderMenu,
   setShowTopUpMenu,
+  setBalance,
+  setShowErrorMessage
 } from "../../../redux/reducers/pages/home/index.ts";
+import { URL_GET_BALANCE_AMOUNT } from "../../../config/xhr/routes/balance.ts";
 
 interface ShowHeaderProps {
   user: IUserData | null;
@@ -36,7 +39,7 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
   const axiosService = useAxios();
 
   // STATES
-  const { showHeaderMenu } = useAppSelector(
+  const { balance, showHeaderMenu } = useAppSelector(
     (state) => state.home
   );
   const dispatch = useAppDispatch();
@@ -68,13 +71,47 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
           controller: abortController,
         })
         .then(() => navigate("/login"))
-        .catch((error) => handleError(error))
+        .catch((error) => handleException(error))
         .finally(() => {
           cookies.remove(CLIENT_USER_INFO, { path: "/" });
           clearTimeout(axiosTimeout);
         })
     );
   };
+
+  React.useEffect(() => {
+    const abortController = new AbortController();
+    const axiosTimeout =
+      axiosService.setAxiosTimeout(abortController);
+    const clientUserInfo: ICookieInfo = cookies.get(
+      CLIENT_USER_INFO
+    );
+
+    if (!user) return;
+    if (!clientUserInfo) return;
+    trackPromise(
+      axiosService
+        .getData({
+          headers: {
+            [X_SID]: clientUserInfo.sid || "",
+          } as unknown as AdvanceAxiosRequestHeaders,
+          endpoint: ARES_SERVICE,
+          url: URL_GET_BALANCE_AMOUNT,
+          controller: abortController,
+        })
+        .then((result: IResponseObject) => {
+          dispatch(setBalance(result.responseData))
+        })
+        .catch((error: IResponseObject) => {
+          dispatch(setShowErrorMessage({
+            isError: error.responseError,
+            errorContent: error.errorContent
+          }));
+        })
+        .finally(() => clearTimeout(axiosTimeout))
+    );
+  }, [])
+  
 
   if (user)
     return (
@@ -85,7 +122,7 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
           <span
             onClick={() => dispatch(setShowTopUpMenu(true))}
             className="cursor-pointer ">
-            0 Trailtokens
+            {balance} Trailtokens
           </span>
         </label>
         <Avatar

@@ -1,3 +1,5 @@
+import { IErrorMessage } from "../interfaces/error";
+
 // GLOBAL STRING
 export const NO_STRING = "";
 export const NO_DATA = "No Data";
@@ -19,6 +21,12 @@ export const ADMIN_FEE = 1500;
 export const GENERAL_MULTIUPLOAD_LABEL =
   "Geser file dan masukkan file ke box ini atau klik untuk pilih file";
 
+// ERROR
+export const defaultError: IErrorMessage = {
+  isError: false,
+  errorContent: "",
+}
+  
 // ARRAY
 export const IMAGE_MIME_TYPE = [
   "image/apng",

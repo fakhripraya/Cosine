@@ -2,12 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IUserSavedLocation } from "../../../../interfaces/building";
 import { IChatData } from "../../../../interfaces/chat";
 import { IUserData } from "../../../../interfaces/credential";
+import { IErrorMessage } from "../../../../interfaces/error";
+import { defaultError } from "../../../../variables/global";
 
 export const HOME_SLICE_KEY = "home_slice";
 
 export interface HomeState {
   user: IUserData | null;
+  balance: number;
   rendered: boolean;
+  showErrorMessage: IErrorMessage;
   showTopUpMenu: boolean;
   showHeaderMenu: boolean;
   showSidebar: boolean;
@@ -19,7 +23,9 @@ export interface HomeState {
 
 const initialState: HomeState = {
   user: null,
+  balance: 0,
   rendered: false,
+  showErrorMessage: defaultError,
   showTopUpMenu: false,
   showHeaderMenu: false,
   showSidebar: true,
@@ -36,8 +42,14 @@ const homeSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    setBalance: (state, action) => {
+      state.balance = action.payload;
+    },
     setRendered: (state, action) => {
       state.rendered = action.payload;
+    },
+    setShowErrorMessage: (state, action) => {
+      state.showErrorMessage = action.payload;
     },
     setShowTopUpMenu: (state, action) => {
       state.showTopUpMenu = action.payload;
@@ -65,7 +77,9 @@ const homeSlice = createSlice({
 
 export const {
   setUser,
+  setBalance,
   setRendered,
+  setShowErrorMessage,
   setShowTopUpMenu,
   setShowHeaderMenu,
   setShowSidebar,

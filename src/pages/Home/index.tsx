@@ -29,7 +29,7 @@ import {
 } from "../../variables/global";
 import {
   clearAllUrlParameters,
-  handleError,
+  handleException,
   removeTrailingNewlines,
 } from "../../utils/functions/global";
 import { URL_POST_AGENT_MESSAGING } from "../../config/xhr/routes/home";
@@ -310,7 +310,7 @@ export default function Home() {
         alert(SESSION_EXPIRED);
         return navigate("/login");
       }
-      handleError(error);
+      handleException(error);
     } finally {
       dispatch(setLoading(false));
     }
@@ -340,7 +340,7 @@ export default function Home() {
       return loggedUser;
     } catch (error) {
       cookies.remove(CLIENT_USER_INFO, { path: "/" });
-      handleError(error);
+      handleException(error);
       navigate("/login");
     }
   };

@@ -1,11 +1,12 @@
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
-import { setShowTopUpMenu } from "../../../redux/reducers/pages/home/index.ts";
-import { formattedCurrencyIDR } from "../../../utils/functions/global";
+import { setShowErrorMessage, setShowTopUpMenu } from "../../../redux/reducers/pages/home/index.ts";
+import { formattedCurrencyIDR, sendWACS } from "../../../utils/functions/global";
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../utils/hooks/useRedux";
+import { defaultError } from "../../../variables/global.ts";
 
 export const ShowTopUp = () => {
   // STATES
@@ -43,7 +44,7 @@ export const ShowTopUp = () => {
               <p className="text-ellipsis">
                 Berisikan 30 Trailtokens
               </p>
-              <Button>Beli</Button>
+              <Button onClick={()=> sendWACS()}>Beli</Button>
               <div className="breakline" />
             </div>
             <div className="home-page-pricing-plan-card darker-bg-color padding-12 border-radius-12">
@@ -57,7 +58,7 @@ export const ShowTopUp = () => {
               <p className="text-ellipsis">
                 Berisikan 120 Trailtokens
               </p>
-              <Button>Beli</Button>
+              <Button onClick={()=> sendWACS()}>Beli</Button>
               <div className="breakline" />
             </div>
             <div className="home-page-pricing-plan-card darker-bg-color padding-12 border-radius-12">
@@ -71,10 +72,44 @@ export const ShowTopUp = () => {
               <p className="text-ellipsis">
                 Berisikan 250 Trailtokens
               </p>
-              <Button>Beli</Button>
+              <Button onClick={()=> sendWACS()}>Beli</Button>
               <div className="breakline" />
             </div>
           </div>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
+export const ShowErrorMessage = () => {
+  // STATES
+  const { showErrorMessage } = useAppSelector(
+    (state) => state.home
+  );
+  const dispatch = useAppDispatch();
+
+  return (
+    <Modal
+      clicked={() => dispatch(setShowErrorMessage(defaultError))}
+      toggle={showErrorMessage}>
+      <div className="child-modal-container dark-bg-color">
+        <div className="child-modal-wrapper">
+          <Button
+            onClick={() =>
+              dispatch(setShowErrorMessage(defaultError))
+            }
+            className="align-self-end child-modal-button red-bg-color">
+            <h4 className="child-modal-button-text">X</h4>
+          </Button>
+          <div className="breakline" />
+          <h3 className="margin-top-0 margin-bottom-12-18">
+            There is an <span className="red-color">ERROR</span>
+          </h3>
+          <div className="breakline" />
+          <label className="margin-top-0 margin-bottom-12-18 white-space-pre-line">
+            {showErrorMessage.errorContent}
+          </label>
         </div>
       </div>
     </Modal>

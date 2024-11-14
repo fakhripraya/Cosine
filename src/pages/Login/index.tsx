@@ -90,7 +90,6 @@ export default function Login() {
           await delayInMilliSecond(10000);
         })
         .catch((error: IResponseObject) => {
-          alert(JSON.stringify(error));
           setErrorMessage(error.errorContent);
           setModalToggle(error.responseError);
         })
