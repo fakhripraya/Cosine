@@ -1,19 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "../../../utils/hooks/useAxios";
 import {
+  AUTHORIZATION,
   CLIENT_USER_INFO,
   X_SID,
 } from "../../../variables/global";
 import { cookies } from "../../../config/cookie";
 import { trackPromise } from "react-promise-tracker";
 import { URL_POST_LOGOUT } from "../../../config/xhr/routes/credentials";
-import { ARES_SERVICE, OLYMPUS_SERVICE } from "../../../config/environment";
-import { AdvanceAxiosRequestHeaders, IResponseObject } from "../../../interfaces/axios";
+import {
+  ARES_SERVICE,
+  OLYMPUS_SERVICE,
+} from "../../../config/environment";
+import {
+  AdvanceAxiosRequestHeaders,
+  IResponseObject,
+} from "../../../interfaces/axios";
 import {
   ICookieInfo,
   IUserData,
 } from "../../../interfaces/credential";
-import { delayInMilliSecond, handleException } from "../../../utils/functions/global";
+import { handleException } from "../../../utils/functions/global";
 import Avatar from "react-avatar";
 import {
   useAppDispatch,
@@ -23,9 +30,10 @@ import {
   setShowHeaderMenu,
   setShowTopUpMenu,
   setBalance,
-  setShowErrorMessage
+  setShowErrorMessage,
 } from "../../../redux/reducers/pages/home/index.ts";
 import { URL_GET_BALANCE_AMOUNT } from "../../../config/xhr/routes/balance.ts";
+import { useEffect } from "react";
 
 interface ShowHeaderProps {
   user: IUserData | null;
@@ -79,7 +87,7 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
     );
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const abortController = new AbortController();
     const axiosTimeout =
       axiosService.setAxiosTimeout(abortController);
@@ -93,6 +101,9 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
       axiosService
         .getData({
           headers: {
+            [AUTHORIZATION]:
+              `Bearer ${clientUserInfo?.credentialToken.accessToken}` ||
+              "",
             [X_SID]: clientUserInfo.sid || "",
           } as unknown as AdvanceAxiosRequestHeaders,
           endpoint: ARES_SERVICE,
@@ -100,18 +111,19 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
           controller: abortController,
         })
         .then((result: IResponseObject) => {
-          dispatch(setBalance(result.responseData))
+          dispatch(setBalance(result.responseData));
         })
         .catch((error: IResponseObject) => {
-          dispatch(setShowErrorMessage({
-            isError: error.responseError,
-            errorContent: error.errorContent
-          }));
+          dispatch(
+            setShowErrorMessage({
+              isError: error.responseError,
+              errorContent: error.errorContent,
+            })
+          );
         })
         .finally(() => clearTimeout(axiosTimeout))
     );
-  }, [])
-  
+  }, []);
 
   if (user)
     return (
