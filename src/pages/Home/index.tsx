@@ -56,6 +56,7 @@ import {
   useAppSelector,
 } from "../../utils/hooks/useRedux";
 import {
+  setBalance,
   setChats,
   setLoading,
   setRendered,
@@ -294,6 +295,9 @@ export default function Home() {
       temp.push(userChatData);
       temp.push(aiChatData);
       dispatch(setChats(temp));
+      dispatch(
+        setBalance(messagingOutput.remaining_balance)
+      );
 
       await db.transaction("rw", db.chat_data, () => {
         db.chat_data.bulkAdd([userChatData, aiChatData]);

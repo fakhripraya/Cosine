@@ -3,6 +3,7 @@ import { useAxios } from "../../../utils/hooks/useAxios";
 import {
   AUTHORIZATION,
   CLIENT_USER_INFO,
+  X_ARES_API_KEY,
   X_SID,
 } from "../../../variables/global";
 import { cookies } from "../../../config/cookie";
@@ -10,6 +11,7 @@ import { trackPromise } from "react-promise-tracker";
 import { URL_POST_LOGOUT } from "../../../config/xhr/routes/credentials";
 import {
   ARES_SERVICE,
+  ARES_SERVICE_API_KEY,
   OLYMPUS_SERVICE,
 } from "../../../config/environment";
 import {
@@ -105,13 +107,14 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
               `Bearer ${clientUserInfo?.credentialToken.accessToken}` ||
               "",
             [X_SID]: clientUserInfo.sid || "",
+            [X_ARES_API_KEY]: ARES_SERVICE_API_KEY,
           } as unknown as AdvanceAxiosRequestHeaders,
           endpoint: ARES_SERVICE,
           url: URL_GET_BALANCE_AMOUNT,
           controller: abortController,
         })
         .then((result: IResponseObject) => {
-          dispatch(setBalance(result.responseData));
+          dispatch(setBalance(result.responseData.balance));
         })
         .catch((error: IResponseObject) => {
           dispatch(

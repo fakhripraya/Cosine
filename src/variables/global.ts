@@ -25,8 +25,8 @@ export const GENERAL_MULTIUPLOAD_LABEL =
 export const defaultError: IErrorMessage = {
   isError: false,
   errorContent: "",
-}
-  
+};
+
 // ARRAY
 export const IMAGE_MIME_TYPE = [
   "image/apng",
@@ -95,6 +95,7 @@ export const DELETE = "DELETE";
 
 // HEADER NAME
 export const X_SID = "x-sid";
+export const X_ARES_API_KEY = "x-ares-api-key";
 export const AUTHORIZATION = "authorization";
 export const CONTENT_TYPE = "Content-Type";
 
