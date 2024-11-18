@@ -169,28 +169,28 @@ export default function DetailBuilding() {
                       className="detail-building-textinput darker-bg-color"
                     />
                   </div>
-                  {/* <div className="detail-building-textinput-box">
-                      <label className="detail-building-input-title">
-                        Whatsapp
-                      </label>
-                      <TextInput
-                        value={data?.owner_whatsapp}
-                        type="text"
-                        readOnly={true}
-                        className="detail-building-textinput darker-bg-color"
-                      />
-                    </div>
-                    <div className="detail-building-textinput-box">
-                      <label className="detail-building-input-title">
-                        Nomor Telepon
-                      </label>
-                      <TextInput
-                        value={data?.owner_phone_number}
-                        type="text"
-                        readOnly={true}
-                        className="detail-building-textinput darker-bg-color"
-                      />
-                    </div> */}
+                  <div className="detail-building-textinput-box">
+                    <label className="detail-building-input-title">
+                      Whatsapp
+                    </label>
+                    <TextInput
+                      value={data?.owner_whatsapp}
+                      type="text"
+                      readOnly={true}
+                      className="detail-building-textinput darker-bg-color"
+                    />
+                  </div>
+                  <div className="detail-building-textinput-box">
+                    <label className="detail-building-input-title">
+                      Nomor Telepon
+                    </label>
+                    <TextInput
+                      value={data?.owner_phone_number}
+                      type="text"
+                      readOnly={true}
+                      className="detail-building-textinput darker-bg-color"
+                    />
+                  </div>
                   <div className="detail-building-textinput-box">
                     <label className="detail-building-input-title">
                       Email Pemilik
