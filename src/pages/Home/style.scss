@@ -304,10 +304,16 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 8px;
+  overflow: scroll;
+  margin-bottom: 16px;
 }
 
 .home-page-pricing-plan-card {
   display: flex;
   flex-direction: column;
   width: 200px;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 }
