@@ -1,7 +1,13 @@
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
-import { setShowErrorMessage, setShowTopUpMenu } from "../../../redux/reducers/pages/home/index.ts";
-import { formattedCurrencyIDR, sendWACS } from "../../../utils/functions/global";
+import {
+  setShowErrorMessage,
+  setShowTopUpMenu,
+} from "../../../redux/reducers/pages/home/index.ts";
+import {
+  formattedCurrencyIDR,
+  sendWACS,
+} from "../../../utils/functions/global";
 import {
   useAppDispatch,
   useAppSelector,
@@ -38,13 +44,15 @@ export const ShowTopUp = () => {
                 Basic
               </h2>
               <p className="font-strikethrough">
-                {formattedCurrencyIDR(20000)}
+                {formattedCurrencyIDR(30000)}
               </p>
-              <h1>{formattedCurrencyIDR(9999)}</h1>
+              <h1>{formattedCurrencyIDR(19999)}</h1>
               <p className="text-ellipsis">
                 Berisikan 30 Trailtokens
               </p>
-              <Button onClick={()=> sendWACS()}>Beli</Button>
+              <Button onClick={() => sendWACS()}>
+                Beli
+              </Button>
               <div className="breakline" />
             </div>
             <div className="home-page-pricing-plan-card darker-bg-color padding-12 border-radius-12">
@@ -56,9 +64,11 @@ export const ShowTopUp = () => {
               </p>
               <h1>{formattedCurrencyIDR(29999)}</h1>
               <p className="text-ellipsis">
-                Berisikan 120 Trailtokens
+                Berisikan 70 Trailtokens
               </p>
-              <Button onClick={()=> sendWACS()}>Beli</Button>
+              <Button onClick={() => sendWACS()}>
+                Beli
+              </Button>
               <div className="breakline" />
             </div>
             <div className="home-page-pricing-plan-card darker-bg-color padding-12 border-radius-12">
@@ -70,9 +80,11 @@ export const ShowTopUp = () => {
               </p>
               <h1>{formattedCurrencyIDR(59999)}</h1>
               <p className="text-ellipsis">
-                Berisikan 250 Trailtokens
+                Berisikan 150 Trailtokens
               </p>
-              <Button onClick={()=> sendWACS()}>Beli</Button>
+              <Button onClick={() => sendWACS()}>
+                Beli
+              </Button>
               <div className="breakline" />
             </div>
           </div>
@@ -91,8 +103,10 @@ export const ShowErrorMessage = () => {
 
   return (
     <Modal
-      clicked={() => dispatch(setShowErrorMessage(defaultError))}
-      toggle={showErrorMessage}>
+      clicked={() =>
+        dispatch(setShowErrorMessage(defaultError))
+      }
+      toggle={showErrorMessage.isError}>
       <div className="child-modal-container dark-bg-color">
         <div className="child-modal-wrapper">
           <Button
@@ -104,7 +118,8 @@ export const ShowErrorMessage = () => {
           </Button>
           <div className="breakline" />
           <h3 className="margin-top-0 margin-bottom-12-18">
-            There is an <span className="red-color">ERROR</span>
+            There is an{" "}
+            <span className="red-color">ERROR</span>
           </h3>
           <div className="breakline" />
           <label className="margin-top-0 margin-bottom-12-18 white-space-pre-line">
