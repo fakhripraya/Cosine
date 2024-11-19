@@ -18,6 +18,8 @@ import {
 } from "../../interfaces/chat";
 import { cookies } from "../../config/cookie";
 import {
+  ARES_SERVICE,
+  ARES_SERVICE_API_KEY,
   HERMES_SERVICE,
   OLYMPUS_SERVICE,
 } from "../../config/environment";
@@ -25,6 +27,7 @@ import { URL_POST_GOOGLE_CALLBACK } from "../../config/xhr/routes/credentials";
 import {
   AUTHORIZATION,
   CLIENT_USER_INFO,
+  X_ARES_API_KEY,
   X_SID,
 } from "../../variables/global";
 import {
@@ -46,6 +49,7 @@ import { IBuildingDetails } from "../../interfaces/building";
 import { BuildingDetailsDTO } from "../../dtos/building";
 import {
   AdvanceAxiosRequestHeaders,
+  IResponseObject,
   isIResponseObject,
 } from "../../interfaces/axios";
 import { IS_NOT_AUTHENTICATE } from "../../utils/validations/credential";
@@ -61,6 +65,7 @@ import {
   setLoading,
   setRendered,
   setSavedLocations,
+  setShowErrorMessage,
   setShowMobileSidebar,
   setShowSidebar,
   setUser,
@@ -73,6 +78,7 @@ import { MessagingDTO } from "../../dtos/messaging";
 import ShowHeader from "./modular/ShowHeader";
 import { ShowTopUp } from "./modular/ShowModal";
 import { SESSION_EXPIRED } from "../../variables/errorMessages/credential.ts";
+import { URL_GET_BALANCE_AMOUNT } from "../../config/xhr/routes/balance.ts";
 
 export default function Home() {
   // REFS //
@@ -119,6 +125,7 @@ export default function Home() {
       const searchParamScopes = window.location.search;
 
       if (clientUserInfo?.user) {
+        await handleInitializeBalance(clientUserInfo);
         dispatch(setUser(clientUserInfo.user));
         loggedUser = clientUserInfo.user;
         clearAllUrlParameters();
@@ -178,10 +185,43 @@ export default function Home() {
       dispatch(setChats(chatDatas));
       dispatch(setSavedLocations(locationDatas));
     } catch (error) {
-      console.error("Failed to initialize:", error);
+      handleException(error);
     } finally {
       dispatch(setRendered(true));
     }
+  };
+
+  const handleInitializeBalance = async (
+    clientUserInfo: ICookieInfo
+  ) => {
+    const abortController = new AbortController();
+    const axiosTimeout =
+      axiosService.setAxiosTimeout(abortController);
+    await axiosService
+      .getData({
+        headers: {
+          [AUTHORIZATION]:
+            `Bearer ${clientUserInfo.credentialToken.accessToken}` ||
+            "",
+          [X_SID]: clientUserInfo.sid || "",
+          [X_ARES_API_KEY]: ARES_SERVICE_API_KEY,
+        } as unknown as AdvanceAxiosRequestHeaders,
+        endpoint: ARES_SERVICE,
+        url: URL_GET_BALANCE_AMOUNT,
+        controller: abortController,
+      })
+      .then((result: IResponseObject) => {
+        dispatch(setBalance(result.responseData.balance));
+      })
+      .catch((error: IResponseObject) => {
+        dispatch(
+          setShowErrorMessage({
+            isError: error.responseError,
+            errorContent: error.errorContent,
+          })
+        );
+      })
+      .finally(() => clearTimeout(axiosTimeout));
   };
 
   const handleOnSendMessage = async () => {
