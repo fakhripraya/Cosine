@@ -124,17 +124,30 @@ export default function Home() {
       const clientUserInfo = cookies.get(CLIENT_USER_INFO);
       const searchParamScopes = window.location.search;
 
-      if (clientUserInfo?.user) {
-        await handleInitializeBalance(clientUserInfo);
-        dispatch(setUser(clientUserInfo.user));
-        loggedUser = clientUserInfo.user;
-        clearAllUrlParameters();
-      } else if (
-        searchParamScopes?.includes("googleapis")
-      ) {
-        const scopes = searchParamScopes;
-        clearAllUrlParameters();
-        loggedUser = await handleGoogleAuthListener(scopes);
+      try {
+        if (clientUserInfo?.user) {
+          await handleInitializeBalance(clientUserInfo);
+          dispatch(setUser(clientUserInfo.user));
+          loggedUser = clientUserInfo.user;
+          clearAllUrlParameters();
+        } else if (
+          searchParamScopes?.includes("googleapis")
+        ) {
+          const scopes = searchParamScopes;
+          clearAllUrlParameters();
+          loggedUser = await handleGoogleAuthListener(
+            scopes
+          );
+        }
+      } finally {
+        const storedClientUserInfo = cookies.get(
+          CLIENT_USER_INFO
+        );
+        if (storedClientUserInfo) {
+          await handleInitializeBalance(
+            storedClientUserInfo
+          );
+        }
       }
 
       const { chatDatas, locationDatas } =
