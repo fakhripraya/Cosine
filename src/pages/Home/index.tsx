@@ -252,7 +252,8 @@ export default function Home() {
     try {
       if (isLoading)
         return window.alert("Sabar lagi loading nih !");
-      if (balance <= 0) dispatch(setShowTopUpMenu(true));
+      if (balance <= 0)
+        return dispatch(setShowTopUpMenu(true));
       if (!user) return navigate("/login");
       if (chatInputRef.current?.value !== "") {
         dispatch(setLoading(true));
