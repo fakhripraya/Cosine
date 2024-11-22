@@ -68,6 +68,7 @@ import {
   setShowErrorMessage,
   setShowMobileSidebar,
   setShowSidebar,
+  setShowTopUpMenu,
   setUser,
 } from "../../redux/reducers/pages/home/index.ts";
 import {
@@ -97,6 +98,7 @@ export default function Home() {
     showMobileSidebar,
     isLoading,
     chats,
+    balance,
   } = useAppSelector((state) => state.home);
   const dispatch = useAppDispatch();
 
@@ -250,6 +252,7 @@ export default function Home() {
     try {
       if (isLoading)
         return window.alert("Sabar lagi loading nih !");
+      if (balance <= 0) dispatch(setShowTopUpMenu(true));
       if (!user) return navigate("/login");
       if (chatInputRef.current?.value !== "") {
         dispatch(setLoading(true));
