@@ -214,12 +214,21 @@ export default function Home() {
         dispatch(setBalance(result.responseData.balance));
       })
       .catch((error: IResponseObject) => {
-        dispatch(
-          setShowErrorMessage({
-            isError: error.responseError,
-            errorContent: error.errorContent,
-          })
-        );
+        if (
+          isIResponseObject(error) &&
+          IS_NOT_AUTHENTICATE(error)
+        ) {
+          cookies.remove(CLIENT_USER_INFO, { path: "/" });
+          dispatch(setUser(null));
+          alert(SESSION_EXPIRED);
+          return navigate("/login");
+        } else
+          dispatch(
+            setShowErrorMessage({
+              isError: error.responseError,
+              errorContent: error.errorContent,
+            })
+          );
       })
       .finally(() => clearTimeout(axiosTimeout));
   };
