@@ -237,13 +237,15 @@ export default function Home() {
           dispatch(setUser(null));
           alert(SESSION_EXPIRED);
           return navigate("/login");
-        } else
+        } else {
           dispatch(
             setShowErrorMessage({
               isError: error.responseError,
               errorContent: error.errorContent,
             })
           );
+          dispatch(setBalance(0));
+        }
       })
       .finally(() => clearTimeout(axiosTimeout));
   };

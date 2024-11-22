@@ -53,7 +53,8 @@ export const useAxios = (): IAxiosService => {
           .catch((error) => {
             result.responseError = true;
             if (error.response) {
-              result.errorContent = error.response.data;
+              result.errorContent =
+                error.response.data.toString();
               result.responseStatus = error.response.status;
             } else result.responseStatus = 500;
 
@@ -87,7 +88,8 @@ export const useAxios = (): IAxiosService => {
               if (res.responseStatus === 200) return config;
               else {
                 result.responseError = true;
-                result.errorContent = res.errorContent;
+                result.errorContent =
+                  res.errorContent.toString();
                 result.responseStatus = res.responseStatus;
                 console.timeEnd("Load Time");
                 reject(result);
@@ -120,7 +122,8 @@ export const useAxios = (): IAxiosService => {
           .catch((error) => {
             result.responseError = true;
             if (error.response) {
-              result.errorContent = error.response.data;
+              result.errorContent =
+                error.response.data.toString();
               result.responseStatus = error.response.status;
             } else result.responseStatus = 500;
 
@@ -191,7 +194,8 @@ export const useAxios = (): IAxiosService => {
           .catch((error) => {
             result.responseError = true;
             if (error.response) {
-              result.errorContent = error.response.data;
+              result.errorContent =
+                error.response.data.toString();
               result.responseStatus = error.response.status;
             } else result.responseStatus = 500;
 
