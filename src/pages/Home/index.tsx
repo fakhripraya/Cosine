@@ -128,7 +128,6 @@ export default function Home() {
 
       try {
         if (clientUserInfo?.user) {
-          await handleInitializeBalance(clientUserInfo);
           dispatch(setUser(clientUserInfo.user));
           loggedUser = clientUserInfo.user;
           clearAllUrlParameters();
@@ -254,9 +253,9 @@ export default function Home() {
     try {
       if (isLoading)
         return window.alert("Sabar lagi loading nih !");
+      if (!user) return navigate("/login");
       if (balance <= 0)
         return dispatch(setShowTopUpMenu(true));
-      if (!user) return navigate("/login");
       if (chatInputRef.current?.value !== "") {
         dispatch(setLoading(true));
         const timeNow = moment(new Date())
