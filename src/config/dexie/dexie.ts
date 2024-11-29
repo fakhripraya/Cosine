@@ -13,9 +13,9 @@ const db = new Dexie(DB_NAME) as Dexie & {
 };
 
 // Schema declaration:
-db.version(6).stores({
+db.version(9).stores({
   chat_data:
-    "id, sender, roomId, content, buildingContents, timestamp",
+    "id, sender.id, content.sendSpecificToId, buildingContents.id, [sender.id+content.sendSpecificToId], roomId, timestamp",
   user_saved_location_data:
     "id, userId, savedLocationId, savedLocation, timestamp",
 });

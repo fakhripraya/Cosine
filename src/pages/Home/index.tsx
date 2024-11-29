@@ -5,10 +5,7 @@ import { Fragment, useEffect, useRef } from "react";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
-import {
-  INITIAL_PINTRAIL_MESSAGE,
-  PAGE_LOADING_MESSAGE,
-} from "../../variables/constants/home";
+import { PAGE_LOADING_MESSAGE } from "../../variables/constants/home";
 import TextInput from "../../components/TextInput";
 import ShowChatWrappers from "./modular/ShowChatWrappers";
 import { useAxios } from "../../utils/hooks/useAxios";
@@ -17,28 +14,14 @@ import {
   OneToOneChat,
 } from "../../interfaces/chat";
 import { cookies } from "../../config/cookie";
-import {
-  ARES_SERVICE,
-  ARES_SERVICE_API_KEY,
-  HERMES_SERVICE,
-  OLYMPUS_SERVICE,
-} from "../../config/environment";
-import { URL_POST_GOOGLE_CALLBACK } from "../../config/xhr/routes/credentials";
-import {
-  AUTHORIZATION,
-  CLIENT_USER_INFO,
-  X_ARES_API_KEY,
-  X_SID,
-} from "../../variables/global";
+import { CLIENT_USER_INFO } from "../../variables/global";
 import {
   clearAllUrlParameters,
   handleException,
   removeTrailingNewlines,
 } from "../../utils/functions/global";
-import { URL_POST_AGENT_MESSAGING } from "../../config/xhr/routes/home";
 import db from "../../config/dexie/dexie";
 import moment from "moment";
-import { ICookieInfo } from "../../interfaces/credential";
 import { v4 as uuidv4 } from "uuid";
 import {
   AI_ID,
@@ -46,15 +29,14 @@ import {
   AI_PROFILE_PIC_URL,
 } from "../../variables/constants/ai";
 import { IBuildingDetails } from "../../interfaces/building";
-import { BuildingDetailsDTO } from "../../dtos/building";
-import {
-  AdvanceAxiosRequestHeaders,
-  IResponseObject,
-  isIResponseObject,
-} from "../../interfaces/axios";
+import { BuildingDetailsDTO } from "../../dtos/building/index.ts";
+import { isIResponseObject } from "../../interfaces/axios";
 import { IS_NOT_AUTHENTICATE } from "../../utils/validations/credential";
 import HamburgerIcon from "../../assets/svg/ic_hamburg_3.svg";
-import { createChatData } from "../../utils/functions/db";
+import {
+  addPintrailNoteChatData,
+  createChatData,
+} from "../../utils/functions/db";
 import {
   useAppDispatch,
   useAppSelector,
@@ -65,7 +47,6 @@ import {
   setLoading,
   setRendered,
   setSavedLocations,
-  setShowErrorMessage,
   setShowMobileSidebar,
   setShowSidebar,
   setShowTopUpMenu,
@@ -75,11 +56,14 @@ import {
   MobileSidebar,
   Sidebar,
 } from "./modular/ShowSidebar";
-import { MessagingDTO } from "../../dtos/messaging";
+import { MessagingDTO } from "../../dtos/messaging/index.ts";
 import ShowHeader from "./modular/ShowHeader";
 import { ShowTopUp } from "./modular/ShowModal";
 import { SESSION_EXPIRED } from "../../variables/errorMessages/credential.ts";
-import { URL_GET_BALANCE_AMOUNT } from "../../config/xhr/routes/balance.ts";
+import { handlePostSendAgentMessaging } from "../../services/home/POST/index.ts";
+import { ResponseError } from "../../classes/error/index.ts";
+import { handlePostGoogleAuthListener } from "../../services/credentials/POST/index.ts";
+import { handleGetBalanceAmount } from "../../services/balance/GET/index.ts";
 
 export default function Home() {
   // REFS //
@@ -136,8 +120,11 @@ export default function Home() {
         ) {
           const scopes = searchParamScopes;
           clearAllUrlParameters();
-          loggedUser = await handleGoogleAuthListener(
-            scopes
+          loggedUser = await handlePostGoogleAuthListener(
+            scopes,
+            axiosService,
+            dispatch,
+            navigate
           );
         }
       } finally {
@@ -145,8 +132,10 @@ export default function Home() {
           CLIENT_USER_INFO
         );
         if (storedClientUserInfo) {
-          await handleInitializeBalance(
-            storedClientUserInfo
+          await handleGetBalanceAmount(
+            axiosService,
+            dispatch,
+            navigate
           );
         }
       }
@@ -181,72 +170,17 @@ export default function Home() {
           }
         );
 
-      const timeNow = moment(new Date())
-        .format("dddd, MMMM Do YYYY, h:mm:ss a")
-        .toString();
-      const initMessage: OneToOneChat = {
-        id: uuidv4(),
-        chatContent: INITIAL_PINTRAIL_MESSAGE,
-        senderId: AI_ID,
-        senderFullName: AI_NAME,
-        sendSpecificToId: user?.userId,
-        senderProfilePictureUri: AI_PROFILE_PIC_URL,
-        createdAt: timeNow,
-      };
-
-      const initData = createChatData(initMessage);
-      chatDatas.push(initData);
-      dispatch(setChats(chatDatas));
+      const added = addPintrailNoteChatData(
+        user,
+        chatDatas
+      );
+      dispatch(setChats(added));
       dispatch(setSavedLocations(locationDatas));
     } catch (error) {
       handleException(error);
     } finally {
       dispatch(setRendered(true));
     }
-  };
-
-  const handleInitializeBalance = async (
-    clientUserInfo: ICookieInfo
-  ) => {
-    const abortController = new AbortController();
-    const axiosTimeout =
-      axiosService.setAxiosTimeout(abortController);
-    await axiosService
-      .getData({
-        headers: {
-          [AUTHORIZATION]:
-            `Bearer ${clientUserInfo.credentialToken.accessToken}` ||
-            "",
-          [X_SID]: clientUserInfo.sid || "",
-          [X_ARES_API_KEY]: ARES_SERVICE_API_KEY,
-        } as unknown as AdvanceAxiosRequestHeaders,
-        endpoint: ARES_SERVICE,
-        url: URL_GET_BALANCE_AMOUNT,
-        controller: abortController,
-      })
-      .then((result: IResponseObject) => {
-        dispatch(setBalance(result.responseData.balance));
-      })
-      .catch((error: IResponseObject) => {
-        if (
-          isIResponseObject(error) &&
-          IS_NOT_AUTHENTICATE(error)
-        ) {
-          cookies.remove(CLIENT_USER_INFO, { path: "/" });
-          dispatch(setUser(null));
-          alert(SESSION_EXPIRED);
-          return navigate("/login");
-        } else {
-          dispatch(
-            setShowErrorMessage({
-              isError: error.responseError,
-              errorContent: error.errorContent,
-            })
-          );
-          dispatch(setBalance(0));
-        }
-      })
-      .finally(() => clearTimeout(axiosTimeout));
   };
 
   const handleOnSendMessage = async () => {
@@ -291,31 +225,10 @@ export default function Home() {
     timeNow: string
   ) => {
     try {
-      const abortController = new AbortController();
-      const axiosTimeout = axiosService.setAxiosTimeout(
-        abortController,
-        120000
+      const response = await handlePostSendAgentMessaging(
+        userChatData,
+        axiosService
       );
-
-      const clientUserInfo: ICookieInfo = cookies.get(
-        CLIENT_USER_INFO
-      );
-      const response = await axiosService.postData({
-        endpoint: HERMES_SERVICE,
-        url: `${URL_POST_AGENT_MESSAGING}`,
-        headers: {
-          [AUTHORIZATION]:
-            `Bearer ${clientUserInfo?.credentialToken.accessToken}` ||
-            "",
-          [X_SID]: clientUserInfo?.sid || "",
-        } as unknown as AdvanceAxiosRequestHeaders,
-        data: {
-          sessionId: userChatData.sender.id,
-          content: userChatData.content.chatContent,
-        },
-        controller: abortController,
-      });
-      clearTimeout(axiosTimeout);
 
       const messagingOutput: MessagingDTO = {
         ...response.responseData,
@@ -370,6 +283,8 @@ export default function Home() {
         db.chat_data.bulkAdd([userChatData, aiChatData]);
       });
     } catch (error) {
+      if (error instanceof ResponseError)
+        handleException(error.response);
       if (
         isIResponseObject(error) &&
         IS_NOT_AUTHENTICATE(error)
@@ -379,38 +294,8 @@ export default function Home() {
         alert(SESSION_EXPIRED);
         return navigate("/login");
       }
-      handleException(error);
     } finally {
       dispatch(setLoading(false));
-    }
-  };
-
-  const handleGoogleAuthListener = async (
-    queryString: string
-  ) => {
-    try {
-      const abortController = new AbortController();
-      const axiosTimeout =
-        axiosService.setAxiosTimeout(abortController);
-
-      const result = await axiosService.postData({
-        endpoint: OLYMPUS_SERVICE,
-        url: `${URL_POST_GOOGLE_CALLBACK}/${queryString}`,
-        controller: abortController,
-      });
-
-      clearTimeout(axiosTimeout);
-
-      let loggedUser: any | undefined = undefined;
-      loggedUser = result.responseData.user;
-      dispatch(setUser(loggedUser));
-      cookies.set(CLIENT_USER_INFO, result.responseData);
-
-      return loggedUser;
-    } catch (error) {
-      cookies.remove(CLIENT_USER_INFO, { path: "/" });
-      handleException(error);
-      navigate("/login");
     }
   };
 

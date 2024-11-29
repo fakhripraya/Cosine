@@ -3,6 +3,7 @@ import {
   setShowSidebar,
   setShowMobileSidebar,
   setSavedLocations,
+  setChats,
 } from "../../../redux/reducers/pages/home/index.ts";
 import { useAppSelector } from "../../../utils/hooks/useRedux";
 import HamburgerIcon from "../../../assets/svg/ic_hamburg_3.svg";
@@ -16,12 +17,18 @@ import { navigateToDetails } from "../../../utils/functions/navigation";
 import db from "../../../config/dexie/dexie";
 import { IUserSavedLocation } from "../../../interfaces/building";
 import { IUserData } from "../../../interfaces/credential";
+import { AI_ID } from "../../../variables/constants/ai.ts";
+import { addPintrailNoteChatData } from "../../../utils/functions/db.ts";
+import { useAxios } from "../../../utils/hooks/useAxios.ts";
+import { handlePostClearMessageHistory } from "../../../services/home/POST/index.ts";
 
 const SidebarContent = () => {
   const navigate = useNavigate();
+  const axiosService = useAxios();
   const dispatch = useDispatch();
   const {
     user,
+    chats,
     showSidebar,
     showMobileSidebar,
     savedLocations,
@@ -57,25 +64,63 @@ const SidebarContent = () => {
     }
   };
 
-  const handleClearSavedLocation = async (
+  // const handleClearSavedLocation = async (
+  //   user: IUserData | null
+  // ) => {
+  //   const title = "Yakin mau bersihkan lokasi tersimpan?";
+  //   if (
+  //     user &&
+  //     savedLocations.length > 0 &&
+  //     confirm(title)
+  //   ) {
+  //     try {
+  //       await db.transaction(
+  //         "rw",
+  //         db.user_saved_location_data,
+  //         () => {
+  //           db.user_saved_location_data
+  //             .where("userId")
+  //             .equals(user.userId)
+  //             .delete();
+  //           dispatch(setSavedLocations([]));
+  //         }
+  //       );
+  //     } catch (error) {
+  //       alert(error);
+  //     }
+  //   }
+  // };
+
+  const handleClearMessageHistory = async (
     user: IUserData | null
   ) => {
-    const title = "Yakin mau bersihkan lokasi tersimpan?";
-    if (
-      user &&
-      savedLocations.length > 0 &&
-      confirm(title)
-    ) {
+    const title =
+      "Pintrail bakal lupain semua percakapan kamu loh, Yakin mau bersihkan chat?";
+    if (user && chats.length > 0 && confirm(title)) {
       try {
+        await handlePostClearMessageHistory(
+          user,
+          axiosService,
+          dispatch,
+          navigate
+        );
         await db.transaction(
           "rw",
-          db.user_saved_location_data,
-          () => {
-            db.user_saved_location_data
-              .where("userId")
+          db.chat_data,
+          async () => {
+            await db.chat_data
+              .where("sender.id")
               .equals(user.userId)
               .delete();
-            dispatch(setSavedLocations([]));
+            await db.chat_data
+              .where([
+                "sender.id",
+                "content.sendSpecificToId",
+              ])
+              .equals([AI_ID, user.userId])
+              .delete();
+            const added = addPintrailNoteChatData(user, []);
+            dispatch(setChats(added));
           }
         );
       } catch (error) {
@@ -106,7 +151,7 @@ const SidebarContent = () => {
           />
         )}
         <img
-          onClick={() => handleClearSavedLocation(user)}
+          onClick={() => handleClearMessageHistory(user)}
           className="home-page-body-clear-icon cursor-pointer"
           src={ClearIcon}
           alt="clear-icon"

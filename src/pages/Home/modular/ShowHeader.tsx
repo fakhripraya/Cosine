@@ -1,19 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "../../../utils/hooks/useAxios";
-import {
-  CLIENT_USER_INFO,
-  X_SID,
-} from "../../../variables/global";
-import { cookies } from "../../../config/cookie";
-import { trackPromise } from "react-promise-tracker";
-import { URL_POST_LOGOUT } from "../../../config/xhr/routes/credentials";
-import { OLYMPUS_SERVICE } from "../../../config/environment";
-import { AdvanceAxiosRequestHeaders } from "../../../interfaces/axios";
-import {
-  ICookieInfo,
-  IUserData,
-} from "../../../interfaces/credential";
-import { handleException } from "../../../utils/functions/global";
+import { IUserData } from "../../../interfaces/credential";
 import Avatar from "react-avatar";
 import {
   useAppDispatch,
@@ -23,6 +10,7 @@ import {
   setShowHeaderMenu,
   setShowTopUpMenu,
 } from "../../../redux/reducers/pages/home/index.ts";
+import { handlePostLogout } from "../../../services/credentials/POST/index.ts";
 
 interface ShowHeaderProps {
   user: IUserData | null;
@@ -45,36 +33,6 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
   const headerMenuClassName = showHeaderMenu
     ? "visible"
     : "hidden";
-
-  const handleLogout = () => {
-    const abortController = new AbortController();
-    const axiosTimeout =
-      axiosService.setAxiosTimeout(abortController);
-    const clientUserInfo: ICookieInfo = cookies.get(
-      CLIENT_USER_INFO
-    );
-
-    if (!user) return;
-    if (!clientUserInfo) return;
-
-    trackPromise(
-      axiosService
-        .postData({
-          headers: {
-            [X_SID]: clientUserInfo.sid || "",
-          } as unknown as AdvanceAxiosRequestHeaders,
-          endpoint: OLYMPUS_SERVICE,
-          url: URL_POST_LOGOUT,
-          controller: abortController,
-        })
-        .then(() => navigate("/login"))
-        .catch((error) => handleException(error))
-        .finally(() => {
-          cookies.remove(CLIENT_USER_INFO, { path: "/" });
-          clearTimeout(axiosTimeout);
-        })
-    );
-  };
 
   if (user)
     return (
@@ -112,7 +70,9 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
           </label>
           <div className="breakline" />
           <label
-            onClick={handleLogout}
+            onClick={() =>
+              handlePostLogout(axiosService, navigate)
+            }
             className="red-color cursor-pointer">
             Logout
           </label>

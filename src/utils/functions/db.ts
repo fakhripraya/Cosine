@@ -8,6 +8,36 @@ import {
 } from "../../interfaces/chat";
 import { v4 as uuidv4 } from "uuid";
 import { IUserData } from "../../interfaces/credential";
+import moment from "moment";
+import { INITIAL_PINTRAIL_MESSAGE } from "../../variables/constants/home";
+import {
+  AI_ID,
+  AI_NAME,
+  AI_PROFILE_PIC_URL,
+} from "../../variables/constants/ai";
+
+export const addPintrailNoteChatData = (
+  user: IUserData | null,
+  chatDatas: IChatData[]
+) => {
+  const timeNow = moment(new Date())
+    .format("dddd, MMMM Do YYYY, h:mm:ss a")
+    .toString();
+  const initMessage: OneToOneChat = {
+    id: uuidv4(),
+    chatContent: INITIAL_PINTRAIL_MESSAGE,
+    senderId: AI_ID,
+    senderFullName: AI_NAME,
+    sendSpecificToId: user?.userId,
+    senderProfilePictureUri: AI_PROFILE_PIC_URL,
+    createdAt: timeNow,
+  };
+
+  const initData = createChatData(initMessage);
+  chatDatas.push(initData);
+
+  return chatDatas;
+};
 
 export const createChatData = (
   message: OneToOneChat,
