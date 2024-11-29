@@ -64,32 +64,32 @@ const SidebarContent = () => {
     }
   };
 
-  // const handleClearSavedLocation = async (
-  //   user: IUserData | null
-  // ) => {
-  //   const title = "Yakin mau bersihkan lokasi tersimpan?";
-  //   if (
-  //     user &&
-  //     savedLocations.length > 0 &&
-  //     confirm(title)
-  //   ) {
-  //     try {
-  //       await db.transaction(
-  //         "rw",
-  //         db.user_saved_location_data,
-  //         () => {
-  //           db.user_saved_location_data
-  //             .where("userId")
-  //             .equals(user.userId)
-  //             .delete();
-  //           dispatch(setSavedLocations([]));
-  //         }
-  //       );
-  //     } catch (error) {
-  //       alert(error);
-  //     }
-  //   }
-  // };
+  const handleClearSavedLocation = async (
+    user: IUserData | null
+  ) => {
+    const title = "Yakin mau bersihkan lokasi tersimpan?";
+    if (
+      user &&
+      savedLocations.length > 0 &&
+      confirm(title)
+    ) {
+      try {
+        await db.transaction(
+          "rw",
+          db.user_saved_location_data,
+          () => {
+            db.user_saved_location_data
+              .where("userId")
+              .equals(user.userId)
+              .delete();
+            dispatch(setSavedLocations([]));
+          }
+        );
+      } catch (error) {
+        alert(error);
+      }
+    }
+  };
 
   const handleClearMessageHistory = async (
     user: IUserData | null
@@ -161,68 +161,84 @@ const SidebarContent = () => {
       <hr className="max-width standard-line" />
       <div className="home-page-sidebar-body">
         {savedLocations.length > 0 ? (
-          savedLocations.map(
-            (
-              location: IUserSavedLocation,
-              index: number
-            ) => (
-              <div
-                key={`home-page-sidebar-body-item-${index}`}
-                className="home-page-sidebar-body-item">
-                <Card
-                  className="margin-bottom-0"
-                  onClick={() =>
-                    navigateToDetails(
-                      navigate,
-                      location.savedLocation
-                    )
-                  }>
-                  <img
-                    className="card-img"
-                    src={
-                      location.savedLocation.image_url[0]
-                    }
-                    alt={
-                      location.savedLocation.image_url[0]
-                    }
-                  />
-                  <div className="breakline" />
-                  <div className="breakline" />
-                  <p className="light-color font-bold">
-                    {location.savedLocation?.building_title}
-                  </p>
-                  <p className="margin-bottom-0 main-color">
-                    {formattedCurrencyIDR(
-                      parseFloat(
+          <Fragment>
+            <div className="home-page-sidebar-body-item">
+              <label
+                onClick={() =>
+                  handleClearSavedLocation(user)
+                }
+                className="red-color cursor-pointer">
+                Clear
+              </label>
+            </div>
+            {savedLocations.map(
+              (
+                location: IUserSavedLocation,
+                index: number
+              ) => (
+                <div
+                  key={`home-page-sidebar-body-item-${index}`}
+                  className="home-page-sidebar-body-item">
+                  <Card
+                    className="margin-bottom-0"
+                    onClick={() =>
+                      navigateToDetails(
+                        navigate,
                         location.savedLocation
-                          ?.housing_price
                       )
-                    )}
-                  </p>
-                  <p className="light-color">
-                    {
-                      location.savedLocation
-                        ?.building_address
-                    }
-                  </p>
-                </Card>
-                <img
-                  onClick={() => {
-                    if (user)
-                      handleDeleteSavedLocation(
-                        user,
-                        location
-                      );
-                  }}
-                  className="home-page-body-trash-icon cursor-pointer margin-top-bottom-8"
-                  src={DeleteIcon}
-                  alt="delete-icon-sidebar"
-                />
-              </div>
-            )
-          )
+                    }>
+                    <img
+                      className="card-img"
+                      src={
+                        location.savedLocation.image_url[0]
+                      }
+                      alt={
+                        location.savedLocation.image_url[0]
+                      }
+                    />
+                    <div className="breakline" />
+                    <div className="breakline" />
+                    <p className="light-color font-bold">
+                      {
+                        location.savedLocation
+                          ?.building_title
+                      }
+                    </p>
+                    <p className="margin-bottom-0 main-color">
+                      {formattedCurrencyIDR(
+                        parseFloat(
+                          location.savedLocation
+                            ?.housing_price
+                        )
+                      )}
+                    </p>
+                    <p className="light-color">
+                      {
+                        location.savedLocation
+                          ?.building_address
+                      }
+                    </p>
+                  </Card>
+                  <img
+                    onClick={() => {
+                      if (user)
+                        handleDeleteSavedLocation(
+                          user,
+                          location
+                        );
+                    }}
+                    className="home-page-body-trash-icon cursor-pointer margin-top-bottom-8"
+                    src={DeleteIcon}
+                    alt="delete-icon-sidebar"
+                  />
+                </div>
+              )
+            )}
+          </Fragment>
         ) : (
-          <label>Belum ada lokasi tersimpan</label>
+          <div className="home-page-sidebar-body-item">
+            <label>Belum ada lokasi tersimpan</label>
+          </div>
         )}
       </div>
       <hr className="max-width standard-line" />
