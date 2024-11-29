@@ -21,6 +21,7 @@ import { AI_ID } from "../../../variables/constants/ai.ts";
 import { addPintrailNoteChatData } from "../../../utils/functions/db.ts";
 import { useAxios } from "../../../utils/hooks/useAxios.ts";
 import { handlePostClearMessageHistory } from "../../../services/home/POST/index.ts";
+import { trackPromise } from "react-promise-tracker";
 
 const SidebarContent = () => {
   const navigate = useNavigate();
@@ -98,30 +99,37 @@ const SidebarContent = () => {
       "Pintrail bakal lupain semua percakapan kamu loh, Yakin mau bersihkan chat?";
     if (user && chats.length > 0 && confirm(title)) {
       try {
-        await handlePostClearMessageHistory(
-          user,
-          axiosService,
-          dispatch,
-          navigate
-        );
-        await db.transaction(
-          "rw",
-          db.chat_data,
-          async () => {
-            await db.chat_data
-              .where("sender.id")
-              .equals(user.userId)
-              .delete();
-            await db.chat_data
-              .where([
-                "sender.id",
-                "content.sendSpecificToId",
-              ])
-              .equals([AI_ID, user.userId])
-              .delete();
-            const added = addPintrailNoteChatData(user, []);
-            dispatch(setChats(added));
-          }
+        trackPromise(
+          (async () => {
+            await handlePostClearMessageHistory(
+              user,
+              axiosService,
+              dispatch,
+              navigate
+            );
+            await db.transaction(
+              "rw",
+              db.chat_data,
+              async () => {
+                await db.chat_data
+                  .where("sender.id")
+                  .equals(user.userId)
+                  .delete();
+                await db.chat_data
+                  .where([
+                    "sender.id",
+                    "content.sendSpecificToId",
+                  ])
+                  .equals([AI_ID, user.userId])
+                  .delete();
+                const added = addPintrailNoteChatData(
+                  user,
+                  []
+                );
+                dispatch(setChats(added));
+              }
+            );
+          })()
         );
       } catch (error) {
         alert(error);
