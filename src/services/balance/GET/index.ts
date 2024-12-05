@@ -14,10 +14,10 @@ import {
 import {
   setBalance,
   setShowErrorMessage,
+  setShowPageLoadingMessage,
   setUser,
 } from "../../../redux/reducers/pages/home";
 import { IS_NOT_AUTHENTICATE } from "../../../utils/validations/credential";
-import { SESSION_EXPIRED } from "../../../variables/errorMessages/credential";
 import {
   AUTHORIZATION,
   CLIENT_USER_INFO,
@@ -25,6 +25,7 @@ import {
   X_SID,
 } from "../../../variables/global";
 import { NavigateFunction } from "react-router-dom";
+import { SESSION_EXPIRED_LOADING_MESSAGE } from "../../../variables/constants/home";
 
 export const handleGetBalanceAmount = async (
   axiosService: IAxiosService,
@@ -58,7 +59,11 @@ export const handleGetBalanceAmount = async (
       ) {
         cookies.remove(CLIENT_USER_INFO, { path: "/" });
         dispatch(setUser(null));
-        alert(SESSION_EXPIRED);
+        dispatch(
+          setShowPageLoadingMessage(
+            SESSION_EXPIRED_LOADING_MESSAGE
+          )
+        );
         return navigate("/login");
       } else {
         dispatch(

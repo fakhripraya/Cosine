@@ -5,7 +5,6 @@ import { Fragment, useEffect, useRef } from "react";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
-import { PAGE_LOADING_MESSAGE } from "../../variables/constants/home";
 import TextInput from "../../components/TextInput";
 import ShowChatWrappers from "./modular/ShowChatWrappers";
 import { useAxios } from "../../utils/hooks/useAxios";
@@ -80,6 +79,7 @@ export default function Home() {
     rendered,
     showSidebar,
     showMobileSidebar,
+    showPageLoadingMessage,
     isLoading,
     chats,
     balance,
@@ -314,7 +314,7 @@ export default function Home() {
     return (
       <PageLoading
         className={pageLoadingClassName}
-        loadingMessage={PAGE_LOADING_MESSAGE}
+        loadingMessage={showPageLoadingMessage}
         noLogo={false}
       />
     );

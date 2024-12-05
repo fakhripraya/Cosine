@@ -4,6 +4,7 @@ import { IChatData } from "../../../../interfaces/chat";
 import { IUserData } from "../../../../interfaces/credential";
 import { IErrorMessage } from "../../../../interfaces/error";
 import { defaultError } from "../../../../variables/global";
+import { PAGE_LOADING_MESSAGE } from "../../../../variables/constants/home";
 
 export const HOME_SLICE_KEY = "home_slice";
 
@@ -12,6 +13,7 @@ export interface HomeState {
   balance: number;
   rendered: boolean;
   showErrorMessage: IErrorMessage;
+  showPageLoadingMessage: string;
   showTopUpMenu: boolean;
   showHeaderMenu: boolean;
   showSidebar: boolean;
@@ -26,6 +28,7 @@ const initialState: HomeState = {
   balance: 0,
   rendered: false,
   showErrorMessage: defaultError,
+  showPageLoadingMessage: PAGE_LOADING_MESSAGE,
   showTopUpMenu: false,
   showHeaderMenu: false,
   showSidebar: true,
@@ -50,6 +53,9 @@ const homeSlice = createSlice({
     },
     setShowErrorMessage: (state, action) => {
       state.showErrorMessage = action.payload;
+    },
+    setShowPageLoadingMessage: (state, action) => {
+      state.showPageLoadingMessage = action.payload;
     },
     setShowTopUpMenu: (state, action) => {
       state.showTopUpMenu = action.payload;
@@ -80,6 +86,7 @@ export const {
   setBalance,
   setRendered,
   setShowErrorMessage,
+  setShowPageLoadingMessage,
   setShowTopUpMenu,
   setShowHeaderMenu,
   setShowSidebar,
