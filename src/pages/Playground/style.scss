@@ -1,0 +1,16 @@
+.privacy-policy-container {
+  min-height: 100vh;
+  min-width: 100vw;
+  padding: 24px 0px;
+}
+
+.privacy-policy-wrapper {
+  margin: 0px auto;
+  position: relative;
+  -webkit-box-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 24px);
+  max-width: calc(1920px - 24px);
+}
