@@ -98,7 +98,7 @@ export default function Home() {
     : "max-width full-width";
   const chatButtonSendClassName = isLoading
     ? "hidden no-width"
-    : "visible";
+    : "visible button-outlined cursor-pointer";
   const chatTextboxClassName = isLoading
     ? "Loading..."
     : "";
@@ -363,7 +363,7 @@ export default function Home() {
                 </div>
                 <div
                   ref={chatBodyContainerRef}
-                  className="home-page-mainbody-container home-page-chatbody-container dark-bg-color">
+                  className="home-page-mainbody-container home-page-chatbody-container transparent-bg-color">
                   <div className="home-page-mainbody-wrapper">
                     <ShowChatWrappers
                       uniqueKey={"chats"}
@@ -384,7 +384,7 @@ export default function Home() {
                   <Button
                     className={chatButtonSendClassName}
                     onClick={handleOnSendMessage}>
-                    <span className="text-ellipsis">
+                    <span className="text-ellipsis main-color">
                       Send
                     </span>
                   </Button>

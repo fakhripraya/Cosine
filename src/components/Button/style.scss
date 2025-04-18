@@ -9,6 +9,11 @@
   display: flex;
 }
 
+.button-outlined {
+  background-color: transparent !important;
+  border: 2px solid #10df6a; /* You can customize the color */
+}
+
 .button-container:hover {
   opacity: 0.7;
 }

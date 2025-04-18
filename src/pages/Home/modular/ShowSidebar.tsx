@@ -251,24 +251,26 @@ const SidebarContent = () => {
       </div>
       <hr className="max-width standard-line" />
       <div className="home-page-sidebar-footer ">
-        <label>© 2024 All Rights Reserved</label>
         <div className="home-page-sidebar-footer-info">
           <label
             onClick={() => navigate("/privacy-policy")}
             className="main-color cursor-pointer">
             Privacy
           </label>
+          ·
           <label
             onClick={() => navigate("/tnc")}
             className="main-color cursor-pointer">
             Terms
           </label>
+          ·
           <label
             onClick={() => navigate("/tnc")}
             className="main-color cursor-pointer">
             Feedback
           </label>
         </div>
+        <label>© 2025 — Pak Labs. All Rights Reserved</label>
       </div>
     </Fragment>
   );

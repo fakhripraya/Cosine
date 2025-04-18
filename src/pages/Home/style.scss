@@ -60,7 +60,7 @@
   height: inherit;
   padding: 12px;
   margin-right: 12px;
-  border-radius: 1em;
+  border-radius: 8px;
 
   transition: all 0.3s ease-in-out;
   animation: slideFromLeft 0.3s ease-in-out;
@@ -75,7 +75,7 @@
   height: inherit;
   padding: 12px;
   margin-right: 12px;
-  border-radius: 1em;
+  border-radius: 8px;
 
   transition: all 0.5s ease-in-out;
   animation: slideFromLeft 0.5s ease-in-out;
@@ -138,11 +138,11 @@
 .home-page-body-header-container {
   display: flex;
   flex-direction: row;
-  border-radius: 1em;
-  height: 60px;
+  border-bottom: 2px solid rgb(255, 255, 255, 0.1);
+  height: 69px;
   width: -webkit-fill-available;
   width: fill-available;
-  background-color: #1c1d1d;
+  background-color: transparent;
   justify-content: space-between;
   padding: 12px;
   box-sizing: border-box;
@@ -200,13 +200,10 @@
   height: 100vh;
   padding: 12px;
   overflow: hidden;
-  border-top-left-radius: 1em;
-  border-top-right-radius: 1em;
+  border-radius: 8px;
 }
 
 .home-page-chatbody-container {
-  padding-bottom: 0px !important;
-
   @media screen and (max-width: 769px) {
     overflow-y: scroll;
   }
@@ -225,14 +222,12 @@
 
 .home-page-chat-container {
   padding: 12px;
-  padding-top: 0px !important;
   height: fit-content;
   width: -webkit-fill-available;
   width: fill-available;
   display: flex;
   flex-direction: row;
-  border-bottom-left-radius: 1em;
-  border-bottom-right-radius: 1em;
+  border-radius: 8px;
 }
 
 .home-page-chat-leftside-textinput-button {

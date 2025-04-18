@@ -11,6 +11,7 @@ import {
   setShowTopUpMenu,
 } from "../../../redux/reducers/pages/home/index.ts";
 import { handlePostLogout } from "../../../services/credentials/POST/index.ts";
+import Button from "../../../components/Button/index.tsx";
 
 interface ShowHeaderProps {
   user: IUserData | null;
@@ -82,11 +83,14 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
 
   return (
     <div className="home-page-body-header">
-      <p
-        onClick={() => navigate("/login")}
-        className="main-color cursor-pointer">
-        Login
-      </p>
+      <Button className="button-outlined cursor-pointer">
+        <span
+          onClick={() => navigate("/login")}
+          className="main-color"
+          >
+          Login
+        </span>
+      </Button >
     </div>
   );
 };
