@@ -98,7 +98,7 @@ export default function Home() {
     : "max-width full-width";
   const chatButtonSendClassName = isLoading
     ? "hidden no-width"
-    : "visible button-outlined cursor-pointer";
+    : "button-outlined cursor-pointer";
   const chatTextboxClassName = isLoading
     ? "Loading..."
     : "";
