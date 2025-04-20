@@ -1,7 +1,7 @@
 import Modal from "../Modal";
 import { usePromiseTracker } from "react-promise-tracker";
 import "./style.scss";
-import MainLogo from "../../assets/svg/pintrail.svg";
+import MainLogo from "../../assets/png/transparent-pintrail.png";
 
 export default function Spinner() {
   const { promiseInProgress } = usePromiseTracker();

@@ -162,8 +162,8 @@ export default function NewPassword() {
               onClick={() =>
                 handleNewPWRequest(handleOpenLogin)
               }
-              className="new-password-button">
-              <p className="new-password-button-text">
+              className="new-password-button button-outlined">
+              <p className="new-password-button-text main-color">
                 Submit
               </p>
             </Button>

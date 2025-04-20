@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
 import "./style.scss";
-import MainLogo from "../../assets/svg/pintrail.svg";
+import MainLogo from "../../assets/png/pintrail.png";
 
 interface PageLoadingProps {
   containerStyle?: CSSProperties;

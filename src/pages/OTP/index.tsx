@@ -147,8 +147,8 @@ export default function OTP() {
             <div className="breakline" />
             <Button
               onClick={() => handleSubmitOTP()}
-              className="otp-button">
-              <p className="otp-button-text">Submit</p>
+              className="otp-button button-outlined">
+              <p className="otp-button-text main-color">Submit</p>
             </Button>
           </div>
         </div>

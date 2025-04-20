@@ -159,8 +159,8 @@ export default function Login() {
             onClick={() =>
               handleLoginRequest(() => navigate("/otp"))
             }
-            className="login-button">
-            <p className="login-button-text">Login</p>
+            className="login-button button-outlined">
+            <p className="login-button-text main-color">Login</p>
           </Button>
           <div className="breakline" />
           <div className="breakline" />

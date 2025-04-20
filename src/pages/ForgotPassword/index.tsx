@@ -141,8 +141,8 @@ export default function ForgotPassword() {
                   setModalToggle(true);
                 })
               }
-              className="forgot-password-button">
-              <p className="forgot-password-button-text">
+              className="forgot-password-button button-outlined">
+              <p className="forgot-password-button-text main-color">
                 Kirim Email
               </p>
             </Button>

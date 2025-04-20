@@ -234,8 +234,8 @@ export default function Register() {
             </label>
             <Button
               onClick={handlePostRegister}
-              className="register-button">
-              <p className="register-button-text">Daftar</p>
+              className="register-button button-outlined">
+              <p className="register-button-text main-color">Daftar</p>
             </Button>
             <div className="breakline" />
             <div className="breakline" />
