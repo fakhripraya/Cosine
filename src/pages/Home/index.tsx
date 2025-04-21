@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "./style.scss";
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
@@ -10,6 +10,7 @@ import ShowChatWrappers from "./modular/ShowChatWrappers";
 import { useAxios } from "../../utils/hooks/useAxios";
 import {
   IChatData,
+  IChatLoading,
   OneToOneChat,
 } from "../../interfaces/chat";
 import { cookies } from "../../config/cookie";
@@ -43,7 +44,7 @@ import {
 import {
   setBalance,
   setChats,
-  setLoading,
+  setChatLoading,
   setRendered,
   setSavedLocations,
   setShowMobileSidebar,
@@ -63,6 +64,7 @@ import { handlePostSendAgentMessaging } from "../../services/home/POST/index.ts"
 import { ResponseError } from "../../classes/error/index.ts";
 import { handlePostGoogleAuthListener } from "../../services/credentials/POST/index.ts";
 import { handleGetBalanceAmount } from "../../services/balance/GET/index.ts";
+import ShowChatWrapper from "./modular/ShowChatWrapper.tsx";
 
 export default function Home() {
   // REFS //
@@ -80,7 +82,7 @@ export default function Home() {
     showSidebar,
     showMobileSidebar,
     showPageLoadingMessage,
-    isLoading,
+    chatLoading,
     chats,
     balance,
   } = useAppSelector((state) => state.home);
@@ -96,12 +98,9 @@ export default function Home() {
   const chatContainerClassName = showSidebar
     ? ""
     : "max-width full-width";
-  const chatButtonSendClassName = isLoading
+  const chatButtonSendClassName = chatLoading.isLoading
     ? "hidden no-width"
     : "button-outlined cursor-pointer";
-  const chatTextboxClassName = isLoading
-    ? "Loading..."
-    : "";
 
   // FUNCTIONS //
   const handleInitialize = async () => {
@@ -185,13 +184,17 @@ export default function Home() {
 
   const handleOnSendMessage = async () => {
     try {
-      if (isLoading)
+      if (chatLoading.isLoading)
         return window.alert("Sabar lagi loading nih !");
       if (!user) return navigate("/login");
       if (balance <= 0)
         return dispatch(setShowTopUpMenu(true));
       if (chatInputRef.current?.value !== "") {
-        dispatch(setLoading(true));
+        const tempChatLoading: IChatLoading = {
+          ...chatLoading,
+          isLoading: true
+        }
+        dispatch(setChatLoading(tempChatLoading));
         const timeNow = moment(new Date())
           .format("dddd, MMMM Do YYYY, h:mm:ss a")
           .toString();
@@ -295,7 +298,11 @@ export default function Home() {
         return navigate("/login");
       }
     } finally {
-      dispatch(setLoading(false));
+      const tempChatLoading: IChatLoading = {
+        ...chatLoading,
+        isLoading: false
+      }
+      dispatch(setChatLoading(tempChatLoading));
     }
   };
 
@@ -308,6 +315,29 @@ export default function Home() {
     const current = chatBodyContainerRef.current;
     if (current) current.scrollTop = current.scrollHeight;
   }, [chats]);
+
+  // Handle Chat Loading
+  useEffect(() => {
+    if(chatLoading.isLoading){
+      let dotCount = 0;
+      const interval = setInterval(() => {
+        dotCount = (dotCount + 1) % 4; // increment first
+        const tempChatLoading: IChatLoading = {
+          loadingChatData: {
+            ...chatLoading.loadingChatData,
+            sender: {
+              ...chatLoading.loadingChatData.sender,
+              fullName: `Pintrail sedang berfikir${".".repeat(dotCount)}`
+            }
+          },
+          isLoading: true
+        }
+
+        dispatch(setChatLoading(tempChatLoading))
+      }, 500);
+      return () => clearInterval(interval);
+    }
+  }, [chatLoading.isLoading]);
 
   // Placeholder message while redirecting to home page
   if (!rendered) {
@@ -369,6 +399,7 @@ export default function Home() {
                       uniqueKey={"chats"}
                       chats={chats}
                     />
+                    {chatLoading.isLoading && <ShowChatWrapper chat={chatLoading.loadingChatData}/>}
                   </div>
                 </div>
                 <div className="home-page-chat-container dark-bg-color">
@@ -376,9 +407,8 @@ export default function Home() {
                     onEnter={handleOnSendMessage}
                     ref={chatInputRef}
                     className="home-page-chat-textinput light-color darker-bg-color max-width"
-                    placeholder={chatTextboxClassName}
                     readOnly={
-                      isLoading || showMobileSidebar
+                      chatLoading.isLoading || showMobileSidebar
                     }
                   />
                   <Button

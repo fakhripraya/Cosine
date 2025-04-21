@@ -21,3 +21,8 @@ export interface OneToOneChat {
   senderProfilePictureUri?: string;
   createdAt: string;
 }
+
+export interface IChatLoading {
+  isLoading: boolean;
+  loadingChatData: IChatData;
+}

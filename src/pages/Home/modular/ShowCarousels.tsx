@@ -34,7 +34,7 @@ export const ShowGrabableStoreCardCarousel: React.FC<
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
-  const { user, isLoading, savedLocations } =
+  const { user, chatLoading, savedLocations } =
     useAppSelector((state) => state.home);
   const dispatch = useAppDispatch();
 
@@ -42,7 +42,7 @@ export const ShowGrabableStoreCardCarousel: React.FC<
     location: IBuildingDetails
   ) => {
     try {
-      if (isLoading)
+      if (chatLoading.isLoading)
         return window.alert("Sabar lagi loading nih !");
       if (!user) return navigate("/login");
       if (location) {

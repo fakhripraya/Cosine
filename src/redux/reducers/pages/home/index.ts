@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUserSavedLocation } from "../../../../interfaces/building";
-import { IChatData } from "../../../../interfaces/chat";
+import { IChatData, IChatLoading } from "../../../../interfaces/chat";
 import { IUserData } from "../../../../interfaces/credential";
 import { IErrorMessage } from "../../../../interfaces/error";
 import { defaultError } from "../../../../variables/global";
 import { PAGE_LOADING_MESSAGE } from "../../../../variables/constants/home";
+import { AI_PROFILE_PIC_URL } from "../../../../variables/constants/ai";
 
 export const HOME_SLICE_KEY = "home_slice";
 
@@ -18,7 +19,7 @@ export interface HomeState {
   showHeaderMenu: boolean;
   showSidebar: boolean;
   showMobileSidebar: boolean;
-  isLoading: boolean;
+  chatLoading: IChatLoading;
   chats: IChatData[];
   savedLocations: IUserSavedLocation[];
 }
@@ -33,7 +34,25 @@ const initialState: HomeState = {
   showHeaderMenu: false,
   showSidebar: true,
   showMobileSidebar: false,
-  isLoading: false,
+  chatLoading: {
+    isLoading: false,
+    loadingChatData: {
+      id: "Loading",
+      sender: {
+        id: "Loading",
+        fullName: "Pintrail sedang berfikir",
+        profilePictureURI: AI_PROFILE_PIC_URL
+      },
+      content: {
+        id: "Loading",
+        chatContent: "",
+        senderId: "Loading",
+        senderFullName: "Pintrail",
+        createdAt: ""
+      },
+      timestamp: ""
+    }
+  },
   chats: [],
   savedLocations: [],
 };
@@ -69,8 +88,8 @@ const homeSlice = createSlice({
     setShowMobileSidebar: (state, action) => {
       state.showMobileSidebar = action.payload;
     },
-    setLoading: (state, action) => {
-      state.isLoading = action.payload;
+    setChatLoading: (state, action) => {
+      state.chatLoading = action.payload;
     },
     setChats: (state, action) => {
       state.chats = action.payload;
@@ -91,7 +110,7 @@ export const {
   setShowHeaderMenu,
   setShowSidebar,
   setShowMobileSidebar,
-  setLoading,
+  setChatLoading,
   setChats,
   setSavedLocations,
 } = homeSlice.actions;
