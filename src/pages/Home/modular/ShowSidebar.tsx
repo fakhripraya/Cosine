@@ -270,7 +270,7 @@ const SidebarContent = () => {
             Feedback
           </label>
         </div>
-        <label>© 2025 — Pak Labs. All Rights Reserved</label>
+        <label>© 2025 — Yuugen Lab. All Rights Reserved</label>
       </div>
     </Fragment>
   );
