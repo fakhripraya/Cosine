@@ -51,6 +51,7 @@ import {
   setShowSidebar,
   setShowTopUpMenu,
   setUser,
+  setUserGeolocation,
 } from "../../redux/reducers/pages/home/index.ts";
 import {
   MobileSidebar,
@@ -135,6 +136,22 @@ export default function Home() {
             axiosService,
             dispatch,
             navigate
+          );
+        }
+
+        if (!navigator.geolocation) {
+          alert("Geolocation is not supported by your browser");
+        } else {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              dispatch(setUserGeolocation({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              }));
+            },
+            (err) => {
+              alert(`Error: ${err.message}`);
+            }
           );
         }
       }

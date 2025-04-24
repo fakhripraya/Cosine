@@ -1,4 +1,4 @@
-export interface Coordinate {
-    lat: number;
-    lng: number;
+export interface IGeolocationCoordinate {
+    latitude: number;
+    longitude: number;
 }

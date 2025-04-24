@@ -6,11 +6,13 @@ import { IErrorMessage } from "../../../../interfaces/error";
 import { defaultError } from "../../../../variables/global";
 import { PAGE_LOADING_MESSAGE } from "../../../../variables/constants/home";
 import { AI_PROFILE_PIC_URL } from "../../../../variables/constants/ai";
+import { IGeolocationCoordinate } from "../../../../interfaces/geo";
 
 export const HOME_SLICE_KEY = "home_slice";
 
 export interface HomeState {
   user: IUserData | null;
+  userGeolocation: IGeolocationCoordinate | null
   balance: number;
   rendered: boolean;
   showErrorMessage: IErrorMessage;
@@ -26,6 +28,7 @@ export interface HomeState {
 
 const initialState: HomeState = {
   user: null,
+  userGeolocation: null,
   balance: 0,
   rendered: false,
   showErrorMessage: defaultError,
@@ -63,6 +66,9 @@ const homeSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+    },
+    setUserGeolocation: (state, action) => {
+      state.userGeolocation = action.payload;
     },
     setBalance: (state, action) => {
       state.balance = action.payload;
@@ -102,6 +108,7 @@ const homeSlice = createSlice({
 
 export const {
   setUser,
+  setUserGeolocation,
   setBalance,
   setRendered,
   setShowErrorMessage,
