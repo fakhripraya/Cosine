@@ -66,6 +66,7 @@ import { ResponseError } from "../../classes/error/index.ts";
 import { handlePostGoogleAuthListener } from "../../services/credentials/POST/index.ts";
 import { handleGetBalanceAmount } from "../../services/balance/GET/index.ts";
 import ShowChatWrapper from "./modular/ShowChatWrapper.tsx";
+import { DUMMY_BOARDING_HOUSE_PICTS } from "../../variables/constants/home.ts";
 
 export default function Home() {
   // REFS //
@@ -275,9 +276,10 @@ export default function Home() {
       const buildingContents = parsedContent?.map(
         (obj): IBuildingDetails => {
           obj.image_url = obj.image_url.replace(/'/g, '"');
-          const actualImages: string[] = JSON.parse(
-            obj.image_url
-          );
+          console.log(obj.image_url)
+          const actualImages: string[] = [`${DUMMY_BOARDING_HOUSE_PICTS[Math.floor(Math.random() * (9 - 0 + 1)) + 0]}`]
+
+          console.log(actualImages)
 
           return {
             ...obj,

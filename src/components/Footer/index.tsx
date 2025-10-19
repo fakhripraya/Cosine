@@ -84,13 +84,13 @@ const Footer: React.FC<FooterProps> = () => {
                   </StyledButton>
                 ))}
               </div>
-              <h3> We are based in </h3>
-              <h3>Jakarta,&nbsp;</h3>
-              <h1 className="break-word">Indonesia</h1>
-              <h3 className="footer-column-1-email">
+              <h3 className="text-md font-bold mb-4"> We are based in </h3>
+              <h3 className="text-xl font-bold mb-2">Jakarta,&nbsp;</h3>
+              <h1 className="break-word text-4xl font-bold">Indonesia</h1>
+              <h3 className="text-md font-bold footer-column-1-email">
                 Drop us a line at
               </h3>
-              <h2 className="break-word">
+              <h2 className="text-md font-bold break-word mb-4">
                 <a
                   className="footer-column-1-email-text main-color"
                   href={`mailto:${APP_EMAIL}`}>

@@ -22,6 +22,7 @@ import {
 import { createSavedLocationData } from "../../../utils/functions/db";
 import db from "../../../config/dexie/dexie";
 import { navigateToDetails } from "../../../utils/functions/navigation";
+import { DUMMY_BOARDING_HOUSE_PICTS } from "../../../variables/constants/home";
 
 interface ShowGrabableStoreCardCarouselProps {
   uniqueKey: string;
@@ -35,7 +36,7 @@ export const ShowGrabableStoreCardCarousel: React.FC<
 
   const navigate = useNavigate();
   const { user, chatLoading, savedLocations } =
-    useAppSelector((state) => state.home);
+  useAppSelector((state) => state.home);
   const dispatch = useAppDispatch();
 
   const handleOnSaveLocation = async (
@@ -88,41 +89,43 @@ export const ShowGrabableStoreCardCarousel: React.FC<
       }
       className="home-page-carousel-wrapper"
       ref={carouselRef}>
-      {props.values?.map((obj, index) => (
-        <div
-          key={`carousel-card-${props.uniqueKey}-${index}-id${obj.id}`}>
-          <Card
-            className="margin-bottom-0"
-            onClick={() =>
-              navigateToDetails(navigate, obj)
-            }>
+      {props.values?.map((obj, index) => {
+        return (
+          <div
+            key={`carousel-card-${props.uniqueKey}-${index}-id${obj.id}`}>
+            <Card
+              className="margin-bottom-0"
+              onClick={() =>
+                navigateToDetails(navigate, obj)
+              }>
+              <img
+                className="card-img"
+                src={obj.image_url[0]}
+                alt={obj.image_url[0]}
+              />
+              <div className="breakline" />
+              <div className="breakline" />
+              <p className="light-color font-bold">
+                {obj?.building_title}
+              </p>
+              <p className="margin-bottom-0 main-color">
+                {formattedCurrencyIDR(
+                  parseFloat(obj?.housing_price)
+                )}
+              </p>
+              <p className="light-color">
+                {obj?.building_address}
+              </p>
+            </Card>
             <img
-              className="card-img"
-              src={obj.image_url[0]}
-              alt={obj.image_url[0]}
+              onClick={() => handleOnSaveLocation(obj)}
+              className="home-page-body-header-icon cursor-pointer margin-top-bottom-8"
+              src={HamburgerIcon}
+              alt="hamburger-icon-header"
             />
-            <div className="breakline" />
-            <div className="breakline" />
-            <p className="light-color font-bold">
-              {obj?.building_title}
-            </p>
-            <p className="margin-bottom-0 main-color">
-              {formattedCurrencyIDR(
-                parseFloat(obj?.housing_price)
-              )}
-            </p>
-            <p className="light-color">
-              {obj?.building_address}
-            </p>
-          </Card>
-          <img
-            onClick={() => handleOnSaveLocation(obj)}
-            className="home-page-body-header-icon cursor-pointer margin-top-bottom-8"
-            src={HamburgerIcon}
-            alt="hamburger-icon-header"
-          />
-        </div>
-      ))}
+          </div>
+        )
+      })}
     </div>
   );
 };

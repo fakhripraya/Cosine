@@ -71,6 +71,12 @@ const ShowHeader: React.FC<ShowHeaderProps> = ({
           </label>
           <div className="breakline" />
           <label
+            onClick={() => navigate("/register-place")}
+            className="cursor-pointer">
+            Register Place
+          </label>
+          <div className="breakline" />
+          <label
             onClick={() =>
               handlePostLogout(axiosService, navigate)
             }

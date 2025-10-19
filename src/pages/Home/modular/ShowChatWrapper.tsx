@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO: Change static true flag to chat type flag
 import React, { Fragment, useMemo } from "react";
 import Avatar from "react-avatar";
 import ShowChat from "./ShowChat";
@@ -26,7 +27,7 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
               name={chat.sender.fullName}
             />
           </div>
-          <div className="home-page-chattext-wrapper max-width full-width">
+          {true ? <div className="home-page-chattext-wrapper max-width full-width">
             <div>
               <p className="home-page-chattext-username font-bold">
                 {chat.sender.fullName}
@@ -43,7 +44,14 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
                 values={chat.buildingContents}
               />
             )}
-          </div>
+          </div> : <div className="home-page-chattext-wrapper max-width full-width">
+            <div>
+              <p className="home-page-chattext-username font-bold">
+                {chat.sender.fullName}
+              </p>
+              {chat.content.createdAt}
+            </div>
+          </div>}
         </div>
       </Fragment>
     ),

@@ -5,9 +5,11 @@ import Home from "../../pages/Home/index.tsx";
 import Login from "../../pages/Login/index.tsx";
 import NewPassword from "../../pages/NewPassword/index.tsx";
 import OTP from "../../pages/OTP/index.tsx";
+import Playground from "../../pages/Playground/index.tsx";
 import PrivacyPolicy from "../../pages/PrivacyPolicy/index.tsx";
 import Register from "../../pages/Register/index.tsx";
 import TermsAndConditions from "../../pages/TermsAndConditions/index.tsx";
+import AddPlace from "../../pages/AddPlace/index.tsx";
 
 export const routes = [
   {
@@ -45,6 +47,14 @@ export const routes = [
   {
     path: "/tnc",
     component: <TermsAndConditions />,
+  },
+  {
+    path: "/playground",
+    component: <Playground />,
+  },
+  {
+    path: "/register-place",
+    component: <AddPlace />,
   },
   {
     path: "*",
