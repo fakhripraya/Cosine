@@ -37,7 +37,7 @@ interface MapPickerProps {
   center: LatLngExpression
   zoom: number
   onLocationSelect: (lat: number, lng: number) => void
-  landmarks: Landmark[] // New prop for landmarks
+  landmarks?: Landmark[] // New prop for landmarks
 }
 
 function LocationMarker({
@@ -102,7 +102,7 @@ export default function MapPicker({ center, zoom, onLocationSelect, landmarks }:
       <LocationMarker onLocationSelect={onLocationSelect} initialPosition={center} />
 
       {/* Render Landmarks */}
-      {landmarks.map((landmark) => (
+      {landmarks?.map((landmark) => (
         <Marker key={landmark.id} position={[landmark.latitude, landmark.longitude]} icon={landmarkIcon}>
           <Popup>{landmark.name}</Popup>
         </Marker>

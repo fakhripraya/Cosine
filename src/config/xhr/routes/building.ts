@@ -1,0 +1,1 @@
+export const URL_POST_BUILDING = `/v1/building/create`;

@@ -1,12 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { Button } from "./button"
 import { Input } from "./input"
 import { Label } from "./label"
 import { MapPin } from "lucide-react"
 import MapPicker from "./map-picker" // Import the new MapPicker component
-import { generateDummyLandmarks, getDistanceFromLatLonInKm } from "../../../utils/functions/global"
 
 export interface LocationData {
   address: string
@@ -18,71 +16,64 @@ export interface LocationData {
   postalCode: string
 }
 
-interface Landmark {
-  id: string
-  name: string
-  latitude: number
-  longitude: number
-}
-
 interface LocationPickerProps {
   location: LocationData
   setLocation: React.Dispatch<React.SetStateAction<LocationData>>;
 }
 
-// Mock reverse geocoding function
-const mockReverseGeocode = async (lat: number, lng: number): Promise<Partial<LocationData>> => {
-  await new Promise((resolve) => setTimeout(resolve, 500)) // Simulate API delay
+const nominatimBaseUrl = "https://nominatim.openstreetmap.org/reverse";
 
-  if (lat > -7 && lat < -6 && lng > 106 && lng < 107) {
-    return {
-      address: `Jl. Mocked Street, Near Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)}`,
-      city: "Jakarta",
-      district: "Central Jakarta",
-      subDistrict: "Tanah Abang",
-      postalCode: "10250",
+export const reverseGeocode = async (
+  lat: number,
+  lng: number
+): Promise<Partial<LocationData>> => {
+  try {
+    const url = `${nominatimBaseUrl}?format=json&lat=${lat}&lon=${lng}&addressdetails=1`;
+
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "Pintrail/1.0 (pintrail@gmail.com)", // 👈 required by Nominatim usage policy
+        "Accept-Language": "id", // or "id" if you want Indonesian
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Nominatim API error: ${response.status}`);
     }
+
+    const data = await response.json();
+    const address = data.address || {};
+
+    console.log(address)
+
+    return {
+      address: data.display_name || `Lat: ${lat}, Lng: ${lng}`,
+      city: address.city || address.town || address.village || "",
+      district: address.suburb || address.state_district || address.city_district || address.county || "",
+      subDistrict: address.neighbourhood || "",
+      postalCode: address.postcode || "",
+    };
+  } catch (error) {
+    console.error("Reverse geocoding failed:", error);
+    return {
+      address: `Unknown Location, Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`,
+      city: "Unknown City",
+      district: "Unknown District",
+      subDistrict: "Unknown Sub-District",
+      postalCode: "",
+    };
   }
-  return {
-    address: `Unknown Location, Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`,
-    city: "Unknown City",
-    district: "Unknown District",
-    subDistrict: "Unknown Sub-District",
-    postalCode: "",
-  }
-}
+};
 
 export default function LocationPicker({ location, setLocation }: LocationPickerProps) {
-  const [showMap, setShowMap] = useState(false)
-  const [landmarks, setLandmarks] = useState<Landmark[]>([]) // State for landmarks
 
   // Default map center (Jakarta, Indonesia)
   const defaultMapCenter: [number, number] = [-6.2088, 106.8456]
   const defaultMapZoom = 13
-  const landmarkRadiusKm = 5 // 5km radius for landmarks
-
-  // Function to fetch and filter landmarks
-  const fetchAndFilterLandmarks = async (centerLat: number, centerLng: number) => {
-    const allDummyLandmarks = generateDummyLandmarks(centerLat, centerLng) // Generate around the current center
-    const filteredLandmarks = allDummyLandmarks.filter((lm) => {
-      const distance = getDistanceFromLatLonInKm(centerLat, centerLng, lm.latitude, lm.longitude)
-      return distance <= landmarkRadiusKm
-    })
-    setLandmarks(filteredLandmarks)
-  }
-
-  useEffect(() => {
-    // When component mounts or location changes, fetch landmarks if map is shown
-    if (showMap && location.latitude && location.longitude) {
-      fetchAndFilterLandmarks(location.latitude, location.longitude)
-    } else if (!showMap) {
-      setLandmarks([]) // Clear landmarks if not on map view
-    }
-  }, [showMap, location.latitude, location.longitude])
 
   const handleMapLocationSelect = async (lat: number, lng: number) => {
     setLocation((prev: LocationData) => ({ ...prev, latitude: lat, longitude: lng }))
-    const geocoded = await mockReverseGeocode(lat, lng)
+    const geocoded = await reverseGeocode(lat, lng)
     setLocation((prev) => ({
       ...prev,
       address: geocoded.address || prev.address,
@@ -91,8 +82,6 @@ export default function LocationPicker({ location, setLocation }: LocationPicker
       subDistrict: geocoded.subDistrict || prev.subDistrict,
       postalCode: geocoded.postalCode || prev.postalCode,
     }))
-    // Fetch landmarks based on the newly selected map location
-    fetchAndFilterLandmarks(lat, lng)
   }
 
   const getCurrentLocation = () => {
@@ -101,7 +90,6 @@ export default function LocationPicker({ location, setLocation }: LocationPicker
         (position) => {
           const { latitude, longitude } = position.coords
           handleMapLocationSelect(latitude, longitude) // Use map select handler to update all fields
-          setShowMap(true) // Show map with current location
         },
         (error) => {
           console.error("Error getting location:", error)
@@ -125,14 +113,11 @@ export default function LocationPicker({ location, setLocation }: LocationPicker
               }
               zoom={defaultMapZoom}
               onLocationSelect={handleMapLocationSelect}
-              landmarks={landmarks} // Pass landmarks to MapPicker
             />
             <div className="text-xs text-gray-400 bg-[#333333] p-2 rounded">
               Selected Coordinates: {location.latitude?.toFixed(6) || "N/A"}, {location.longitude?.toFixed(6) || "N/A"}
               <br />
               Address (from map): {location.address || "N/A"}
-              <br />
-              Landmarks found within {landmarkRadiusKm}km: {landmarks.length}
             </div>
           </div>
 

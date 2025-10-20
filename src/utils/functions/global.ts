@@ -178,31 +178,3 @@ export const getDistanceFromLatLonInKm = (lat1: number, lon1: number, lat2: numb
 function deg2rad(deg: number): number {
   return deg * (Math.PI / 180)
 }
-
-// Dummy Landmark Data Generation
-interface Landmark {
-  id: string
-  name: string
-  latitude: number
-  longitude: number
-}
-
-export const generateDummyLandmarks = (centerLat: number, centerLng: number): Landmark[] => {
-  const landmarks: Landmark[] = []
-  const baseLat = centerLat || -6.2088 // Default to Jakarta if no center provided
-  const baseLng = centerLng || 106.8456
-
-  for (let i = 0; i < 10; i++) {
-    // Generate random offsets within a small range (e.g., 0.05 degrees ~ 5.5km)
-    const latOffset = (Math.random() - 0.5) * 0.1 // -0.05 to +0.05
-    const lngOffset = (Math.random() - 0.5) * 0.1 // -0.05 to +0.05
-
-    landmarks.push({
-      id: `landmark-${i + 1}`,
-      name: `Landmark ${i + 1}`,
-      latitude: baseLat + latOffset,
-      longitude: baseLng + lngOffset,
-    })
-  }
-  return landmarks
-}
