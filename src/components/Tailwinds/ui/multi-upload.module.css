@@ -46,8 +46,8 @@
 }
 
 .multi-upload-icon-img {
-  width: 60px;
-  height: 60px;
+  width: 70%;
+  height: 70%;
   margin-bottom: 10px;
 }
 
@@ -107,5 +107,5 @@
 }
 
 .multi-upload-button-text {
-  margin: 0 !important; /* Override any default margin */
+  margin: 6px !important;
 }

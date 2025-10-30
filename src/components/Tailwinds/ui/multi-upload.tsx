@@ -10,8 +10,8 @@ import { formattedNumber, isImageType } from "../../../utils/functions/global"
 import { fileToBase64 } from "../../../utils/functions/format"
 
 // Placeholder SVG URLs
-const UploadIcon = "/placeholder.svg?height=60&width=60"
-const FileIcon = "/placeholder.svg?height=40&width=40"
+const UploadIcon = "/icons/upload-image.svg"
+const FileIcon = "/icons/upload-image.svg"
 
 // Interfaces
 interface FileWithMeta {
