@@ -7,6 +7,7 @@ import { useDropzone, type FileRejection, type FileError } from "react-dropzone"
 import { Button } from "./button" // Using shadcn/ui Button
 import styles from "./multi-upload.module.css" // CSS Module for styles
 import { formattedNumber, isImageType } from "../../../utils/functions/global"
+import { fileToBase64 } from "../../../utils/functions/format"
 
 // Placeholder SVG URLs
 const UploadIcon = "/placeholder.svg?height=60&width=60"
@@ -18,7 +19,7 @@ interface FileWithMeta {
   type: string
   size: number
   blob?: Blob
-  base64?: string
+  base64: string
   url?: string
 }
 
@@ -147,32 +148,46 @@ export default function MultiUpload(props: MultiUploadProps) {
 
   async function onDropRejected(rejectedFiles: FileRejection[]) {
     const proceed = rejectedFiles.length > 0
-    const temp: RejectedFile[] = rejectedFiles.map((rejection) => ({
-      file: {
-        name: rejection.file.name,
-        type: rejection.file.type,
-        size: rejection.file.size,
-        blob: rejection.file,
-      },
-      errors: rejection.errors,
-    }))
+    const temp: RejectedFile[] = []
+
+    for (const rejection of rejectedFiles) {
+      const base64 = await fileToBase64(rejection.file)
+
+      temp.push({
+        file: {
+          name: rejection.file.name,
+          type: rejection.file.type,
+          size: rejection.file.size,
+          blob: rejection.file,
+          base64,
+        },
+        errors: rejection.errors,
+      })
+    }
+
     if (proceed) props.setRejected(temp)
   }
 
   async function onDropAccepted(acceptedFiles: File[]) {
-    const proceed = acceptedFiles.length > 0
-    const temp: FileWithMeta[] = [...props.files]
-    for (const file of acceptedFiles) {
-      if (temp.length >= props.maxLength) break
-      temp.push({
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        blob: file,
-      })
-    }
-    if (proceed) props.setFiles(temp)
+  const proceed = acceptedFiles.length > 0
+  const temp: FileWithMeta[] = [...props.files]
+
+  for (const file of acceptedFiles) {
+    if (temp.length >= props.maxLength) break
+
+    const base64 = await fileToBase64(file)
+
+    temp.push({
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      blob: file,
+      base64,
+    })
   }
+
+  if (proceed) props.setFiles(temp)
+}
 
   function multiFileValidator(file: File): { code: string; message: string } | null {
     if (!file.type || !props.extensions.includes(file.type)) {

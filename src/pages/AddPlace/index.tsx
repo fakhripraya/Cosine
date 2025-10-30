@@ -25,7 +25,7 @@ interface FileWithMeta {
   type: string
   size: number
   blob?: Blob
-  base64?: string
+  base64: string
   url?: string
 }
 
@@ -76,12 +76,16 @@ export default function BusinessFormPage() {
       numRooms,
       description,
       facilities,
-      images: files.map((file) => ({
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        url: file.url || file.base64 || URL.createObjectURL(file.blob!),
-      })),
+      images: files.map((file) => {
+        return {
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          base64: file.base64,
+          blob: file.blob,
+          url: file.url
+        }
+      }),
     }
 
     handlePostBusinessForm(formData)
