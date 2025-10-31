@@ -81,12 +81,13 @@
 }
 
 .child-modal-button {
-  text-align: center;
-  justify-self: center;
-  align-self: center;
-  padding: 6px !important;
-  width: 24px;
-  height: 24px;
+  background-color: #dc3545; /* Red background for delete button */
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .child-modal-button-text {

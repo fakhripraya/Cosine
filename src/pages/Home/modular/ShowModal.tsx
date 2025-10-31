@@ -50,6 +50,7 @@ export const ShowTopUp = () => {
               <p className="text-ellipsis">
                 Berisikan 30 Trailtokens
               </p>
+              <div className="breakline" />
               <Button onClick={() => sendWACS()}>
                 Beli
               </Button>
@@ -66,6 +67,7 @@ export const ShowTopUp = () => {
               <p className="text-ellipsis">
                 Berisikan 70 Trailtokens
               </p>
+              <div className="breakline" />
               <Button onClick={() => sendWACS()}>
                 Beli
               </Button>
@@ -82,6 +84,7 @@ export const ShowTopUp = () => {
               <p className="text-ellipsis">
                 Berisikan 150 Trailtokens
               </p>
+              <div className="breakline" />
               <Button onClick={() => sendWACS()}>
                 Beli
               </Button>

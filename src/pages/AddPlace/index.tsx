@@ -18,6 +18,7 @@ import { AdvanceAxiosRequestHeaders, IResponseObject } from "../../interfaces/ax
 import { URL_POST_BUILDING } from "../../config/xhr/routes/building"
 import { AUTHORIZATION, CLIENT_USER_INFO, X_SID } from "../../variables/global"
 import { cookies } from "../../config/cookie"
+import ProximityManager from "../../components/Tailwinds/ui/proximity-manager"
 
 // Interfaces for MultiUpload component (copied from multi-upload.tsx for clarity)
 interface FileWithMeta {
@@ -48,6 +49,7 @@ export default function BusinessFormPage() {
   const [numRooms, setNumRooms] = useState<number | "">("")
   const [description, setDescription] = useState("")
   const [facilities, setFacilities] = useState<string[]>([])
+  const [proximities, setProximities] = useState<string[]>([])
   const [location, setLocation] = useState<LocationData>({
     address: "",
     latitude: undefined as number | undefined,
@@ -64,30 +66,75 @@ export default function BusinessFormPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const formData = {
-      businessName,
-      businessType,
-      ownerName,
-      businessPhone,
-      businessWhatsapp,
-      businessEmail,
-      location,
-      price,
-      numRooms,
-      description,
-      facilities,
-      images: files.map((file) => {
-        return {
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          base64: file.base64,
-          blob: file.blob,
-          url: file.url
-        }
-      }),
+    // Basic field validation (you can customize as needed)
+    if (!businessName || !businessType || !ownerName) {
+      console.error("Missing required business information.")
+      return
     }
 
+    if (!location) {
+      console.error("Location data is missing.")
+      return
+    }
+
+    const { address, latitude, longitude, city, district, subDistrict, postalCode } = location
+
+    // Handle missing address data gracefully
+    const buildingAddress = [
+      address || '',
+      subDistrict || '',
+      district || '',
+      city || '',
+      postalCode || ''
+    ]
+      .filter((val) => val && val.trim() !== '')
+      .join(', ') || 'Address not provided'
+
+    // Handle missing geolocation safely
+    const buildingGeolocation = {
+      latitude: latitude ?? 0, // default to 0 if undefined
+      longitude: longitude ?? 0,
+    }
+
+    // Handle files safely (ensure array and valid data)
+    const imageList = Array.isArray(files)
+      ? files.map((file) => ({
+          name: file?.name || 'unknown',
+          size: file?.size || 0,
+          type: file?.type || 'unknown',
+          base64: file?.base64 || '',
+          blob: file?.blob || null,
+          url: file?.url || '',
+        }))
+      : []
+
+    const formData = {
+      buildingTitle: businessName,
+      businessType,
+      buildingDescription: description || '',
+      buildingGeolocation,
+      buildingAddress,
+      buildingFacilities: facilities || [],
+      buildingProximities: proximities || [],
+      housingPrice: price || 1,
+      ownerName,
+      ownerEmail: businessEmail || '',
+      ownerWhatsapp: businessWhatsapp || '',
+      ownerPhoneNumber: businessPhone || '',
+      numRooms: numRooms || 1,
+      images: imageList,
+    }
+
+    // Final sanity check before sending
+    if (!buildingAddress || !buildingAddress.length) {
+      console.warn("Warning: Address is empty.")
+    }
+
+    if (!buildingGeolocation.latitude || !buildingGeolocation.longitude) {
+      console.warn("Warning: Geolocation might be invalid.")
+    }
+
+    console.log("Submitting form data:", formData)
     handlePostBusinessForm(formData)
   }
 
@@ -282,6 +329,7 @@ export default function BusinessFormPage() {
 
           {/* Facility Manager */}
           <FacilityManager facilities={facilities} setFacilities={setFacilities} />
+          <ProximityManager proximities={proximities} setProximities={setProximities} />
 
           <div>
             <Label className="text-sm font-medium text-gray-300 mb-2 block">Upload Images</Label>
