@@ -101,6 +101,9 @@ export default function DetailBuilding() {
               </div>
               <div className="detail-building-body-listpic-container dark-bg-color">
                 {data?.image_url.map((obj, index) => {
+                  console.log(obj)
+                  console.log(failedImages )
+                  console.log(failedImages.includes(index) )
                   return (
                     !failedImages.includes(index) && (
                       <Card
@@ -116,8 +119,8 @@ export default function DetailBuilding() {
                             handleImageError(index)
                           }
                           className="card-img"
-                          src={obj}
-                          alt=""
+                          src={`${obj}`}
+                          alt={`${obj}`}
                         />
                       </Card>
                     )

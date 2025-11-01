@@ -22,7 +22,6 @@ import {
 import { createSavedLocationData } from "../../../utils/functions/db";
 import db from "../../../config/dexie/dexie";
 import { navigateToDetails } from "../../../utils/functions/navigation";
-import { DUMMY_BOARDING_HOUSE_PICTS } from "../../../variables/constants/home";
 
 interface ShowGrabableStoreCardCarouselProps {
   uniqueKey: string;

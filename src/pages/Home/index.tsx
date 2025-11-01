@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "./style.scss";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import PageLoading from "../PageLoading";
@@ -67,6 +67,8 @@ import { handlePostGoogleAuthListener } from "../../services/credentials/POST/in
 import { handleGetBalanceAmount } from "../../services/balance/GET/index.ts";
 import ShowChatWrapper from "./modular/ShowChatWrapper.tsx";
 import { DUMMY_BOARDING_HOUSE_PICTS } from "../../variables/constants/home.ts";
+import { RETRIEVE_BOARDING_HOUSES_OR_BUILDINGS, SAVE_BUILDINGS_TO_THE_SYSTEM, SHOW_MAP_AND_DIRECTIONS } from "../../variables/actions.ts";
+import { IPathFinder } from "../../interfaces/geo/index.ts";
 
 export default function Home() {
   // REFS //
@@ -269,28 +271,36 @@ export default function Home() {
         createdAt: timeNow,
       };
 
-      const parsedContent:
-        | BuildingDetailsDTO[]
-        | undefined = messagingOutput?.output_content;
+      let buildingContents = undefined
+      let pathFinder = undefined
+      if (messagingOutput.action === RETRIEVE_BOARDING_HOUSES_OR_BUILDINGS) {
+        const parsedContent:
+          | BuildingDetailsDTO[]
+          | undefined = messagingOutput?.output_content;
 
-      const buildingContents = parsedContent?.map(
-        (obj): IBuildingDetails => {
-          obj.image_url = obj.image_url.replace(/'/g, '"');
-          console.log(obj.image_url)
-          const actualImages: string[] = [`${DUMMY_BOARDING_HOUSE_PICTS[Math.floor(Math.random() * (9 - 0 + 1)) + 0]}`]
+        buildingContents = parsedContent?.map(
+          (obj): IBuildingDetails => {
+            obj.image_url = obj.image_url.replace(/'/g, '"');
+            const actualImages: string[] = [`${DUMMY_BOARDING_HOUSE_PICTS[Math.floor(Math.random() * (9 - 0 + 1)) + 0]}`]
 
-          console.log(actualImages)
-
-          return {
-            ...obj,
-            image_url: actualImages,
-          };
-        }
-      );
+            return {
+              ...obj,
+              image_url: actualImages,
+            };
+          }
+        );
+      } else if (messagingOutput.action === SHOW_MAP_AND_DIRECTIONS) {
+        pathFinder = {
+          isShow: true,
+          startCoordinate: {},
+          destinationCoordinate: {},
+        } as IPathFinder;
+      }
 
       const aiChatData: IChatData = createChatData(
         aiMessage,
-        buildingContents
+        buildingContents,
+        pathFinder
       );
 
       const temp: IChatData[] = [...chats];

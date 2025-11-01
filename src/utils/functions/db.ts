@@ -15,6 +15,7 @@ import {
   AI_NAME,
   AI_PROFILE_PIC_URL,
 } from "../../variables/constants/ai";
+import { IPathFinder } from "../../interfaces/geo";
 
 export const addPintrailNoteChatData = (
   user: IUserData | null,
@@ -41,7 +42,8 @@ export const addPintrailNoteChatData = (
 
 export const createChatData = (
   message: OneToOneChat,
-  buildingContents?: IBuildingDetails[]
+  buildingContents?: IBuildingDetails[],
+  pathFinder?: IPathFinder
 ) => {
   const chatData: IChatData = {
     id: uuidv4(),
@@ -52,6 +54,7 @@ export const createChatData = (
     },
     content: message,
     buildingContents: buildingContents,
+    pathFinder: pathFinder,
     timestamp: new Date().toISOString(),
   };
   return chatData;

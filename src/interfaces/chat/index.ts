@@ -1,4 +1,5 @@
 import { IBuildingDetails } from "../building";
+import { IPathFinder } from "../geo";
 
 export interface IChatData {
   id: string;
@@ -9,6 +10,7 @@ export interface IChatData {
   };
   content: OneToOneChat;
   buildingContents?: IBuildingDetails[];
+  pathFinder?: IPathFinder;
   timestamp: string;
 }
 
