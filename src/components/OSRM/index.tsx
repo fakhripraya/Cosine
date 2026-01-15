@@ -146,32 +146,7 @@ export function LeafletMap({ origin, destination, height = "400px" }: LeafletMap
   const defaultCenter: [number, number] = [-6.2, 106.7]
 
   return (
-    <div className="w-full">
-      <div className="p-3 bg-blue-50 border-b">
-        <h3 className="font-medium">{destination ? "Directions" : "Location"}</h3>
-        <p className="font-small">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam, deleniti quidem minus incidunt libero neque quos mollitia et iste tempore officia dolore rem nostrum? Autem sint veritatis non! Excepturi, ab.</p>
-        {destination && (
-          <div style={{marginBottom: "8px"}}>
-            {route.loading ? (
-              <>
-                <span className="mx-2">•</span>
-                <Loader2 className="h-3 w-3 animate-spin" />
-                <span className="ml-1 text-xs">Calculating route...</span>
-              </>
-            ) : (
-              <>
-                <div className="breakline" />
-                <Clock style={{marginRight: "8px"}} />
-                <span>{route.duration} minute</span>
-                <div className="breakline" />
-                <Navigation style={{marginRight: "8px"}} />
-                <span>{route.distance} Kilometer</span>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-
+    <div className="w-full dark-bg-color p-3">
       <div style={{ height, width: "100%" }}>
         {/* Only render the map on the client side */}
         <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }} scrollWheelZoom={true}>
@@ -215,6 +190,30 @@ export function LeafletMap({ origin, destination, height = "400px" }: LeafletMap
           {/* Set view to show all markers and route */}
           <SetViewToBounds origin={origin} destination={destination} routeCoordinates={route.coordinates} />
         </MapContainer>
+      </div>
+      <div className="p-2">
+        <h3 className="font-medium">{destination ? "Directions" : "Location"}</h3>
+        <p className="font-small">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam, deleniti quidem minus incidunt libero neque quos mollitia et iste tempore officia dolore rem nostrum? Autem sint veritatis non! Excepturi, ab.</p>
+        {destination && (
+          <div style={{marginBottom: "8px"}}>
+            {route.loading ? (
+              <>
+                <span className="mx-2">•</span>
+                <Loader2 className="h-3 w-3 animate-spin" />
+                <span className="ml-1 text-xs">Calculating route...</span>
+              </>
+            ) : (
+              <>
+                <div className="breakline" />
+                <Clock style={{marginRight: "8px"}} />
+                <span>{route.duration} minute</span>
+                <div className="breakline" />
+                <Navigation style={{marginRight: "8px"}} />
+                <span>{route.distance} Kilometer</span>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

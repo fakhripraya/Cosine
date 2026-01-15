@@ -5,6 +5,7 @@ import Avatar from "react-avatar";
 import ShowChat from "./ShowChat";
 import { IChatData } from "../../../interfaces/chat";
 import { ShowGrabableStoreCardCarousel } from "./ShowCarousels";
+import ShowMaps from "./ShowMaps";
 
 interface ShowChatWrapperProps {
   chat: IChatData;
@@ -27,31 +28,30 @@ const ShowChatWrapper: React.FC<ShowChatWrapperProps> = ({
               name={chat.sender.fullName}
             />
           </div>
-          {true ? <div className="home-page-chattext-wrapper max-width full-width">
+          <div className="home-page-chattext-wrapper max-width full-width">
             <div>
               <p className="home-page-chattext-username font-bold">
                 {chat.sender.fullName}
               </p>
               {chat.content.createdAt}
             </div>
+
             <ShowChat
               content={chat.content}
               uniqueKey={chat.id}
             />
-            {chat.buildingContents && (
-              <ShowGrabableStoreCardCarousel
-                uniqueKey={chat.id}
-                values={chat.buildingContents}
-              />
+
+            {chat.ifShowsMap ? (
+              <ShowMaps />
+            ) : (
+              chat.buildingContents && (
+                <ShowGrabableStoreCardCarousel
+                  uniqueKey={chat.id}
+                  values={chat.buildingContents}
+                />
+              )
             )}
-          </div> : <div className="home-page-chattext-wrapper max-width full-width">
-            <div>
-              <p className="home-page-chattext-username font-bold">
-                {chat.sender.fullName}
-              </p>
-              {chat.content.createdAt}
-            </div>
-          </div>}
+          </div>
         </div>
       </Fragment>
     ),

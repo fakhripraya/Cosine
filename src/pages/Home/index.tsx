@@ -281,7 +281,11 @@ export default function Home() {
         buildingContents = parsedContent?.map(
           (obj): IBuildingDetails => {
             obj.image_url = obj.image_url.replace(/'/g, '"');
-            const actualImages: string[] = [`${DUMMY_BOARDING_HOUSE_PICTS[Math.floor(Math.random() * (9 - 0 + 1)) + 0]}`]
+            const actualImages: string[] = JSON.parse(obj.image_url).map(
+                (imgUrl: string) => imgUrl.includes("http")
+                  ? imgUrl
+                  : `${import.meta.env.VITE_PINTRAIL_API_BASE_URL}/images/${imgUrl}`
+              );
 
             return {
               ...obj,

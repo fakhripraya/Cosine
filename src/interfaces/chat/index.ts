@@ -8,6 +8,7 @@ export interface IChatData {
     fullName: string;
     profilePictureURI?: string;
   };
+  ifShowsMap?: boolean;
   content: OneToOneChat;
   buildingContents?: IBuildingDetails[];
   pathFinder?: IPathFinder;

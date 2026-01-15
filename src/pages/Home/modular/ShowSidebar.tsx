@@ -188,7 +188,7 @@ const SidebarContent = () => {
                   key={`home-page-sidebar-body-item-${index}`}
                   className="home-page-sidebar-body-item">
                   <Card
-                    className="margin-bottom-0"
+                    className="margin-bottom-0 darker-bg-color"
                     onClick={() =>
                       navigateToDetails(
                         navigate,
@@ -265,7 +265,7 @@ const SidebarContent = () => {
           </label>
           ·
           <label
-            onClick={() => navigate("/tnc")}
+            onClick={() => {}}
             className="main-color cursor-pointer">
             Feedback
           </label>
